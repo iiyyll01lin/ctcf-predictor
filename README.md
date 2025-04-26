@@ -308,7 +308,7 @@ graph TD
 
 ## Notes
 
-* **Negative Test Examples:** The `prepare_datasets.R` script **does not** create negative examples. You must generate or find appropriate negative sequences (e.g., random genomic regions, shuffled sequences) and add them manually to `data/test_sequences.fasta` with `| class=0` in the header for the evaluation to be meaningful.
+* **Negative Test Examples:** The `prepare_datasets.R` script now **automatically generates negative examples** using one of several methods (simple shuffling, dinucleotide shuffling, or random sequence generation). This can be configured through parameters in the script. No manual addition of negative examples is required.
 * **Sequence Length:** Ensure the `target_length` parameter in `prepare_datasets.R` matches the desired length for your PWM and that your training/test sequences conform to this.
 * **Reference Genome:** The download script uses only chr21 for demonstration. For a real analysis, use the full reference genome corresponding to your peak data (modify `download_data.sh`).
 * **Test Set Quality:** The evaluation's reliability depends heavily on the quality and representativeness of your prepared `test_sequences.fasta` file.
@@ -316,9 +316,9 @@ graph TD
 * **Threshold:** The `prediction_threshold` in `scripts/predict_ctcf.R` is crucial for prediction and may need calibration based on evaluation results.
 * **Data Input for Prediction:** The `predict_ctcf.R` script now takes the input sequence file path as a command-line argument.
 * **Next Steps:**
-  * Develop a strategy for generating good negative examples for the test set.
-  * Modify `predict_ctcf.R` to read target sequences from files.
-  * Perform statistical analysis to determine an optimal score threshold from ROC analysis.
+  * ~~Develop a strategy for generating good negative examples for the test set.~~
+  * ~~Modify `predict_ctcf.R` to read target sequences from files.~~
+  * ~~Perform statistical analysis to determine an optimal score threshold from ROC analysis.~~
   * Visualize results (e.g., ROC curves, score distributions).
 
 ## Pipeline Improvement Suggestions
