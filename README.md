@@ -4,6 +4,20 @@
 
 Predict potential binding sites for the CTCF (CCCTC-binding factor) transcription factor within DNA sequences. CTCF plays a crucial role in chromatin organization and gene expression regulation.
 
+## Project Architecture
+This project is structured as a pipeline that automates the process of downloading data, preparing datasets, building models, evaluating them, and making predictions. The pipeline consists of several scripts that can be executed sequentially to achieve the desired results.
+The main components of the pipeline are as follows:
+1. **Data Collection & Initial Extraction:** Download CTCF ChIP-seq peak data and extract sequences.
+2. **Dataset Preparation:** Filter sequences, split into training and test sets, and generate negative examples.
+3. **Build Sequence Model:** Create a Position Weight Matrix (PWM) from training sequences.
+4. **Evaluate Models:** Assess model performance using ROC/AUC analysis.
+5. **Threshold Optimization:** Determine the optimal score threshold for predictions.
+6. **Prediction on New Sequences:** Scan new sequences using the PWM and identify potential binding sites.
+7. **Prediction Results:** Output the predicted binding sites in a structured format.
+<!-- 8. **Experimental Validation:** (Conceptual Step - Requires lab work) Verify predictions using techniques like Electrophoretic Mobility Shift Assay (EMSA). -->
+
+![Data-flow](./mermaid-diagram-dataflow.png)
+
 ## Prediction Pipeline Overview
 
 0. **Sequence Preprocessing (NEW):**
@@ -107,51 +121,55 @@ graph TD
     A[External Data: ENCODE Peaks BED] --> B(Download Script);
     C[External Data: Reference Genome FASTA] --> B;
     B --> D[Extracted Sequences FASTA];
-    D --> E(Prepare Datasets Script);
+    D --> S(Preprocess Sequences Script);
+    S --> T[Preprocessed Sequences FASTA];
+    T --> E(Prepare Datasets Script);
     E --> F[Training Sequences FASTA];
-    E --> G[Initial Test Sequences FASTA];
-    G --> H{Manual Addition of Negatives};
-    H --> I[Complete Test Sequences FASTA];
+    E --> I[Test Sequences FASTA with Auto-generated Negatives];
     F --> J(Build PWM Script);
     J --> K[Generated PWM RDS];
     J --> L[Generated PWM TXT];
-    I --> M(Evaluate Models Script);
+    I --> M(Standard Evaluate Models Script);
+    I --> U(Cross-Validation Evaluate Script);
     K --> M;
+    K --> U;
     M --> N[Evaluation Results AUC];
+    U --> V[CV Evaluation Results CSV];
+    I --> W(Threshold Optimization Script);
+    K --> W;
+    W --> X[Optimized Threshold JSON];
     O[Input Sequences FASTA] --> P(Predict CTF Script);
     K --> P;
-    Q[Score Threshold] --> P;
+    X --> P;
     P --> R[Prediction Results TSV];
 
     subgraph Data Files
         direction LR
-        D; F; G; I; O;
+        D; T; F; I; O;
     end
     subgraph Script Files
         direction LR
-        B; E; J; M; P;
+        B; S; E; J; M; U; W; P;
     end
     subgraph Result Files
         direction LR
-        K; L; N; R;
-    end
-    subgraph Manual Steps
-        H;
+        K; L; N; V; X; R;
     end
     subgraph External Inputs
-        A; C; Q;
+        A; C;
     end
 
     style D fill:#f9f,stroke:#333,stroke-width:2px
+    style T fill:#f9f,stroke:#333,stroke-width:2px
     style F fill:#f9f,stroke:#333,stroke-width:2px
-    style G fill:#f9f,stroke:#333,stroke-width:2px
     style I fill:#f9f,stroke:#333,stroke-width:2px
     style O fill:#f9f,stroke:#333,stroke-width:2px
     style K fill:#ffffe0,stroke:#333,stroke-width:2px
     style L fill:#ffffe0,stroke:#333,stroke-width:2px
-    style R fill:#cfc,stroke:#333,stroke-width:2px
     style N fill:#cfc,stroke:#333,stroke-width:2px
-    style H fill:#ff9,stroke:#333,stroke-width:2px
+    style V fill:#cfc,stroke:#333,stroke-width:2px
+    style X fill:#ffffe0,stroke:#333,stroke-width:2px
+    style R fill:#cfc,stroke:#333,stroke-width:2px
 ```
 
 ## Project Structure
