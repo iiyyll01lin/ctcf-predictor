@@ -1,0 +1,14 @@
+>positive_1 | class=1
+CGGCGCCAGGTGGCGCTAG
+>positive_2 | class=1
+AGCTACCAGGTGGCAGTCG
+>positive_3 | class=1
+TTTCTCCAGGTGGCTTTTT
+>negative_1 | class=0
+AAAAAAAAAAAAAAAAAAA
+>negative_2 | class=0
+GCGCGCGCGCGCGCGCGCG
+>negative_3 | class=0
+ATATATATATATATATATA
+>negative_4 | class=0
+CCCCCCCCCCCCCCCCCCC
