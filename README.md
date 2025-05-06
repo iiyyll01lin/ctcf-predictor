@@ -5,8 +5,10 @@
 Predict potential binding sites for the CTCF (CCCTC-binding factor) transcription factor within DNA sequences. CTCF plays a crucial role in chromatin organization and gene expression regulation.
 
 ## Project Architecture
+
 This project is structured as a pipeline that automates the process of downloading data, preparing datasets, building models, evaluating them, and making predictions. The pipeline consists of several scripts that can be executed sequentially to achieve the desired results.
 The main components of the pipeline are as follows:
+
 1. **Data Collection & Initial Extraction:** Download CTCF ChIP-seq peak data and extract sequences.
 2. **Dataset Preparation:** Filter sequences, split into training and test sets, and generate negative examples.
 3. **Build Sequence Model:** Create a Position Weight Matrix (PWM) from training sequences.
@@ -31,7 +33,8 @@ The main components of the pipeline are as follows:
    * This step improves data quality and model performance by ensuring clean, consistent input sequences.
 
 1. **Data Collection & Initial Extraction:**
-   * Use the `scripts/download_data.sh` script to download example CTCF ChIP-seq peak data (BED format), a corresponding reference genome segment (FASTA format), and extract raw sequences using `bedtools getfasta` into `data/extracted_sequences.fasta`.
+   * Use the `scripts/download_data.sh` script to download example CTCF ChIP-seq peak data (BED format), a corresponding reference genome (either the full hg38 or just chr21), and extract raw sequences using `bedtools getfasta` into `data/extracted_sequences.fasta`.
+   * The script supports demo mode (-d flag) for faster setup with only chr21, and force mode (-f flag) to re-download existing files.
 
 2. **Dataset Preparation:**
    * Run the `scripts/prepare_datasets.R` script.
@@ -96,6 +99,7 @@ The main components of the pipeline are as follows:
 2. **Shuffled Sequences:**
    * Create shuffled versions of positive sequences to maintain nucleotide composition while breaking binding motifs.
    * Example R code:
+
      ```R
      shuffle_sequence <- function(seq) {
        chars <- unlist(strsplit(seq, ""))
@@ -178,12 +182,13 @@ graph TD
 /
 ├── data/
 │   ├── reference_genome/
-│   │   └── hg38.chr21.fa         # Example downloaded reference genome segment
-│   ├── K562_CTCF_peaks.bed       # Example downloaded peak data
-│   ├── extracted_sequences.fasta # Sequences extracted by download_data.sh
+│   │   └── hg38.chr21.fa         # Reference genome (chr21 for demo mode, ~46 MB)
+│   │   └── hg38.fa               # Full reference genome (for real analysis, ~3.1 GB)
+│   ├── K562_CTCF_peaks.bed       # Example downloaded peak data (~2.7 MB)
+│   ├── extracted_sequences.fasta # Sequences extracted by download_data.sh (~8.8 MB)
 │   ├── preprocessed_sequences.fasta # NEW: Cleaned and filtered sequences
-│   ├── training_sequences.fasta  # Prepared training sequences (FASTA)
-│   └── test_sequences.fasta      # Prepared test sequences (FASTA, labeled headers)
+│   ├── training_sequences.fasta  # Prepared training sequences (FASTA, ~100 KB)
+│   └── test_sequences.fasta      # Prepared test sequences (FASTA, labeled headers, ~294 KB)
 ├── results/
 │   ├── generated_pwm.rds         # Generated PWM object (R format)
 │   ├── generated_pwm.txt         # Generated PWM (text format, optional view)
@@ -191,7 +196,7 @@ graph TD
 │   ├── cv_evaluation_results.csv # Cross-validation evaluation results
 │   └── threshold_optimization.json # Threshold optimization results
 ├── scripts/
-│   ├── download_data.sh          # Downloads data, reference, and extracts sequences
+│   ├── download_data.sh          # Downloads data and reference genome (supports -d for demo mode, -f to force redownload)
 │   ├── preprocess_sequences.R    # NEW: Sequence preprocessing script
 │   ├── preprocess_config.json    # NEW: Example configuration for preprocessing
 │   ├── prepare_datasets.R        # Splits extracted data into train/test sets
@@ -216,12 +221,32 @@ graph TD
      BiocManager::install("Biostrings")
      install.packages("pROC")
      ```
+   * Ensure you have sufficient disk space:
+     * ~4 GB for full genome analysis
+     * ~100 MB for demo mode (chr21 only)
+   
+   > **Note:** For a complete list of dependencies, see `requirements.txt` (system dependencies) and `r-requirements.txt` (R packages). Alternatively, you can use Docker to avoid manual installation of dependencies (see `DOCKER_README.md`).
 
 2. **Download Data & Extract Sequences:**
-   * Navigate to the project's root directory (`/mnt/d/workspace/data-science`) in your terminal.
+   * Navigate to the project's root directory (`/mnt/d/workspace/ctcf-predictor`) in your terminal.
    * Make the download script executable: `chmod +x scripts/download_data.sh`
-   * Run the script: `./scripts/download_data.sh`
-   * This downloads the example peak file, the reference genome segment (hg38 chr21), and runs `bedtools getfasta` to create `data/extracted_sequences.fasta`.
+   * Run the script with one of the following options:
+
+     ```bash
+     # For demo mode (only chr21, faster download):
+     ./scripts/download_data.sh -d
+
+     # For full genome analysis (recommended for real work):
+     ./scripts/download_data.sh
+
+     # To force re-download of files (if needed):
+     ./scripts/download_data.sh -f
+
+     # Force re-download in demo mode:
+     ./scripts/download_data.sh -d -f
+     ```
+
+   * This downloads the example peak file, the reference genome (full hg38 or just chr21 in demo mode), and runs `bedtools getfasta` to create `data/extracted_sequences.fasta`.
 
 3. **Preprocess Sequences (NEW):**
    * Execute the sequence preprocessing script to clean and filter your sequences:
@@ -229,23 +254,25 @@ graph TD
      ```bash
      Rscript scripts/preprocess_sequences.R <input_fasta> <output_fasta> [config_file]
      ```
-     
+
      For example:
+
      ```bash
      Rscript scripts/preprocess_sequences.R data/extracted_sequences.fasta data/preprocessed_sequences.fasta
      ```
-     
+
      Or with a custom configuration:
+
      ```bash
      Rscript scripts/preprocess_sequences.R data/extracted_sequences.fasta data/preprocessed_sequences.fasta scripts/preprocess_config.json
      ```
-     
+
    * This script performs:
-     - Sequence length filtering (min/max or exact length)
-     - N-base handling (masking or removal)
-     - Low-complexity filtering (entropy-based)
-     - Repeat masking (homopolymers and simple repeats)
-     - Tracking of preprocessing operations in sequence headers
+     * Sequence length filtering (min/max or exact length)
+     * N-base handling (masking or removal)
+     * Low-complexity filtering (entropy-based)
+     * Repeat masking (homopolymers and simple repeats)
+     * Tracking of preprocessing operations in sequence headers
 
 4. **Prepare Training and Test Datasets:**
    * Execute the dataset preparation script, ideally using preprocessed sequences:
@@ -253,7 +280,7 @@ graph TD
      ```bash
      Rscript scripts/prepare_datasets.R
      ```
-   
+
    * You can modify the input source in the script to use the preprocessed sequences.
 
 5. **Build the PWM:**
@@ -283,9 +310,9 @@ graph TD
      ```
 
      This script performs stratified k-fold cross-validation with multiple repeats and provides:
-     - Mean AUC and standard deviation across all folds
-     - Suggested optimal score threshold based on Youden's J statistic
-     - Saves comprehensive results to `results/cv_evaluation_results.csv`
+     * Mean AUC and standard deviation across all folds
+     * Suggested optimal score threshold based on Youden's J statistic
+     * Saves comprehensive results to `results/cv_evaluation_results.csv`
 
 7. **Optimize the Threshold (NEW):**
    * Determine the optimal score threshold for prediction using:
@@ -295,16 +322,17 @@ graph TD
      ```
 
      For example:
+
      ```bash
      Rscript scripts/optimize_threshold.R ../data/test_sequences.fasta ../results/generated_pwm.rds youden
      ```
 
    * Available optimization methods:
-     - `youden` (default): Maximizes Youden's J statistic (sensitivity + specificity - 1)
-     - `sensitivity_specificity`: Finds threshold where sensitivity equals specificity
-     - `closest_topleft`: Finds threshold closest to perfect classification point (top-left of ROC curve)
-     - `balanced`: Maximizes F1 score (balanced precision and recall)
-   
+     * `youden` (default): Maximizes Youden's J statistic (sensitivity + specificity - 1)
+     * `sensitivity_specificity`: Finds threshold where sensitivity equals specificity
+     * `closest_topleft`: Finds threshold closest to perfect classification point (top-left of ROC curve)
+     * `balanced`: Maximizes F1 score (balanced precision and recall)
+
    * The script outputs detailed metrics and saves results to `results/threshold_optimization.json`
    * It also provides the exact command for using this threshold in the prediction script
 
@@ -328,7 +356,13 @@ graph TD
 
 * **Negative Test Examples:** The `prepare_datasets.R` script now **automatically generates negative examples** using one of several methods (simple shuffling, dinucleotide shuffling, or random sequence generation). This can be configured through parameters in the script. No manual addition of negative examples is required.
 * **Sequence Length:** Ensure the `target_length` parameter in `prepare_datasets.R` matches the desired length for your PWM and that your training/test sequences conform to this.
-* **Reference Genome:** The download script uses only chr21 for demonstration. For a real analysis, use the full reference genome corresponding to your peak data (modify `download_data.sh`).
+* **Reference Genome:** By default, the download script uses only chr21 in demo mode for quicker testing. For a real analysis, use the full reference genome by running the script without the -d flag.
+* **Disk Space Requirements:** Be aware of the file sizes when using this pipeline:
+  * Full hg38 reference genome: ~3.1 GB
+  * Chr21 only (demo mode): ~46 MB
+  * ENCODE CTCF peaks file: ~2.7 MB
+  * Extracted sequences: ~8.8 MB
+  * Ensure you have at least 4 GB of free space for the full analysis mode, or 100 MB for the demo mode.
 * **Test Set Quality:** The evaluation's reliability depends heavily on the quality and representativeness of your prepared `test_sequences.fasta` file.
 * **Scoring Method:** The prediction script uses a log2-likelihood ratio score.
 * **Threshold:** The `prediction_threshold` in `scripts/predict_ctcf.R` is crucial for prediction and may need calibration based on evaluation results.
@@ -389,6 +423,7 @@ graph TD
 ## Recent Updates
 
 **2025-04-27 (4): Sequence Preprocessing Implementation**
+
 * Added new script `preprocess_sequences.R` for comprehensive sequence preprocessing
 * Implemented multiple preprocessing capabilities:
   * Length filtering (min/max/exact length)
@@ -400,6 +435,7 @@ graph TD
 * Preprocessing significantly improves input data quality and subsequent model performance
 
 **2025-04-27 (3): Threshold Optimization Implementation**
+
 * Added new script `optimize_threshold.R` for finding optimal score thresholds
 * Implemented multiple optimization strategies:
   * Youden's index (maximizes sensitivity + specificity - 1)
@@ -411,6 +447,7 @@ graph TD
 * Direct command suggestion makes it simple to use the optimized threshold in prediction
 
 **2025-04-27 (2): Cross-Validation Evaluation Implementation**
+
 * Added new script `evaluate_models_with_cv.R` for improved model evaluation
 * Implemented stratified k-fold cross-validation to ensure balanced class distribution
 * Added repeat functionality for more reliable performance estimates
@@ -419,6 +456,7 @@ graph TD
 * All cross-validation results are saved to CSV for further analysis
 
 **2025-04-27 (1): Automatic Negative Example Generation**
+
 * Added automatic negative example generation to `prepare_datasets.R`
 * Implemented three methods for generating negative examples:
   * Simple shuffling - maintains nucleotide composition

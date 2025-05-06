@@ -1,0 +1,9 @@
+# R package requirements for CTCF Binding Site Prediction Pipeline
+
+# Bioconductor packages
+BiocManager
+Biostrings
+
+# CRAN packages
+pROC
+jsonlite

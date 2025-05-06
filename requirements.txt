@@ -1,0 +1,11 @@
+# System dependencies for CTCF Binding Site Prediction Pipeline
+
+# Data download and extraction
+wget
+curl
+bedtools
+
+# Required for R package installation
+libcurl4-gnutls-dev
+libxml2-dev
+libssl-dev
