@@ -2,6 +2,20 @@
 
 This document explains how to use Docker to run the CTCF Binding Site Prediction Pipeline without installing dependencies directly on your system.
 
+## New: Automatic Proxy Fallback System
+
+This project now includes an intelligent proxy detection and fallback system that automatically configures the environment based on network conditions. See `PROXY_FALLBACK_README.md` for complete documentation.
+
+### Quick Start with Smart Startup
+
+```bash
+# Automatic proxy detection and application startup
+./smart-startup.sh
+
+# Enhanced script execution with automatic proxy handling
+./run-in-docker.sh scripts/download_data.sh -d
+```
+
 ## Prerequisites
 
 - [Docker](https://www.docker.com/get-started) installed on your system
@@ -15,7 +29,7 @@ To build the Docker image containing all necessary dependencies:
 # Navigate to the project directory
 cd /path/to/ctcf-predictor
 
-# Build the Docker image
+# Build the Docker image (with automatic proxy detection)
 docker build -t ctcf-predictor .
 ```
 
@@ -23,10 +37,25 @@ This will create a Docker image with all the required dependencies:
 - R with BiocManager, Biostrings, pROC, and jsonlite packages
 - bedtools for sequence extraction
 - wget and curl for downloading data
+- Python 3 with proxy detection capabilities
 
 ## Proxy Configuration
 
-If you're working in a corporate environment that requires a proxy server, the project includes built-in proxy configuration:
+### Automatic Proxy Detection (Recommended)
+
+The project now includes built-in automatic proxy detection:
+
+```bash
+# Check proxy connectivity
+./check-proxy.sh
+
+# Use smart startup (automatically handles proxy)
+./smart-startup.sh
+```
+
+### Manual Proxy Configuration (Legacy)
+
+If you need to manually configure proxy settings, the project includes built-in proxy configuration:
 
 ```bash
 # Configure proxy settings for your environment

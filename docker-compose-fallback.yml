@@ -1,0 +1,25 @@
+services:
+  ctcf-predictor:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # No proxy arguments when using fallback
+        - HTTP_PROXY=
+        - HTTPS_PROXY=
+        - NO_PROXY=
+    image: ctcf-predictor:latest
+    network_mode: host
+    environment:
+      # Empty proxy environment variables for direct connection
+      - https_proxy=
+      - http_proxy=
+      - HTTP_PROXY=
+      - HTTPS_PROXY=
+      - NO_PROXY=localhost,127.0.0.1,::1
+    volumes:
+      - ./:/app
+    working_dir: /app
+    entrypoint: ["/bin/bash"]
+    tty: true
+    stdin_open: true

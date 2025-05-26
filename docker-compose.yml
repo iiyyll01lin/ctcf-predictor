@@ -3,13 +3,20 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
+      args:
+        # Proxy build arguments - will be set by environment variables
+        - HTTP_PROXY=${HTTP_PROXY:-}
+        - HTTPS_PROXY=${HTTPS_PROXY:-}
+        - NO_PROXY=${NO_PROXY:-}
     image: ctcf-predictor:latest
     network_mode: host
     environment:
-      - https_proxy=http://10.6.254.210:3128
-      - http_proxy=http://10.6.254.210:3128
-      - HTTP_PROXY=http://10.6.254.210:3128
-      - HTTPS_PROXY=http://10.6.254.210:3128
+      # Proxy environment variables - will be set by smart startup script
+      - https_proxy=${HTTPS_PROXY:-}
+      - http_proxy=${HTTP_PROXY:-}
+      - HTTP_PROXY=${HTTP_PROXY:-}
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=${NO_PROXY:-localhost,127.0.0.1,::1}
     volumes:
       - ./:/app
     working_dir: /app

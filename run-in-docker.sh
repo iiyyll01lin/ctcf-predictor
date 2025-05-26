@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script helps run the CTCF Predictor pipeline scripts within the Docker container
-# It automatically mounts the current directory to the container and runs the specified script
+# It automatically detects proxy availability and configures the container accordingly
 
 if [ $# -lt 1 ]; then
   echo "Usage: $0 <script_name> [script_args...]"
@@ -20,7 +20,18 @@ if [[ "$SCRIPT" == *.R ]]; then
   fi
 fi
 
-# Run the container with the current directory mounted
+# Check proxy connectivity and set environment accordingly
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if "$SCRIPT_DIR/check-proxy.sh" > /dev/null 2>&1; then
+  echo "Using proxy configuration for container execution"
+  PROXY_ENV="-e https_proxy=http://10.6.254.210:3128 -e http_proxy=http://10.6.254.210:3128 -e HTTP_PROXY=http://10.6.254.210:3128 -e HTTPS_PROXY=http://10.6.254.210:3128"
+  PROXY_SETUP="source /app/set-proxy.sh &&"
+else
+  echo "Using direct connection for container execution"
+  PROXY_ENV=""
+  PROXY_SETUP=""
+fi
+
 # Check if the image exists first
 if ! docker image inspect ctcf-predictor:latest &>/dev/null; then
   echo "Docker image 'ctcf-predictor:latest' not found."
@@ -31,11 +42,8 @@ fi
 # Run the container with the current directory mounted
 docker run --rm -it \
   --network host \
-  -e https_proxy=http://10.6.254.210:3128 \
-  -e http_proxy=http://10.6.254.210:3128 \
-  -e HTTP_PROXY=http://10.6.254.210:3128 \
-  -e HTTPS_PROXY=http://10.6.254.210:3128 \
+  $PROXY_ENV \
   -v "$(pwd):/app" \
   -w /app \
   ctcf-predictor:latest \
-  -c "source /app/set-proxy.sh && $SCRIPT $*"
+  -c "$PROXY_SETUP $SCRIPT $*"
