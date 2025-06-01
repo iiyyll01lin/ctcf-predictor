@@ -9,13 +9,15 @@ if (!requireNamespace("Biostrings", quietly = TRUE)) {
 library(Biostrings)
 
 # --- Parameters ---
-input_fasta <- "../data/extracted_sequences.fasta"
-output_train_fasta <- "../data/training_sequences.fasta"
-output_test_fasta <- "../data/test_sequences.fasta"
+# input_fasta <- "../data/extracted_sequences.fasta"
+input_fasta <- "data/preprocessed_sequences_optimized.fasta" 
+output_train_fasta <- "data/training_sequences.fasta"
+output_test_fasta <- "data/test_sequences.fasta"
 
 # Desired sequence length for PWM building and evaluation
 # Set to NULL to skip length filtering
-target_length <- 11 # Example: Match the original PWM length
+target_length <- NULL
+# target_length <- 11 # Example: Match the original PWM length
 
 # Proportion of data to use for the training set (e.g., 0.8 = 80%)
 train_proportion <- 0.8
@@ -99,7 +101,7 @@ generate_negative_examples <- function(positive_seqs, method="shuffle", ratio=1.
     # Choose a positive sequence to base the negative on
     pos_idx <- ((i - 1) %% n_positives) + 1
     pos_seq <- positive_seqs[[pos_idx]]
-    seq_len <- width(pos_seq)
+    seq_len <- nchar(as.character(pos_seq))
     
     # Apply the chosen method to generate a negative example
     if (method == "shuffle") {
@@ -113,7 +115,7 @@ generate_negative_examples <- function(positive_seqs, method="shuffle", ratio=1.
     }
     
     # Create a named negative sequence
-    neg_seq <- DNAString(new_seq)
+    neg_seq <- DNAStringSet(new_seq)
     names(neg_seq) <- paste0("negative_", i, " | class=0")
     
     # Add to our collection
