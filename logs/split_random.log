@@ -1,0 +1,5 @@
+[split_strategy] Reading data/complete_labeled_82.fasta ... 
+[split_strategy] Strategy: random (train_ratio 0.8 ) 
+[split_strategy]   ↳ 188 seqs → data/splits/random/train_sequences.fasta 
+[split_strategy]   ↳ 48 seqs → data/splits/random/test_sequences.fasta 
+[split_strategy] Done. 

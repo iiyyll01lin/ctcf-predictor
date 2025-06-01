@@ -1,21 +1,29 @@
 # R script to prepare training and testing datasets from extracted sequences
 
 # --- Dependencies ---
-if (!requireNamespace("Biostrings", quietly = TRUE)) {
-  stop("Package 'Biostrings' is needed. Please install via BiocManager: \n",
-       "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('Biostrings')",
-       call. = FALSE)
+
+
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+  install.packages("BiocManager")
 }
+
+if (!requireNamespace("Biostrings", quietly = TRUE)) {
+  BiocManager::install("Biostrings", force = TRUE)
+}
+
+
+
+
 library(Biostrings)
 
 # --- Parameters ---
-input_fasta <- "../data/extracted_sequences.fasta"
-output_train_fasta <- "../data/training_sequences.fasta"
-output_test_fasta <- "../data/test_sequences.fasta"
+input_fasta <- "data/extracted_sequences.fasta"
+output_train_fasta <- "data/training_sequences.fasta"
+output_test_fasta <- "data/test_sequences.fasta"
 
 # Desired sequence length for PWM building and evaluation
 # Set to NULL to skip length filtering
-target_length <- 11 # Example: Match the original PWM length
+target_length <- 82 # Example: Match the original PWM length
 
 # Proportion of data to use for the training set (e.g., 0.8 = 80%)
 train_proportion <- 0.8
@@ -99,7 +107,7 @@ generate_negative_examples <- function(positive_seqs, method="shuffle", ratio=1.
     # Choose a positive sequence to base the negative on
     pos_idx <- ((i - 1) %% n_positives) + 1
     pos_seq <- positive_seqs[[pos_idx]]
-    seq_len <- width(pos_seq)
+    seq_len <- nchar(as.character(pos_seq))
     
     # Apply the chosen method to generate a negative example
     if (method == "shuffle") {
@@ -113,7 +121,7 @@ generate_negative_examples <- function(positive_seqs, method="shuffle", ratio=1.
     }
     
     # Create a named negative sequence
-    neg_seq <- DNAString(new_seq)
+    neg_seq <- DNAStringSet(new_seq)
     names(neg_seq) <- paste0("negative_", i, " | class=0")
     
     # Add to our collection
@@ -133,6 +141,9 @@ if (!file.exists(input_fasta)) {
   stop("Input FASTA file not found: ", input_fasta, ". Run download_data.sh first.")
 }
 all_sequences <- readDNAStringSet(input_fasta)
+if (!inherits(all_sequences, "DNAStringSet")) {
+  all_sequences <- DNAStringSet(all_sequences)
+}
 cat("Read", length(all_sequences), "sequences.\n")
 
 # 2. Filter by Length (Optional)
@@ -197,3 +208,5 @@ cat("Writing test set to:", output_test_fasta, "\n")
 writeXStringSet(test_sequences, filepath = output_test_fasta)
 
 cat("\nDataset preparation complete.\n")
+
+

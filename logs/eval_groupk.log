@@ -1,0 +1,20 @@
+
+▶ Evaluating fold1 ...
+  AUC = 0.6429 
+
+▶ Evaluating fold2 ...
+  AUC = 0.596 
+
+▶ Evaluating fold3 ...
+  AUC = 0.5323 
+
+▶ Evaluating fold4 ...
+  AUC = 0.5138 
+
+▶ Evaluating fold5 ...
+  AUC = 0.6701 
+
+▶ Evaluating standard ...
+
+✅ Done. AUC 平均值: 0.591 +/- 0.0678 
+✔ metrics written to: results/metrics_groupk.csv 

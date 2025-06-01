@@ -1,0 +1,19 @@
+[[1]]
+[1] "readr"     "stats"     "graphics"  "grDevices" "utils"     "datasets" 
+[7] "methods"   "base"     
+
+[[2]]
+[1] "dplyr"     "readr"     "stats"     "graphics"  "grDevices" "utils"    
+[7] "datasets"  "methods"   "base"     
+
+[[3]]
+ [1] "ggplot2"   "dplyr"     "readr"     "stats"     "graphics"  "grDevices"
+ [7] "utils"     "datasets"  "methods"   "base"     
+
+[[4]]
+ [1] "optparse"  "ggplot2"   "dplyr"     "readr"     "stats"     "graphics" 
+ [7] "grDevices" "utils"     "datasets"  "methods"   "base"     
+
+✔ Finished!
+  • Summary : results/plots_uniform/summary_auc.csv 
+  • Plot    : results/plots_uniform/auc_boxplot.png 

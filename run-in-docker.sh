@@ -31,10 +31,6 @@ fi
 # Run the container with the current directory mounted
 docker run --rm -it \
   --network host \
-  -e https_proxy=http://10.6.254.210:3128 \
-  -e http_proxy=http://10.6.254.210:3128 \
-  -e HTTP_PROXY=http://10.6.254.210:3128 \
-  -e HTTPS_PROXY=http://10.6.254.210:3128 \
   -v "$(pwd):/app" \
   -w /app \
   ctcf-predictor:latest \

@@ -8,6 +8,11 @@ if (!requireNamespace("Biostrings", quietly = TRUE)) {
        call. = FALSE)
 }
 library(Biostrings)
+# s1 <- DNAString("ACGT")            # 單一 DNAString
+# s2 <- DNAStringSet("ACGT")         # DNAStringSet 包裝
+
+# names(s1) <- "wrong"               # ❌ 錯誤，會報錯
+# names(s2) <- "correct"             # ✅ 正確
 
 # --- Command Line Arguments ---
 args <- commandArgs(trailingOnly = TRUE)
@@ -149,15 +154,12 @@ preprocess_sequence <- function(sequence, seq_name, params) {
   if (params$length_filter) {
     if (!is.null(params$target_length)) {
       # For exact length extraction (e.g., for PWM)
-      if (original_length != params$target_length) {
-        if (original_length > params$target_length) {
-          # If sequence is longer, take the center portion
-          start_pos <- floor((original_length - params$target_length) / 2) + 1
-          seq_string <- substr(seq_string, start_pos, start_pos + params$target_length - 1)
-          modifications <- c(modifications, paste0("trimmed_to_", params$target_length))
+      if (original_length >= params$target_length) {
+        start_pos <- floor((original_length - params$target_length) / 2) + 1
+        seq_string <- substr(seq_string, start_pos, start_pos + params$target_length - 1)
+        modifications <- c(modifications, paste0("trimmed_to_", params$target_length))
         } else {
-          # Sequence too short, can't meet target length
-          return(NULL)
+          return(list(seq = NULL, reason = "length"))
         }
       }
     } else {
@@ -213,20 +215,24 @@ preprocess_sequence <- function(sequence, seq_name, params) {
       }
     }
   }
-  
-  # Create new sequence object
-  new_seq <- DNAString(seq_string)
-  
+
+  # Create new sequence object (wrap DNAString into DNAStringSet)
+  new_seq <- DNAStringSet(DNAString(seq_string))
+
+
   # Update sequence name if modifications were made
   if (params$label_preprocessed && length(modifications) > 0) {
     new_name <- paste0(seq_name, " | preprocessed=", paste(modifications, collapse=","))
   } else {
     new_name <- seq_name
   }
-  
-  # Return preprocessed sequence with new name
+
+  # Set name (only legal on DNAStringSet)
   names(new_seq) <- new_name
+
+  # Return preprocessed sequence
   return(new_seq)
+  
 }
 
 # --- Main Script ---

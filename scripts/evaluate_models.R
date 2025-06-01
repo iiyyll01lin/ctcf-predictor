@@ -13,13 +13,28 @@ if (!requireNamespace("pROC", quietly = TRUE)) {
 library(Biostrings)
 library(pROC)
 
+if (!requireNamespace("optparse", quietly = TRUE)) {
+  install.packages("optparse", repos = "https://cloud.r-project.org")
+}
+library(optparse)
+
+# ---- Parse CLI arguments ----
+option_list <- list(
+  make_option("--pwm",      type = "character", help = "PWM model path"),
+  make_option("--test",     type = "character", help = "FASTA file of test sequences"),
+  make_option("--out",      type = "character", default = NULL, help = "Output metrics CSV path"),
+  make_option("--strategy", type = "character", default = "unknown", help = "Split strategy name")
+)
+opt <- parse_args(OptionParser(option_list = option_list))
+
+
 # --- Parameters ---
 # Input file containing labeled test sequences in FASTA format
-test_fasta_file <- "../data/test_sequences.fasta"
+test_fasta_file <- opt$test
 # Directory containing the trained PWM models (.rds files)
-models_dir <- "../results/"
+models_dir <- dirname(opt$pwm)
 # Pattern to identify PWM model files
-model_file_pattern <- "\.rds$" # Matches files ending in .rds
+model_file_pattern <- paste0("^", basename(opt$pwm), "$") # Matches files ending in .rds
 
 # --- Functions ---
 
@@ -27,7 +42,7 @@ model_file_pattern <- "\.rds$" # Matches files ending in .rds
 # Assumes header format like ">name | class=1" or ">name | class=0"
 get_labels_from_fasta <- function(fasta_file) {
   headers <- names(readDNAStringSet(fasta_file))
-  labels <- sub(".*\| *class=([01]).*", "\\1", headers)
+  labels <- sub(".*\\| *class=([01]).*", "\\1", headers)
   # Check if parsing worked, handle cases where pattern doesn't match
   if (any(!labels %in% c("0", "1"))) {
       warning("Could not parse class labels (0 or 1) from all FASTA headers. Check format.")
@@ -126,7 +141,8 @@ for (model_file in model_files) {
   } else {
       # Calculate ROC and AUC
       roc_obj <- roc(labels_valid, scores_valid, quiet = TRUE)
-      auc_value <- auc(roc_obj)
+      auc_obj <- auc(roc_obj)
+      auc_value <- as.numeric(auc_obj)
       cat("  AUC:", sprintf("%.4f", auc_value), "\n")
       
       # Optional: Plot ROC curve
@@ -150,3 +166,14 @@ print(results[order(-results$auc), ], row.names = FALSE)
 cat("-------------------------\n")
 
 cat("Evaluation complete.\n")
+
+# Write metrics if --out is specified
+if (!is.null(opt$out)) {
+  metrics <- data.frame(
+    strategy = opt$strategy,
+    AUC = results$auc[1],
+    stringsAsFactors = FALSE
+  )
+  write.csv(metrics, opt$out, row.names = FALSE)
+  cat("✔ Metrics written to", opt$out, "\n")
+}
