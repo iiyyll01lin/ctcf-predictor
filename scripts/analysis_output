@@ -1,0 +1,109 @@
+=== CTCF Sequence Characteristics Analysis Report ===
+Input file: data/extracted_sequences.fasta 
+Analysis time: 2025-06-01 10:10:15 
+
+Reading sequences...
+Total sequences loaded: 44217 
+
+1. SEQUENCE LENGTH ANALYSIS
+===================================================
+Average length: 181.01 bp
+Median length: 216 bp
+Shortest sequence: 54 bp
+Longest sequence: 452 bp
+Standard deviation: 51.37 bp
+
+Length Distribution:
+  [0,50): 0 (0.0%)
+  [50,100): 4829 (10.9%)
+  [100,150): 7786 (17.6%)
+  [150,200): 3357 (7.6%)
+  [200,300): 28239 (63.9%)
+  [300,452): 4 (0.0%)
+  [452,500): 2 (0.0%)
+  [500,1e+03): 0 (0.0%)
+
+Length Filter Impact:
+Sequences <= 100bp: 4965 ( 11.23 %)
+Sequences <= 150bp: 12760 ( 28.86 %)
+Sequences <= 200bp: 15986 ( 36.15 %)
+Sequences <= 500bp: 44217 ( 100 %)
+
+2. N BASE ANALYSIS
+===================================================
+Sequences containing N bases: 44217 ( 100 %)
+Average N percentage: 0.63 %
+Median N percentage: 0.46 %
+Maximum N percentage: 1.85 %
+
+N Base Filter Impact:
+N percentage <= 10%: 44217 ( 100 %)
+N percentage <= 15%: 44217 ( 100 %)
+N percentage <= 20%: 44217 ( 100 %)
+N percentage <= 30%: 44217 ( 100 %)
+
+3. SEQUENCE COMPLEXITY ANALYSIS
+===================================================
+Calculating entropy for sample sequences (this may take a moment)...
+Entropy statistics (sample size: 1000 ):
+Average entropy: 0.89 
+Median entropy: 0.881 
+Minimum entropy: 0 
+Maximum entropy: 1.522 
+
+Complexity Filter Impact (estimated):
+Entropy < 1.0: 747 / 1000 ( 74.7 %)
+Entropy < 1.5: 999 / 1000 ( 99.9 %)
+Entropy < 2.0: 1000 / 1000 ( 100 %)
+
+4. REPEAT SEQUENCE ANALYSIS
+===================================================
+Detecting repeats in sample sequences...
+Repeat statistics (sample size: 1000 ):
+Sequences with homopolymer repeats: 670 / 1000 ( 67 %)
+Sequences with dinucleotide repeats: 998 / 1000 ( 99.8 %)
+Sequences with any repeats: 999 / 1000 ( 99.9 %)
+
+5. PREPROCESSING PARAMETER OPTIMIZATION
+===================================================
+Simulating different preprocessing scenarios:
+
+                                    Scenario Length_Filter N_Filter
+  Current_Strict (11-100bp, N<=15%, entropy)          4965    44217
+  Relaxed_Length (11-200bp, N<=15%, entropy)         15986    44217
+       Relaxed_N (11-200bp, N<=25%, entropy)         15986    44217
+   No_Entropy (11-200bp, N<=25%, no entropy)         15986    44217
+ Very_Relaxed (11-500bp, N<=30%, no entropy)         44217    44217
+    Length_Only (11-200bp, no other filters)         15986    44217
+ Entropy_Filter Combined Percentage
+              0        0       0.00
+              0        0       0.00
+              0        0       0.00
+          44217    15986      36.15
+          44217    44217     100.00
+          44217    15986      36.15
+
+
+6. RECOMMENDATIONS
+===================================================
+Analysis Summary:
+- Total input sequences: 44217 
+- Current strict filtering retains: 0 sequences ( 0 %)
+- Most sequences are longer than 100bp ( 88.8 %)
+- N base content varies widely (max  1.9 %)
+
+Recommended preprocessing parameters:
+✓ Recommended scenario: Very_Relaxed (11-500bp, N<=30%, no entropy) 
+  - This will retain 44217 sequences ( 100 %)
+  - Sufficient for reliable PWM model training
+
+Suggested config.json updates:
+  "max_length": 500,  // Most sequences are long, increase significantly
+  "max_n_percent": 20,  // Increase from 15% to be more permissive
+  "low_complexity_filter": false,  // Disable initially to retain more sequences
+  "mask_repeats": false,  // Disable initially, can re-enable later if needed
+
+Model Training Considerations:
+- Minimum recommended sequences for PWM: 200-500
+- Ideal range: 1000-5000 sequences
+- Current analysis suggests retaining 44217 sequences is achievable

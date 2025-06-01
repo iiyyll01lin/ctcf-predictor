@@ -1,0 +1,24 @@
+{
+  "_comment": "Optimized preprocessing configuration based on sequence analysis",
+  
+  "length_filter": true,
+  "min_length": 11,
+  "max_length": 200,
+  "target_length": null,
+  
+  "n_handling": "mask",
+  "max_n_percent": 25,
+  "n_replacement": "A",
+  
+  "low_complexity_filter": false,
+  "entropy_threshold": 1.5,
+  "complexity_handling": "remove",
+  "complexity_window": 10,
+  
+  "mask_repeats": false,
+  "repeat_min_length": 5,
+  
+  "force_uppercase": true,
+  "label_preprocessed": true,
+  "verbose": true
+}

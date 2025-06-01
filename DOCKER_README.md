@@ -140,7 +140,7 @@ This approach gives you an interactive shell within the container:
 
 ```bash
 # Start the container with an interactive shell
-docker-compose run --rm ctcf-predictor
+docker compose run --rm ctcf-predictor
 
 # Now you're inside the container and can run commands directly
 ./scripts/download_data.sh -d

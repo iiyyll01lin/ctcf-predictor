@@ -24,6 +24,13 @@ input_fasta_file <- args[1]
 output_fasta_file <- args[2]
 config_file <- if (length(args) >= 3) args[3] else NULL
 
+# Handle case where output is a directory
+if (dir.exists(output_fasta_file) || endsWith(output_fasta_file, "/") || endsWith(output_fasta_file, "\\")) {
+  # If output is a directory, create a default filename
+  output_fasta_file <- file.path(output_fasta_file, "preprocessed_sequences.fasta")
+  cat("Output path is a directory. Using default filename:", output_fasta_file, "\n")
+}
+
 # --- Default Parameters ---
 params <- list(
   # Length filtering
@@ -59,16 +66,28 @@ if (!is.null(config_file)) {
     stop("Config file not found: ", config_file)
   }
   
-  # Read JSON config file (can use jsonlite or rjson package)
-  # For simplicity in this example, we'll just use a basic approach
+  # Read JSON config file - enhanced parsing
   config_text <- readLines(config_file, warn = FALSE)
   config_text <- paste(config_text, collapse = "")
   
-  # Very simple parsing - in a real application, use a proper JSON parser
+  # Parse key parameters with improved regex
   if (grepl("\"min_length\"[^0-9]*(\\d+)", config_text)) {
     params$min_length <- as.numeric(gsub(".*\"min_length\"[^0-9]*(\\d+).*", "\\1", config_text))
   }
-  # Extract other parameters similarly (simplified for the example)
+  if (grepl("\"max_length\"[^0-9]*(\\d+)", config_text)) {
+    params$max_length <- as.numeric(gsub(".*\"max_length\"[^0-9]*(\\d+).*", "\\1", config_text))
+  }
+  if (grepl("\"max_n_percent\"[^0-9]*(\\d+)", config_text)) {
+    params$max_n_percent <- as.numeric(gsub(".*\"max_n_percent\"[^0-9]*(\\d+).*", "\\1", config_text))
+  }
+  if (grepl("\"low_complexity_filter\"[^:]*:[^a-z]*(true|false)", config_text)) {
+    filter_val <- gsub(".*\"low_complexity_filter\"[^:]*:[^a-z]*(true|false).*", "\\1", config_text)
+    params$low_complexity_filter <- (filter_val == "true")
+  }
+  if (grepl("\"mask_repeats\"[^:]*:[^a-z]*(true|false)", config_text)) {
+    mask_val <- gsub(".*\"mask_repeats\"[^:]*:[^a-z]*(true|false).*", "\\1", config_text)
+    params$mask_repeats <- (mask_val == "true")
+  }
   
   if (params$verbose) {
     cat("Loaded configuration from:", config_file, "\n")
@@ -224,9 +243,10 @@ preprocess_sequence <- function(sequence, seq_name, params) {
     new_name <- seq_name
   }
   
-  # Return preprocessed sequence with new name
-  names(new_seq) <- new_name
-  return(new_seq)
+  # Return preprocessed sequence with new name as DNAStringSet
+  result <- DNAStringSet(new_seq)
+  names(result) <- new_name
+  return(result)
 }
 
 # --- Main Script ---
