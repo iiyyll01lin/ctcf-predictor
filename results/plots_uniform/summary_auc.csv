@@ -1,0 +1,9 @@
+strategy,n,mean_metric,sd_metric
+chrom,1,NA,NA
+chrom_uniform,1,NA,NA
+cv_real,15,0.5695668583280823,0.07123059148528252
+cv_uniform,15,0.5,0
+groupk,5,0.5910060368180986,0.06776707080996641
+groupk_uniform,5,0.5,0
+random,1,0.571678321678322,NA
+random_uniform,1,0.5,NA
