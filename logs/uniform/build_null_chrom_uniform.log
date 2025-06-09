@@ -1,0 +1,5 @@
+NULL
+[build_null_pwm_uniform] motif length = 82 
+[build_null_pwm_uniform] PWM 維度： 4 × 82 
+[build_null_pwm_uniform] 儲存成： results/null_chrom_uniform.rds 
+[build_null_pwm_uniform] 完成。

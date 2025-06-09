@@ -1,0 +1,17 @@
+Starting PWM Model Evaluation...
+Reading test sequences from: data/splits/random/test_sequences.fasta 
+Found 48 test sequences with labels.
+Looking for PWM models ( ^pwm_random.rds$ ) in: results 
+Found 1 model(s) to evaluate.
+
+Evaluating model: pwm_random.rds 
+  PWM length: 82 
+  Scored 48 out of 48 sequences (matching PWM length).
+  AUC: 0.5717 
+
+--- Evaluation Summary ---
+     model_file       auc num_sequences_scored pwm_length
+ pwm_random.rds 0.5716783                   48         82
+-------------------------
+Evaluation complete.
+✔ Metrics written to results/metrics_random.csv 

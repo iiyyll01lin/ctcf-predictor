@@ -1,0 +1,9 @@
+[split_strategy] Reading data/complete_labeled_82.fasta ... 
+[split_strategy] Strategy: chrom 
+[split_strategy]   train_chr: chr1,chr2,chr3,chr4,chr5,chr6 
+[split_strategy]   val_chr: chr7 
+[split_strategy]   test_chr: chr8,chr9 
+[split_strategy]   ↳ 8 seqs → data/splits/chrom/val_sequences.fasta 
+[split_strategy]   ↳ 51 seqs → data/splits/chrom/train_sequences.fasta 
+[split_strategy]   ↳ 15 seqs → data/splits/chrom/test_sequences.fasta 
+[split_strategy] Done. 

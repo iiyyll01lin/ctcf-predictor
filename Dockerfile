@@ -44,9 +44,13 @@ RUN apt-get update && \
 
 # Install required R packages
 # Read R packages from r-requirements.txt, filter comments and install
-RUN R -e "install.packages('BiocManager')" \
-    && R -e "BiocManager::install(c('Biostrings'))" \
-    && R -e "install.packages(c('pROC', 'jsonlite'))"
+# ---- install R packages needed by the project ----
+  RUN R -e "install.packages(                     \
+              c('BiocManager',                   \
+                'dplyr','readr','ggplot2',       \
+                'optparse','pROC'),              \
+              repos = 'https://cloud.r-project.org')"  && \
+  R -e "BiocManager::install('Biostrings', update = FALSE)"
 
 # Comment explaining why we're not using a more elegant approach with the requirements file
 # We install packages explicitly rather than parsing the requirements file

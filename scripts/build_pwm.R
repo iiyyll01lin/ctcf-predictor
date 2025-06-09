@@ -9,13 +9,32 @@ if (!requireNamespace("Biostrings", quietly = TRUE)) {
 }
 library(Biostrings)
 
-# --- Parameters ---
-# Input file containing known binding sequences in FASTA format
-fasta_file <- "../data/training_sequences.fasta" 
-# Output file to save the generated PWM object
-output_pwm_file <- "../results/generated_pwm.rds"
-# Output file to save the PWM as a text matrix (optional, for easy viewing)
-output_pwm_txt_file <- "../results/generated_pwm.txt"
+# --- Dependencies ---
+if (!requireNamespace("Biostrings", quietly = TRUE)) {
+  stop("Package 'Biostrings' is needed. Please install via BiocManager: \n",
+       "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('Biostrings')",
+       call. = FALSE)
+}
+if (!requireNamespace("optparse", quietly = TRUE)) {
+  install.packages("optparse", repos = "https://cloud.r-project.org")
+}
+library(Biostrings)
+library(optparse)
+
+# --- Parse CLI options ---
+option_list <- list(
+  make_option("--input",  type = "character", default = "data/training_sequences.fasta"),
+  make_option("--output", type = "character", default = "results/generated_pwm.rds"),
+  make_option("--only_positive", action = "store_true", default = FALSE,
+              help = "Keep only sequences whose name contains 'class=1'")
+)
+opt <- parse_args(OptionParser(option_list = option_list))
+
+fasta_file         <- opt$input
+output_pwm_file    <- opt$output
+output_pwm_txt_file <- sub("\\.rds$", ".txt", output_pwm_file)
+
+
 
 # --- Main Script ---
 
@@ -23,6 +42,15 @@ cat("Reading sequences from:", fasta_file, "\n")
 
 # Read sequences
 sequences <- readDNAStringSet(fasta_file)
+
+# 把 only-positive 過濾段插在這裡
+if (opt$only_positive) {
+  keep <- grepl("class=1", names(sequences))
+  sequences <- sequences[keep]
+  cat("Keeping", length(sequences), "positive sequences (class=1).\n")
+  if (length(sequences) == 0)
+    stop("No positive sequences found after filtering.")
+}
 
 # Basic validation: Check if sequences are non-empty and have consistent length
 if (length(sequences) == 0) {

@@ -1,7 +1,7 @@
 {
   "length_filter": true,
-  "min_length": 11,
-  "max_length": 300,
+  "min_length": 50,
+  "max_length": 10000,
   "target_length": null,
   
   "n_handling": "mask",
@@ -9,11 +9,11 @@
   "n_replacement": "A",
   
   "low_complexity_filter": false,
-  "entropy_threshold": 1.0,
-  "complexity_handling": "remove",
+  "entropy_threshold": 0.8,
+  "complexity_handling": "mask",
   "complexity_window": 10,
   
-  "mask_repeats": false,
+  "mask_repeats": true,
   "repeat_min_length": 5,
   
   "force_uppercase": true,

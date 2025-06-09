@@ -132,32 +132,40 @@ for (model_file in model_files) {
   valid_indices <- !is.na(scores)
   scores_valid <- scores[valid_indices]
   labels_valid <- true_labels[valid_indices]
+
   num_scored <- length(scores_valid)
   cat("  Scored", num_scored, "out of", length(test_sequences), "sequences (matching PWM length).\n")
 
   if (num_scored < 2 || length(unique(labels_valid)) < 2) {
       cat("  Skipping ROC/AUC calculation: Need at least two scored sequences with both positive and negative labels.\n")
       auc_value <- NA
+      fraction_sig <- NA
   } else {
       # Calculate ROC and AUC
       roc_obj <- roc(labels_valid, scores_valid, quiet = TRUE)
       auc_obj <- auc(roc_obj)
       auc_value <- as.numeric(auc_obj)
-      cat("  AUC:", sprintf("%.4f", auc_value), "\n")
-      
-      # Optional: Plot ROC curve
-      # plot_file <- file.path(models_dir, paste0(gsub(".rds", "", basename(model_file)), "_roc.png"))
-      # png(plot_file)
-      # plot(roc_obj, main = paste("ROC Curve - ", basename(model_file)), print.auc = TRUE)
-      # dev.off()
-      # cat("  ROC plot saved to:", plot_file, "\n")
+      ## ====== 再計 GC-matched p/q =====================================
+      pos_idx <- labels_valid == 1
+      neg_idx <- labels_valid == 0
+      if (sum(neg_idx) == 0) {
+          stop("No class=0 sequences ⇒ 無 GC 背景可用")
+      }
+      S_pos   <- scores_valid[pos_idx]
+      S_neg   <- scores_valid[neg_idx]
+      pvals   <- sapply(S_pos, function(s) mean(S_neg >= s))
+      qvals   <- p.adjust(pvals, "BH")
+      fraction_sig <- mean(qvals < 0.05)
   }
   
   # Store results
-  results <- rbind(results, data.frame(model_file = basename(model_file), 
-                                        auc = auc_value, 
-                                        num_sequences_scored = num_scored,
-                                        pwm_length = pwm_len))
+  results <- rbind(results, data.frame(
+       model_file           = basename(model_file),
+       auc                  = auc_value,
+       num_sequences_scored = num_scored,
+       pwm_length           = pwm_len,
+       sig_frac_q05         = fraction_sig      # <-- 新欄位
+   ))
 }
 
 # 4. Display Summary
@@ -167,13 +175,11 @@ cat("-------------------------\n")
 
 cat("Evaluation complete.\n")
 
+
+
 # Write metrics if --out is specified
 if (!is.null(opt$out)) {
-  metrics <- data.frame(
-    strategy = opt$strategy,
-    AUC = results$auc[1],
-    stringsAsFactors = FALSE
-  )
-  write.csv(metrics, opt$out, row.names = FALSE)
-  cat("✔ Metrics written to", opt$out, "\n")
+  results <- dplyr::rename(results, AUC = auc)
+  write.csv(results, opt$out, row.names = FALSE)   # 把整張 results 直接輸出
+  cat("✔ All model metrics written to", opt$out, "\n")
 }

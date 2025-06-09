@@ -1,0 +1,23 @@
+
+▶ Evaluating (Uniform) fold1...
+  motif length (L) = 82
+  AUC = 0.5 
+
+▶ Evaluating (Uniform) fold2...
+  motif length (L) = 82
+  AUC = 0.5 
+
+▶ Evaluating (Uniform) fold3...
+  motif length (L) = 82
+  AUC = 0.5 
+
+▶ Evaluating (Uniform) fold4...
+  motif length (L) = 82
+  AUC = 0.5 
+
+▶ Evaluating (Uniform) fold5...
+  motif length (L) = 82
+  AUC = 0.5 
+
+✅ Done (Uniform). AUC 平均: 0.5 +/- 0 
+✔ metrics written to: results/metrics_groupk_uniform.csv 

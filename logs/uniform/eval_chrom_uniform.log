@@ -1,0 +1,17 @@
+Starting PWM Model Evaluation...
+Reading test sequences from: data/splits/chrom/test_sequences.fasta 
+Found 15 test sequences with labels.
+Looking for PWM models ( ^null_chrom_uniform.rds$ ) in: results 
+Found 1 model(s) to evaluate.
+
+Evaluating model: null_chrom_uniform.rds 
+  PWM length: 82 
+  Scored 15 out of 15 sequences (matching PWM length).
+  Skipping ROC/AUC calculation: Need at least two scored sequences with both positive and negative labels.
+
+--- Evaluation Summary ---
+             model_file auc num_sequences_scored pwm_length
+ null_chrom_uniform.rds  NA                   15         82
+-------------------------
+Evaluation complete.
+✔ Metrics written to results/metrics_chrom_uniform.csv 

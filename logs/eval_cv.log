@@ -1,0 +1,19 @@
+Starting PWM model evaluation with cross-validation...
+Reading sequences from: data/complete_labeled_82.fasta 
+Read 236 sequences.
+Using 118 positive and 118 negative sequences.
+
+Performing 5 fold cross-validation with 3 repeats:
+
+Evaluating pwm_cv.rds ...
+  Mean AUC: 0.5696 ± 0.0712 
+  Suggested threshold: 20.8154 
+
+Summary of Evaluation Results:
+    PWM_File  Mean_AUC     SD_AUC Mean_Threshold
+1 pwm_cv.rds 0.5695669 0.07123059       20.81542
+
+Results saved to: results/cv_evaluation_results.csv 
+
+Cross-validation evaluation complete!
+Per-fold AUC (with strategy) saved to: results/metrics_cv.csv 
