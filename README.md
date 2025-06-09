@@ -468,3 +468,42 @@ graph TD
   * Setting the negative-to-positive ratio
 * The negative examples are now automatically included in the test set
 * This eliminates the previous manual step and standardizes the negative sample creation process
+
+### **Comprehensive PWM Testing with Integrated Chromosome Validation** ⭐ NEW
+
+The pipeline now includes a comprehensive testing workflow with integrated chromosome-based split validation and flexible execution modes:
+
+```bash
+# Run with Docker (default, recommended for consistency)
+USE_DOCKER=true ./test_pwm_improvements_with_null_analysis.sh
+
+# Run locally (requires R and dependencies installed)
+USE_DOCKER=false ./test_pwm_improvements_with_null_analysis.sh
+
+# Legacy Docker command (still supported)
+./run-in-docker.sh test_pwm_improvements_with_null_analysis.sh
+```
+
+**Features:**
+- **Flexible Execution**: Choose between Docker (consistent) or local (faster if R is installed) execution
+- **Chromosome-based Split**: Prevents genomic data leakage by using different chromosomes for training/testing
+- **Performance Comparison**: Direct comparison of chromosome-based vs random split methodologies
+- **Automatic Validation**: Built-in data leakage detection and split quality assessment
+- **Statistical Analysis**: Null model comparison and significance testing
+- **Multiple PWM Methods**: Tests various PWM building approaches
+- **Comprehensive Reporting**: Generates detailed HTML reports and validation summaries
+
+**Execution Modes:**
+- **Docker Mode (`USE_DOCKER=true`)**: Uses containerized environment for reproducibility
+- **Local Mode (`USE_DOCKER=false`)**: Runs directly with system R installation for speed
+
+**Key Outputs:**
+- `results/chromosome_split_report.txt` - Split validation and leakage detection
+- `results/performance_comparison/` - Chromosome vs random split comparison results
+- `results/enhanced_pwm_comparison_report.html` - PWM performance comparison with statistical testing
+- `results/statistical_significance_report.html` - Detailed statistical analysis
+- Multiple PWM models with performance metrics
+
+For more details, see `CHROMOSOME_SPLIT_IMPLEMENTATION.md` and `CTCF_PWM_Testing_Pipeline.md`.
+
+---
