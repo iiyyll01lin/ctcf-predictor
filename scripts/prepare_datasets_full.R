@@ -67,7 +67,7 @@ output_fasta     <- args[1]
 neg_method       <- "shuffle"
 neg_ratio        <- 1.0
 add_negatives    <- TRUE
-target_length    <- 82   # default; set NULL to disable
+target_length    <- NULL   # default; set NULL to disable
 
 if (length(args) > 1) {
   idx <- 2

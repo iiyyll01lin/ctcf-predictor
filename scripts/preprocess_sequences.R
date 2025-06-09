@@ -8,11 +8,6 @@ if (!requireNamespace("Biostrings", quietly = TRUE)) {
        call. = FALSE)
 }
 library(Biostrings)
-# s1 <- DNAString("ACGT")            # 單一 DNAString
-# s2 <- DNAStringSet("ACGT")         # DNAStringSet 包裝
-# names(s1) <- "wrong"               # ❌ 錯誤，會報錯
-# names(s2) <- "correct"             # ✅ 正確
-
 
 # --- Command Line Arguments ---
 args <- commandArgs(trailingOnly = TRUE)
@@ -71,8 +66,7 @@ if (!is.null(config_file)) {
     stop("Config file not found: ", config_file)
   }
   
-  # Read JSON config file (can use jsonlite or rjson package)
-  # For simplicity in this example, we'll just use a basic approach
+  # Read JSON config file - enhanced parsing
   config_text <- readLines(config_file, warn = FALSE)
   config_text <- paste(config_text, collapse = "")
   
