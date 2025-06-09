@@ -1,29 +1,23 @@
 # R script to prepare training and testing datasets from extracted sequences
 
 # --- Dependencies ---
-
-
-if (!requireNamespace("BiocManager", quietly = TRUE)) {
-  install.packages("BiocManager")
-}
-
 if (!requireNamespace("Biostrings", quietly = TRUE)) {
-  BiocManager::install("Biostrings", force = TRUE)
+  stop("Package 'Biostrings' is needed. Please install via BiocManager: \n",
+       "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager'); BiocManager::install('Biostrings')",
+       call. = FALSE)
 }
-
-
-
-
 library(Biostrings)
 
 # --- Parameters ---
-input_fasta <- "data/extracted_sequences.fasta"
+# input_fasta <- "../data/extracted_sequences.fasta"
+input_fasta <- "data/preprocessed_sequences_optimized.fasta" 
 output_train_fasta <- "data/training_sequences.fasta"
 output_test_fasta <- "data/test_sequences.fasta"
 
 # Desired sequence length for PWM building and evaluation
 # Set to NULL to skip length filtering
-target_length <- 82 # Example: Match the original PWM length
+target_length <- NULL
+# target_length <- 11 # Example: Match the original PWM length
 
 # Proportion of data to use for the training set (e.g., 0.8 = 80%)
 train_proportion <- 0.8
@@ -141,9 +135,6 @@ if (!file.exists(input_fasta)) {
   stop("Input FASTA file not found: ", input_fasta, ". Run download_data.sh first.")
 }
 all_sequences <- readDNAStringSet(input_fasta)
-if (!inherits(all_sequences, "DNAStringSet")) {
-  all_sequences <- DNAStringSet(all_sequences)
-}
 cat("Read", length(all_sequences), "sequences.\n")
 
 # 2. Filter by Length (Optional)
@@ -178,6 +169,7 @@ cat("Test set size:", length(test_sequences), "\n")
 
 # 4. Write Training Set
 cat("Writing training set to:", output_train_fasta, "\n")
+names(train_sequences) <- paste0(names(train_sequences), " | class=1")  # ✅ 有加上這一行，讓train_sequence.fasta也可以有標註
 writeXStringSet(train_sequences, filepath = output_train_fasta)
 
 # 5. Prepare Test Set (Adding Positive Labels)
@@ -208,5 +200,3 @@ cat("Writing test set to:", output_test_fasta, "\n")
 writeXStringSet(test_sequences, filepath = output_test_fasta)
 
 cat("\nDataset preparation complete.\n")
-
-
