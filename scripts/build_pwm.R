@@ -11,11 +11,11 @@ library(Biostrings)
 
 # --- Parameters ---
 # Input file containing known binding sequences in FASTA format
-fasta_file <- "../data/training_sequences.fasta" 
+fasta_file <- "data/training_sequences.fasta" 
 # Output file to save the generated PWM object
-output_pwm_file <- "../results/generated_pwm.rds"
+output_pwm_file <- "results/generated_pwm.rds"
 # Output file to save the PWM as a text matrix (optional, for easy viewing)
-output_pwm_txt_file <- "../results/generated_pwm.txt"
+output_pwm_txt_file <- "results/generated_pwm.txt"
 
 # --- Main Script ---
 
