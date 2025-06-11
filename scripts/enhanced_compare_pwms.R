@@ -22,7 +22,28 @@ cat("Output report:", output_file, "\n")
 cat("Null models directory:", null_dir, "\n\n")
 
 # --- Load original functions ---
-source(file.path(dirname(sys.frame(1)$ofile), "compare_pwms.R"))
+# Simple and robust approach: try common locations for compare_pwms.R
+compare_pwms_paths <- c(
+  "scripts/compare_pwms.R",         # From project root
+  "./compare_pwms.R",               # Same directory as this script
+  "../compare_pwms.R",              # Parent directory
+  file.path(dirname(getwd()), "scripts", "compare_pwms.R")  # Alternative path
+)
+
+compare_pwms_file <- NULL
+for (path in compare_pwms_paths) {
+  if (file.exists(path)) {
+    compare_pwms_file <- path
+    break
+  }
+}
+
+if (is.null(compare_pwms_file)) {
+  stop("Could not find compare_pwms.R. Please ensure it exists in the scripts directory.")
+}
+
+source(compare_pwms_file)
+cat("Successfully loaded compare_pwms.R from:", compare_pwms_file, "\n\n")
 
 # --- Additional Helper Functions for Null Model Integration ---
 
@@ -290,9 +311,8 @@ generate_enhanced_html_report <- function(comparison_results, null_summary, sign
   
   html_content <- paste0(html_content, "
         </tr>")
-  
-  # Add data rows
-  for (i in 1:nrow(metrics_df)) {
+    # Add data rows
+  for (i in seq_len(nrow(metrics_df))) {
     row <- metrics_df[i, ]
     pwm_name <- row$name
     

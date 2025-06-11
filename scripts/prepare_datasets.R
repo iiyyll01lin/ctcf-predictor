@@ -125,6 +125,56 @@ generate_negative_examples <- function(positive_seqs, method="shuffle", ratio=1.
   return(negative_seqs)
 }
 
+# --- Genomic Split Helper Functions ---
+
+# Validate and show examples of sequence names for debugging
+validate_sequence_names <- function(seq_names, show_examples = 5) {
+  cat("Validating sequence name formats for chromosome extraction...\n")
+  
+  # Show first few examples
+  n_examples <- min(show_examples, length(seq_names))
+  cat("Example sequence names (first", n_examples, "):\n")
+  for (i in 1:n_examples) {
+    cat("  ", i, ":", seq_names[i], "\n")
+  }
+  
+  # Test chromosome extraction on examples
+  chr_patterns <- c(
+    "chr[0-9XY]+:[0-9]+-[0-9]+",    # chr1:12345-67890
+    "chr[0-9XY]+_[0-9]+_[0-9]+",    # chr1_12345_67890
+    "chr[0-9XY]+\\.[0-9]+\\.[0-9]+", # chr1.12345.67890
+    "chr[0-9XY]+"                   # just chr1 (minimal)
+  )
+  
+  cat("Testing common chromosome patterns:\n")
+  for (pattern in chr_patterns) {
+    matches <- sum(grepl(pattern, seq_names[1:n_examples]))
+    cat("  Pattern '", pattern, "': ", matches, "/", n_examples, " matches\n")
+  }
+  
+  return(invisible(NULL))
+}
+
+# Extract chromosome information from sequence names
+extract_chromosome <- function(seq_name) {
+  # Try multiple common formats
+  patterns <- list(
+    chr_colon = "chr[0-9XY]+(?=:)",           # chr1:start-end
+    chr_underscore = "chr[0-9XY]+(?=_)",      # chr1_start_end  
+    chr_dot = "chr[0-9XY]+(?=\\.)",           # chr1.start.end
+    chr_simple = "chr[0-9XY]+"                # chr1 (anywhere)
+  )
+  
+  for (pattern in patterns) {
+    chr_match <- regexpr(pattern, seq_name, perl = TRUE)
+    if (chr_match > 0) {
+      return(substr(seq_name, chr_match, chr_match + attr(chr_match, "match.length") - 1))
+    }
+  }
+  
+  return("unknown")
+}
+
 # --- Main Script ---
 
 cat("Starting dataset preparation...\n")
@@ -152,17 +202,61 @@ if (!is.null(target_length)) {
   filtered_count <- length(all_sequences)
 }
 
-# 3. Shuffle and Split Data
-cat("Shuffling and splitting data (", train_proportion * 100, "% training)...\n", sep="")
-shuffled_indices <- sample(filtered_count)
-num_train <- floor(train_proportion * filtered_count)
-num_test <- filtered_count - num_train
+# 3. Chromosome-based Split (prevents genomic data leakage)
+cat("Performing chromosome-based split (", train_proportion * 100, "% training)...\n", sep="")
 
-train_indices <- shuffled_indices[1:num_train]
-test_indices <- shuffled_indices[(num_train + 1):filtered_count]
+# Validate sequence names first
+validate_sequence_names(names(all_sequences))
 
-train_sequences <- all_sequences[train_indices]
-test_sequences <- all_sequences[test_indices]
+# Get chromosome for each sequence
+chromosomes <- sapply(names(all_sequences), extract_chromosome)
+unique_chrs <- unique(chromosomes)
+cat("Found chromosomes:", paste(sort(unique_chrs), collapse=", "), "\n")
+
+# Handle case where chromosome extraction fails
+if (length(unique_chrs) == 1 && unique_chrs[1] == "unknown") {
+  cat("WARNING: Could not extract chromosome information from sequence names.\n")
+  cat("Falling back to random split. Consider checking sequence name format.\n")
+  cat("Expected formats: 'chr1:start-end', 'chr1_start_end', etc.\n")
+  
+  # Fallback to original random split
+  shuffled_indices <- sample(filtered_count)
+  num_train <- floor(train_proportion * filtered_count)
+  train_indices <- shuffled_indices[1:num_train]
+  test_indices <- shuffled_indices[(num_train + 1):filtered_count]
+  
+  train_sequences <- all_sequences[train_indices]
+  test_sequences <- all_sequences[test_indices]
+  
+} else {
+  # Split chromosomes between train/test (not individual sequences)
+  set.seed(123)  # For reproducible chromosome assignment
+  shuffled_chrs <- sample(unique_chrs)
+  n_train_chrs <- max(1, ceiling(length(unique_chrs) * train_proportion))
+  
+  train_chrs <- shuffled_chrs[1:n_train_chrs]
+  test_chrs <- shuffled_chrs[(n_train_chrs + 1):length(unique_chrs)]
+  
+  cat("Training chromosomes (", length(train_chrs), "):", paste(sort(train_chrs), collapse=", "), "\n")
+  cat("Testing chromosomes (", length(test_chrs), "):", paste(sort(test_chrs), collapse=", "), "\n")
+  
+  # Split sequences based on chromosome assignment
+  train_mask <- chromosomes %in% train_chrs
+  test_mask <- chromosomes %in% test_chrs
+  
+  train_sequences <- all_sequences[train_mask]
+  test_sequences <- all_sequences[test_mask]
+  
+  # Verify no overlap
+  if (length(intersect(train_chrs, test_chrs)) > 0) {
+    warning("Chromosome overlap detected between train/test sets!")
+  }
+  
+  # Report split statistics
+  cat("Split quality check:\n")
+  cat("- Unique training chromosomes:", length(unique(chromosomes[train_mask])), "\n")
+  cat("- Unique testing chromosomes:", length(unique(chromosomes[test_mask])), "\n")
+}
 
 cat("Training set size:", length(train_sequences), "\n")
 cat("Test set size:", length(test_sequences), "\n")

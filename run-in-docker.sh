@@ -40,10 +40,22 @@ if ! docker image inspect ctcf-predictor:latest &>/dev/null; then
 fi
 
 # Run the container with the current directory mounted
-docker run --rm -it \
-  --network host \
-  $PROXY_ENV \
-  -v "$(pwd):/app" \
-  -w /app \
-  ctcf-predictor:latest \
-  -c "$PROXY_SETUP $SCRIPT $*"
+if [[ "$SCRIPT" == *.sh ]]; then
+  # For shell scripts, ensure they run with bash
+  docker run --rm -it \
+    --network host \
+    $PROXY_ENV \
+    -v "$(pwd):/app" \
+    -w /app \
+    ctcf-predictor:latest \
+    bash -c "$PROXY_SETUP bash $SCRIPT $*"
+else
+  # For other commands
+  docker run --rm -it \
+    --network host \
+    $PROXY_ENV \
+    -v "$(pwd):/app" \
+    -w /app \
+    ctcf-predictor:latest \
+    bash -c "$PROXY_SETUP $SCRIPT $*"
+fi
