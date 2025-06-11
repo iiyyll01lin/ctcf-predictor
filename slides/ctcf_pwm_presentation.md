@@ -112,7 +112,7 @@ graph LR
     A[37,628 Raw Sequences<br/>📉 0.695 bits] --> B[Quality Filters<br/>🔍 N ratio, length, complexity]
     B --> C[1,000 High-Quality<br/>📈 19.592 bits] 
     
-    D[Traditional Approach<br/>❌ "More data = better"] --> E[Our Discovery<br/>✅ "Quality data = better"]
+    D[Traditional Approach<br/>❌ More data better] --> E[Our Discovery<br/>✅ Quality data better]
     E --> F[28× Improvement<br/>🏆 Revolutionary result]
     
     style A fill:#ffcccc
@@ -147,7 +147,7 @@ graph TD
     C --> E
     D --> E
     
-    E --> F[Result: All 23 PWMs<br/>p = 0.010 (highly significant)<br/>Cohen's d > 1000 (massive effect)]
+    E --> F[Result: All 23 PWMs<br/>p &lt; 0.010 highly significant<br/>Cohen's d &gt; 1000 massive effect]
     
     style F fill:#ccffcc
 ```
@@ -155,8 +155,8 @@ graph TD
 **Statistical Results:**
 - **Baseline Performance**: 0.041 ± 0.002 bits (null models)
 - **Best Real PWM**: 20.519 bits (**500× improvement**)
-- **Statistical Significance**: p = 0.010 (highly significant)
-- **Effect Size**: Cohen's d > 1000 (unprecedented biological relevance)
+- **Statistical Significance**: p less than 0.010 (highly significant)
+- **Effect Size**: Cohens d greater than 1000 (unprecedented biological relevance)
 
 **🔑 Validation Success**: Massive statistical significance proves authentic biological signal detection
 
@@ -170,8 +170,7 @@ graph TD
 graph LR
     A[Complete Genome<br/>23 chromosomes] --> B[Training Set<br/>19 chromosomes<br/>37,628 sequences]
     A --> C[Testing Set<br/>4 chromosomes<br/>13,166 sequences]
-    
-    D[Traditional Split<br/>❌ Random sequences<br/>🚨 Spatial bias] --> E[Our Innovation<br/>✅ Complete chromosome separation<br/>✅ 0% data leakage]
+    D[Traditional Split<br/>❌ Random sequences<br/>🚨 Spatial bias] --> E[Our Innovation<br/>✅ Complete chromosome separation<br/>✅ Zero percent data leakage]
     
     B --> F[Honest Evaluation<br/>No genomic autocorrelation]
     C --> F
@@ -183,7 +182,7 @@ graph LR
 **Split Statistics:**
 - **Training Chromosomes (19)**: chr1, chr2, chr3, ..., chr19, chrX
 - **Testing Chromosomes (4)**: chr11, chr17, chr20, chr22
-- **Data Leakage**: ✅ **0% overlap** confirmed
+- **Data Leakage**: ✅ **Zero percent overlap** confirmed
 - **Split Ratio**: 80.4% training / 19.6% testing
 
 **🔑 Methodological Breakthrough**: Eliminates spatial autocorrelation bias, ensuring honest model evaluation
@@ -200,19 +199,19 @@ graph TD
     A --> C[Conserved Positions<br/>Positions > 1.0 bits]
     A --> D[Average Information<br/>Per-position specificity]
     
-    B --> E[🏆 Excellent: >15 bits<br/>✅ Good: 10-15 bits<br/>⚠️ Fair: 5-10 bits<br/>❌ Poor: <5 bits]
-    C --> F[🏆 Excellent: >2 positions<br/>✅ Good: 2-5 positions<br/>⚠️ Fair: 1-2 positions<br/>❌ Poor: <1 position]
-    D --> G[🏆 Excellent: >0.06 bits<br/>✅ Good: 0.04-0.06 bits<br/>⚠️ Fair: 0.02-0.04 bits<br/>❌ Poor: <0.02 bits]
+    B --> E[🏆 Excellent: greater than 15 bits<br/>✅ Good: 10-15 bits<br/>⚠️ Fair: 5-10 bits<br/>❌ Poor: less than 5 bits]
+    C --> F[🏆 Excellent: greater than 2 positions<br/>✅ Good: 2-5 positions<br/>⚠️ Fair: 1-2 positions<br/>❌ Poor: less than 1 position]
+    D --> G[🏆 Excellent: greater than 0.06 bits<br/>✅ Good: 0.04-0.06 bits<br/>⚠️ Fair: 0.02-0.04 bits<br/>❌ Poor: less than 0.02 bits]
 ```
 
 **Quality Framework:**
 
 | **Quality Level** | **Total Information** | **Conserved Positions** | **Biological Relevance**       |
 |-------------------|-----------------------|-------------------------|---------------------------------|
-| 🏆 **Excellent**  | >15 bits              | >2 positions            | Publication-ready, clear motif  |
+| 🏆 **Excellent**  | greater than 15 bits              | greater than 2 positions            | Publication-ready, clear motif  |
 | ✅ **Good**        | 10-15 bits            | 2-5 positions           | Suitable for applications       |
 | ⚠️ **Fair**       | 5-10 bits             | 1-2 positions           | Requires validation             |
-| ❌ **Poor**        | <5 bits               | <1 position             | Insufficient quality            |
+| ❌ **Poor**        | less than 5 bits               | less than 1 position             | Insufficient quality            |
 
 ---
 
@@ -323,8 +322,8 @@ graph LR
     A[⚡ Speed Metrics] --> B[35,368 sequences/0.48s<br/>📊 73,683 sequences/second]
     A --> C[💾 Memory Efficiency<br/>Peak: 179.5 MB<br/>Scalable architecture]
     
-    D[🎯 Accuracy Metrics] --> E[Statistical Significance<br/>p = 0.010 (highly significant)]
-    D --> F[Effect Size<br/>Cohen's d > 1000<br/>Massive practical impact]
+    D[🎯 Accuracy Metrics] --> E[Statistical Significance<br/>p &lt; 0.010 highly significant]
+    D --> F[Effect Size<br/>Cohens d greater than 1000<br/>Massive practical impact]
     
     G[🔄 Reliability Metrics] --> H[Error Rate: 0%<br/>100% test completion]
     G --> I[Reproducibility<br/>Docker containerization<br/>Cross-platform compatibility]
@@ -338,7 +337,7 @@ graph LR
 - **Throughput**: 73,683 sequences processed per second
 - **Scalability**: Successful batch processing >35K sequences
 - **Reliability**: 0% error rate across all test iterations
-- **Statistical Power**: All models achieve p < 0.05 with massive effect sizes
+- **Statistical Power**: All models achieve p less than 0.05 with massive effect sizes
 - **Resource Efficiency**: <200MB memory footprint
 
 ---
@@ -436,16 +435,22 @@ graph TD
 ## 28x Performance Improvement Through Smart Filtering
 
 ```mermaid
-sankey
-    Raw Dataset,High Quality,37628
-    Raw Dataset,Low Complexity,34000
-    Raw Dataset,Contaminated,37628
-    High Quality,Excellent PWM,1000
-    Low Complexity,Failed PWM,34000
-    Contaminated,Poor Results,37628
-    Excellent PWM,19.592 bits,1000
-    Failed PWM,0.695 bits,34000
-    Poor Results,Multiple failures,37628
+graph TD
+    A[Raw Dataset<br/>37,628 sequences] --> B[High Quality<br/>1,000 sequences]
+    A --> C[Low Complexity<br/>34,000 sequences]
+    A --> D[Contaminated<br/>37,628 sequences]
+    
+    B --> E[Excellent PWM<br/>19.592 bits]
+    C --> F[Failed PWM<br/>0.695 bits]
+    D --> G[Poor Results<br/>Multiple failures]
+    
+    style A fill:#ffecb3
+    style B fill:#c8e6c9
+    style C fill:#ffcdd2
+    style D fill:#ffcdd2
+    style E fill:#a5d6a7
+    style F fill:#ffcccc
+    style G fill:#ffcccc
 ```
 
 ### **Scaling Relationship Analysis:**
@@ -538,8 +543,7 @@ graph TD
 flowchart LR
     A[Chromosome Extraction] --> B[Training Set<br/>chr1,2,3,4,5,6,7,8,9,10<br/>chr12,13,14,15,16,18,19,21,X]
     A --> C[Testing Set<br/>chr11,17,20,22]
-    
-    B --> D[Overlap Check<br/>intersection() = ∅]
+      B --> D[Overlap Check<br/>intersection empty]
     C --> D
     
     D --> E[✅ Zero Overlap Confirmed<br/>Complete spatial separation<br/>No data leakage detected]
@@ -694,10 +698,10 @@ graph TD
     end
     
     subgraph "Quality Classification"
-        F --> G[🏆 Excellent<br/>>15 bits, >2 conserved<br/>Clear biological pattern<br/>p < 0.001, d > 1000]
-        F --> H[✅ Good<br/>10-15 bits, 1-2 conserved<br/>Moderate pattern<br/>p < 0.01, d > 100]
-        F --> I[⚠️ Fair<br/>5-10 bits, 0-1 conserved<br/>Weak pattern<br/>p < 0.05, d > 10]
-        F --> J[❌ Poor<br/><5 bits, 0 conserved<br/>No pattern<br/>p > 0.05, d < 1]
+        F --> G[🏆 Excellent<br/>greater than 15 bits, greater than 2 conserved<br/>Clear biological pattern<br/>p less than 0.001, d greater than 1000]
+        F --> H[✅ Good<br/>10-15 bits, 1-2 conserved<br/>Moderate pattern<br/>p less than 0.01, d greater than 100]
+        F --> I[⚠️ Fair<br/>5-10 bits, 0-1 conserved<br/>Weak pattern<br/>p less than 0.05, d greater than 10]
+        F --> J[❌ Poor<br/>less than 5 bits, 0 conserved<br/>No pattern<br/>p greater than 0.05, d less than 1]
     end
     
     style A fill:#e3f2fd
@@ -734,7 +738,7 @@ pie title PWM Quality Assessment (19 variants)
 
 ```mermaid
 graph TD
-    A[🏆 Elite Tier - Excellent Performance >15 bits] --> B[🥇 pwm_aligned.rds<br/>20.519 bits, 0 conserved<br/>⚠️ Anomalous pattern]
+    A[🏆 Elite Tier - Excellent Performance greater than 15 bits] --> B[🥇 pwm_aligned.rds<br/>20.519 bits, 0 conserved<br/>⚠️ Anomalous pattern]
     A --> C[🥈 subset_pwm_size1000.rds<br/>19.592 bits, 2 conserved<br/>✅ Quality-over-quantity proof]
     A --> D[🥉 best_pwm.rds<br/>15.565 bits, 2 conserved<br/>✅ RECOMMENDED for production]
     
