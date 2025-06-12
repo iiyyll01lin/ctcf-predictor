@@ -211,17 +211,16 @@
 
         <div class="slide">
             <h2><span class="emoji">🧬</span> CTCF - The Master Genome Organizer</h2>
-            
-            <div class="mermaid">
+              <div class="mermaid">
                 graph LR
-                    A[🧬 CTCF Protein<br/>11 Zinc Fingers] --> B[🎯 DNA Binding<br/>~19bp Core Motif]
-                    B --> C[🏗️ Genome Organization<br/>TAD Formation]
-                    C --> D[🔄 Gene Regulation<br/>Enhancer-Promoter]
-                    D --> E[🩺 Medical Relevance<br/>Cancer & Disease]
+                    A["🧬 CTCF Protein<br/>11 Zinc Fingers"] --> B["🎯 DNA Binding<br/>~19bp Core Motif"]
+                    B --> C["🏗️ Genome Organization<br/>TAD Formation"]
+                    C --> D["🔄 Gene Regulation<br/>Enhancer-Promoter"]
+                    D --> E["🩺 Medical Relevance<br/>Cancer & Disease"]
                     
-                    F[⚙️ Binding Mechanism] --> G[📊 PWM Modeling<br/>Position-Specific Scores]
-                    G --> H[🎯 Site Prediction<br/>Genome-wide Scanning]
-                    H --> I[🔬 Functional Analysis<br/>Regulatory Networks]
+                    F["⚙️ Binding Mechanism"] --> G["📊 PWM Modeling<br/>Position-Specific Scores"]
+                    G --> H["🎯 Site Prediction<br/>Genome-wide Scanning"]
+                    H --> I["🔬 Functional Analysis<br/>Regulatory Networks"]
             </div>
 
             <div class="highlight">
@@ -236,15 +235,13 @@
         </div>
 
         <div class="slide" id="discovery">
-            <h2><span class="emoji">🏆</span> The Quality-Over-Quantity Revolution</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">🏆</span> The Quality-Over-Quantity Revolution</h2>            <div class="mermaid">
                 graph LR
-                    A[37,628 Raw Sequences<br/>📉 0.695 bits] --> B[Quality Filters<br/>🔍 N ratio, length, complexity]
-                    B --> C[1,000 High-Quality<br/>📈 19.592 bits] 
+                    A["37,628 Raw Sequences<br/>📉 0.695 bits"] --> B["Quality Filters<br/>🔍 N ratio, length, complexity"]
+                    B --> C["1,000 High-Quality<br/>📈 19.592 bits"] 
                     
-                    D[Traditional Approach<br/>❌ "More data = better"] --> E[Our Discovery<br/>✅ "Quality data = better"]
-                    E --> F[28× Improvement<br/>🏆 Revolutionary result]
+                    D["Traditional Approach<br/>❌ More data = better"] --> E["Our Discovery<br/>✅ Quality data = better"]
+                    E --> F["28× Improvement<br/>🏆 Revolutionary result"]
                     
                     style A fill:#ffcccc
                     style C fill:#ccffcc
@@ -299,19 +296,17 @@
         </div>
 
         <div class="slide">
-            <h2><span class="emoji">📊</span> Statistical Validation Framework</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">📊</span> Statistical Validation Framework</h2>            <div class="mermaid">
                 graph TD
-                    A[300 Null Model Replicates] --> B[Random Sequences<br/>100 replicates<br/>Matched nucleotide composition]
-                    A --> C[Shuffled Sequences<br/>100 replicates<br/>Individual sequence preservation]
-                    A --> D[Position-Shuffled<br/>100 replicates<br/>Dinucleotide frequency maintained]
+                    A["300 Null Model Replicates"] --> B["Random Sequences<br/>100 replicates<br/>Matched nucleotide composition"]
+                    A --> C["Shuffled Sequences<br/>100 replicates<br/>Individual sequence preservation"]
+                    A --> D["Position-Shuffled<br/>100 replicates<br/>Dinucleotide frequency maintained"]
                     
-                    B --> E[Statistical Testing<br/>P-values & Effect Sizes]
+                    B --> E["Statistical Testing<br/>P-values & Effect Sizes"]
                     C --> E
                     D --> E
                     
-                    E --> F[Result: All 23 PWMs<br/>p = 0.010 (highly significant)<br/>Cohen's d > 1000 (massive effect)]
+                    E --> F["Result: All 23 PWMs<br/>p = 0.010 (highly significant)<br/>Cohen's d > 1000 (massive effect)"]
                     
                     style F fill:#ccffcc
             </div>
@@ -342,16 +337,14 @@
         </div>
 
         <div class="slide" id="methods">
-            <h2><span class="emoji">🧬</span> Chromosome-Based Split Innovation</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">🧬</span> Chromosome-Based Split Innovation</h2>            <div class="mermaid">
                 graph LR
-                    A[Complete Genome<br/>23 chromosomes] --> B[Training Set<br/>19 chromosomes<br/>37,628 sequences]
-                    A --> C[Testing Set<br/>4 chromosomes<br/>13,166 sequences]
+                    A["Complete Genome<br/>23 chromosomes"] --> B["Training Set<br/>19 chromosomes<br/>37,628 sequences"]
+                    A --> C["Testing Set<br/>4 chromosomes<br/>13,166 sequences"]
                     
-                    D[Traditional Split<br/>❌ Random sequences<br/>🚨 Spatial bias] --> E[Our Innovation<br/>✅ Complete chromosome separation<br/>✅ 0% data leakage]
+                    D["Traditional Split<br/>❌ Random sequences<br/>🚨 Spatial bias"] --> E["Our Innovation<br/>✅ Complete chromosome separation<br/>✅ 0% data leakage"]
                     
-                    B --> F[Honest Evaluation<br/>No genomic autocorrelation]
+                    B --> F["Honest Evaluation<br/>No genomic autocorrelation"]
                     C --> F
                     
                     style E fill:#ccffcc
@@ -374,18 +367,16 @@
         </div>
 
         <div class="slide">
-            <h2><span class="emoji">📈</span> Enhanced Pipeline Architecture</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">📈</span> Enhanced Pipeline Architecture</h2>            <div class="mermaid">
                 graph TD
-                    A[📥 Phase 0: Data Acquisition<br/>ENCODE CTCF peaks + hg38] --> B[🔍 Phase 1: Quality Analysis<br/>Sequence preprocessing & null models]
-                    B --> C[🧬 Phase 1.5: Chromosome Split<br/>⭐ NEW: Data leakage prevention]
-                    C --> D[🏗️ Phase 2: PWM Building<br/>5 methods, 19 variants]
-                    D --> E[📊 Phase 3: Statistical Validation<br/>300 null model testing]
-                    E --> F[🎯 Phase 4: Quality Assessment<br/>Multi-metric evaluation]
-                    F --> G[📋 Phase 5: Reporting<br/>Publication-ready results]
+                    A["📥 Phase 0: Data Acquisition<br/>ENCODE CTCF peaks + hg38"] --> B["🔍 Phase 1: Quality Analysis<br/>Sequence preprocessing & null models"]
+                    B --> C["🧬 Phase 1.5: Chromosome Split<br/>⭐ NEW: Data leakage prevention"]
+                    C --> D["🏗️ Phase 2: PWM Building<br/>5 methods, 19 variants"]
+                    D --> E["📊 Phase 3: Statistical Validation<br/>300 null model testing"]
+                    E --> F["🎯 Phase 4: Quality Assessment<br/>Multi-metric evaluation"]
+                    F --> G["📋 Phase 5: Reporting<br/>Publication-ready results"]
                     
-                    H[🔄 Continuous Validation<br/>Quality metrics throughout] --> B
+                    H["🔄 Continuous Validation<br/>Quality metrics throughout"] --> B
                     H --> C
                     H --> D
                     H --> E
@@ -399,15 +390,13 @@
         </div>
 
         <div class="slide" id="results">
-            <h2><span class="emoji">🏆</span> Top Performing PWM Methods</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">🏆</span> Top Performing PWM Methods</h2>            <div class="mermaid">
                 graph LR
-                    A[🥇 best_pwm.rds<br/>15.565 bits, 2 conserved<br/>✅ RECOMMENDED] --> D[Production Use<br/>Optimal balance]
-                    B[🥈 subset_pwm_size1000.rds<br/>19.592 bits, 2 conserved<br/>Quality-over-quantity proof] --> D
-                    C[🥉 pwm_aligned.rds<br/>20.519 bits, 0 conserved<br/>⚠️ High info, low specificity] --> E[Research Use<br/>Needs validation]
+                    A["🥇 best_pwm.rds<br/>15.565 bits, 2 conserved<br/>✅ RECOMMENDED"] --> D["Production Use<br/>Optimal balance"]
+                    B["🥈 subset_pwm_size1000.rds<br/>19.592 bits, 2 conserved<br/>Quality-over-quantity proof"] --> D
+                    C["🥉 pwm_aligned.rds<br/>20.519 bits, 0 conserved<br/>⚠️ High info, low specificity"] --> E["Research Use<br/>Needs validation"]
                     
-                    F[❌ Alignment Methods<br/>consensus: 0.770 bits<br/>length: 0.741 bits<br/>progressive: 0.534 bits] --> G[Failed Approaches<br/>Poor performance]
+                    F["❌ Alignment Methods<br/>consensus: 0.770 bits<br/>length: 0.741 bits<br/>progressive: 0.534 bits"] --> G["Failed Approaches<br/>Poor performance"]
                     
                     style A fill:#ffd700
                     style B fill:#c0c0c0
@@ -458,18 +447,16 @@
         </div>
 
         <div class="slide">
-            <h2><span class="emoji">⚡</span> Performance Metrics Dashboard</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">⚡</span> Performance Metrics Dashboard</h2>            <div class="mermaid">
                 graph LR
-                    A[⚡ Speed Metrics] --> B[35,368 sequences/0.48s<br/>📊 73,683 sequences/second]
-                    A --> C[💾 Memory Efficiency<br/>Peak: 179.5 MB<br/>Scalable architecture]
+                    A["⚡ Speed Metrics"] --> B["35,368 sequences/0.48s<br/>📊 73,683 sequences/second"]
+                    A --> C["💾 Memory Efficiency<br/>Peak: 179.5 MB<br/>Scalable architecture"]
                     
-                    D[🎯 Accuracy Metrics] --> E[Statistical Significance<br/>p = 0.010 (highly significant)]
-                    D --> F[Effect Size<br/>Cohen's d > 1000<br/>Massive practical impact]
+                    D["🎯 Accuracy Metrics"] --> E["Statistical Significance<br/>p = 0.010 (highly significant)"]
+                    D --> F["Effect Size<br/>Cohen's d > 1000<br/>Massive practical impact"]
                     
-                    G[🔄 Reliability Metrics] --> H[Error Rate: 0%<br/>100% test completion]
-                    G --> I[Reproducibility<br/>Docker containerization<br/>Cross-platform compatibility]
+                    G["🔄 Reliability Metrics"] --> H["Error Rate: 0%<br/>100% test completion"]
+                    G --> I["Reproducibility<br/>Docker containerization<br/>Cross-platform compatibility"]
                     
                     style B fill:#ccffcc
                     style E fill:#ccffcc
@@ -534,17 +521,15 @@
         </div>
 
         <div class="slide" id="impact">
-            <h2><span class="emoji">💰</span> Economic Impact & Resource Efficiency</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">💰</span> Economic Impact & Resource Efficiency</h2>            <div class="mermaid">
                 graph LR
-                    A[Traditional Approach] --> B[💰 High Computational Cost<br/>Process all 37K sequences<br/>Complex alignment required]
-                    B --> C[⏱️ Long Processing Time<br/>Hours to days<br/>High resource usage]
-                    C --> D[📉 Poor Results<br/>Low-quality PWMs<br/>Limited applicability]
+                    A["Traditional Approach"] --> B["💰 High Computational Cost<br/>Process all 37K sequences<br/>Complex alignment required"]
+                    B --> C["⏱️ Long Processing Time<br/>Hours to days<br/>High resource usage"]
+                    C --> D["📉 Poor Results<br/>Low-quality PWMs<br/>Limited applicability"]
                     
-                    E[Our Quality-First Approach] --> F[💰 Low Computational Cost<br/>Process 1K sequences<br/>Simple filtering]
-                    F --> G[⏱️ Fast Processing<br/>Seconds to minutes<br/>Efficient resource usage]
-                    G --> H[📈 Superior Results<br/>High-quality PWMs<br/>28× improvement]
+                    E["Our Quality-First Approach"] --> F["💰 Low Computational Cost<br/>Process 1K sequences<br/>Simple filtering"]
+                    F --> G["⏱️ Fast Processing<br/>Seconds to minutes<br/>Efficient resource usage"]
+                    G --> H["📈 Superior Results<br/>High-quality PWMs<br/>28× improvement"]
                     
                     style A fill:#ffcccc
                     style E fill:#ccffcc
@@ -588,9 +573,7 @@
         </div>
 
         <div class="slide">
-            <h2><span class="emoji">🌍</span> Future Extensions & Applications</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">🌍</span> Future Extensions & Applications</h2>            <div class="mermaid">
                 graph LR
                     A[Current CTCF Pipeline] --> B[Multi-TF Extension<br/>Other transcription factors<br/>Comparative analysis]
                     A --> C[Species Comparison<br/>Cross-species validation<br/>Evolution analysis]
@@ -620,9 +603,7 @@
         </div>
 
         <div class="slide" id="conclusions">
-            <h2><span class="emoji">🏆</span> Conclusions - Paradigm Shift Achieved</h2>
-
-            <div class="mermaid">
+            <h2><span class="emoji">🏆</span> Conclusions - Paradigm Shift Achieved</h2>            <div class="mermaid">
                 graph LR
                     A[🏆 Key Achievements] --> B[🔬 28× Performance Improvement<br/>Quality beats quantity]
                     A --> C[📊 Statistical Excellence<br/>p=0.010, Cohen's d>1000]

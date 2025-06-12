@@ -123,11 +123,11 @@ graph LR
 **Breakthrough Results:**
 
 | **Dataset**           | **Size** | **Total Information** | **Quality Grade** | **Performance** |
-|-----------------------|----------|----------------------|-------------------|-----------------|
-| 🥇 **1,000 filtered** | 1K       | **19.592 bits**      | 🏆 **Excellent** | **Baseline**    |
-| 🥈 **2,000 filtered** | 2K       | **12.564 bits**      | ✅ **Good**       | 0.64×           |
-| 🥉 **5,000 filtered** | 5K       | **10.659 bits**      | ⚠️ **Fair**       | 0.54×           |
-| ❌ **All raw data**   | 37.6K    | **0.695 bits**       | ❌ **Very Poor**  | **0.035×**      |
+|-----------------------|----------|-----------------------|-------------------|-----------------|
+| 🥇 **1,000 filtered** | 1K       | **19.592 bits**       | 🏆 **Excellent**  | **Baseline**    |
+| 🥈 **2,000 filtered** | 2K       | **12.564 bits**       | ✅ **Good**        | 0.64×           |
+| 🥉 **5,000 filtered** | 5K       | **10.659 bits**       | ⚠️ **Fair**       | 0.54×           |
+| ❌ **All raw data**    | 37.6K    | **0.695 bits**        | ❌ **Very Poor**   | **0.035×**      |
 
 **🔑 Scientific Impact**: Established that **dataset quality trumps dataset size** in transcription factor modeling
 
@@ -206,12 +206,12 @@ graph TD
 
 **Quality Framework:**
 
-| **Quality Level** | **Total Information** | **Conserved Positions** | **Biological Relevance**       |
-|-------------------|-----------------------|-------------------------|---------------------------------|
-| 🏆 **Excellent**  | greater than 15 bits              | greater than 2 positions            | Publication-ready, clear motif  |
-| ✅ **Good**        | 10-15 bits            | 2-5 positions           | Suitable for applications       |
-| ⚠️ **Fair**       | 5-10 bits             | 1-2 positions           | Requires validation             |
-| ❌ **Poor**        | less than 5 bits               | less than 1 position             | Insufficient quality            |
+| **Quality Level** | **Total Information** | **Conserved Positions**  | **Biological Relevance**       |
+|-------------------|-----------------------|--------------------------|--------------------------------|
+| 🏆 **Excellent**  | greater than 15 bits  | greater than 2 positions | Publication-ready, clear motif |
+| ✅ **Good**        | 10-15 bits            | 2-5 positions            | Suitable for applications      |
+| ⚠️ **Fair**       | 5-10 bits             | 1-2 positions            | Requires validation            |
+| ❌ **Poor**        | less than 5 bits      | less than 1 position     | Insufficient quality           |
 
 ---
 
@@ -241,11 +241,11 @@ graph TD
 
 **Quality Impact Analysis:**
 
-| **Issue**              | **Severity** | **Impact**              | **Solution**          |
-|------------------------|--------------|-------------------------|-----------------------|
-| Length Variability     | 🔴 Critical  | Poor alignment, low IC  | Length filtering      |
-| N Base Contamination   | 🔴 High      | Reduced information     | N-ratio threshold     |
-| Low Complexity         | 🔴 Critical  | Minimal motif signal    | Entropy filtering     |
+| **Issue**            | **Severity** | **Impact**             | **Solution**      |
+|----------------------|--------------|------------------------|-------------------|
+| Length Variability   | 🔴 Critical  | Poor alignment, low IC | Length filtering  |
+| N Base Contamination | 🔴 High      | Reduced information    | N-ratio threshold |
+| Low Complexity       | 🔴 Critical  | Minimal motif signal   | Entropy filtering |
 
 **🔑 Key Insight**: Data preprocessing more critical than alignment methodology
 
@@ -271,12 +271,12 @@ graph LR
 
 **Performance Comparison:**
 
-| **Method**               | **Total Info** | **Conserved Pos** | **Assessment**        |
-|--------------------------|----------------|--------------------|----------------------|
-| **🥇 best_pwm.rds**      | **15.565**     | **2**              | ✅ **RECOMMENDED**   |
-| **🥈 subset 1K**         | **19.592**     | **2**              | ✅ **Excellent**     |
-| **🥉 pwm_aligned**       | **20.519**     | **0**              | ⚠️ **High info only** |
-| **❌ Consensus align**   | **0.770**      | **0**              | ❌ **Poor**          |
+| **Method**            | **Total Info** | **Conserved Pos** | **Assessment**        |
+|-----------------------|----------------|-------------------|-----------------------|
+| **🥇 best_pwm.rds**   | **15.565**     | **2**             | ✅ **RECOMMENDED**     |
+| **🥈 subset 1K**      | **19.592**     | **2**             | ✅ **Excellent**       |
+| **🥉 pwm_aligned**    | **20.519**     | **0**             | ⚠️ **High info only** |
+| **❌ Consensus align** | **0.770**      | **0**             | ❌ **Poor**            |
 
 **🔑 Recommendation**: Use `best_pwm.rds` for production applications
 
@@ -757,14 +757,14 @@ graph TD
 
 ### **Complete Performance Table:**
 
-| **Rank** | **PWM File** | **Total Info** | **Conserved Pos** | **Assessment** | **Use Case** |
-|----------|--------------|----------------|--------------------|----------------|--------------|
-| **🥇 #1** | **pwm_aligned.rds** | **20.519** | **0** | ⚠️ **High info, no specificity** | Research only |
-| **🥈 #2** | **subset_pwm_size1000.rds** | **19.592** | **2** | ✅ **Excellence demonstration** | Research/validation |
-| **🥉 #3** | **best_pwm.rds** | **15.565** | **2** | ✅ **PRODUCTION READY** | **Recommended** |
-| **#4** | **subset_pwm_size2000.rds** | **12.564** | **1** | ✅ **Good alternative** | Production backup |
-| **#5** | **subset_pwm_size5000.rds** | **10.659** | **0** | ⚠️ **Fair quality** | Limited use |
-| **#6-23** | **Alignment methods** | **0.534-0.770** | **0** | ❌ **Failed approaches** | Not recommended |
+| **Rank**  | **PWM File**                | **Total Info**  | **Conserved Pos** | **Assessment**                   | **Use Case**        |
+|-----------|-----------------------------|-----------------|-------------------|----------------------------------|---------------------|
+| **🥇 #1** | **pwm_aligned.rds**         | **20.519**      | **0**             | ⚠️ **High info, no specificity** | Research only       |
+| **🥈 #2** | **subset_pwm_size1000.rds** | **19.592**      | **2**             | ✅ **Excellence demonstration**   | Research/validation |
+| **🥉 #3** | **best_pwm.rds**            | **15.565**      | **2**             | ✅ **PRODUCTION READY**           | **Recommended**     |
+| **#4**    | **subset_pwm_size2000.rds** | **12.564**      | **1**             | ✅ **Good alternative**           | Production backup   |
+| **#5**    | **subset_pwm_size5000.rds** | **10.659**      | **0**             | ⚠️ **Fair quality**              | Limited use         |
+| **#6-23** | **Alignment methods**       | **0.534-0.770** | **0**             | ❌ **Failed approaches**          | Not recommended     |
 
 ### **Key Performance Insights:**
 - **Clear Quality Threshold**: Massive gap between subset methods (>10 bits) vs alignment (<1 bit)
@@ -793,13 +793,13 @@ graph LR
 
 ### **Comprehensive Pseudocount Analysis:**
 
-| **Pseudocount** | **Mean Information** | **SD Information** | **Performance Level** | **Status** |
-|-----------------|---------------------|-------------------|----------------------|------------|
-| **0.01** ✅     | **0.8594**          | **0.01775**       | **Peak performance** | ✅ **OPTIMAL** |
-| **0.05**        | **0.8594**          | **0.01775**       | **Excellent**        | ✅ **Alternative** |
-| **0.10**        | **0.8593**          | **0.01775**       | **Very good**        | ⚠️ **Acceptable** |
-| **0.50**        | **0.8585**          | **0.01773**       | **Good**             | ❌ **Suboptimal** |
-| **1.00**        | **0.8574**          | **0.01771**       | **Fair**             | ❌ **Poor choice** |
+| **Pseudocount** | **Mean Information** | **SD Information** | **Performance Level** | **Status**        |
+|-----------------|----------------------|--------------------|-----------------------|-------------------|
+| **0.01** ✅      | **0.8594**           | **0.01775**        | **Peak performance**  | ✅ **OPTIMAL**     |
+| **0.05**        | **0.8594**           | **0.01775**        | **Excellent**         | ✅ **Alternative** |
+| **0.10**        | **0.8593**           | **0.01775**        | **Very good**         | ⚠️ **Acceptable** |
+| **0.50**        | **0.8585**           | **0.01773**        | **Good**              | ❌ **Suboptimal**  |
+| **1.00**        | **0.8574**           | **0.01771**        | **Fair**              | ❌ **Poor choice** |
 
 ### **Statistical Validation:**
 - **Methodology**: Multiple cross-validation runs with statistical analysis
@@ -838,12 +838,12 @@ graph TD
 
 ### **Dramatic Improvement Analysis:**
 
-| **Configuration** | **Sequences** | **Total Information** | **Quality Grade** | **Improvement Factor** | **Status** |
-|-------------------|---------------|----------------------|-------------------|------------------------|------------|
-| **🏆 Filtered (1K)** | **1,000** | **19.592 bits** | 🏆 **Excellent** | **28.2× baseline** | ✅ **OPTIMAL** |
-| **Filtered (2K)** | **2,000** | **12.564 bits** | ✅ **Good** | **18.1× baseline** | ✅ **Alternative** |
-| **Filtered (5K)** | **5,000** | **10.659 bits** | ⚠️ **Fair** | **15.3× baseline** | ⚠️ **Acceptable** |
-| **❌ Raw Dataset** | **37,628** | **0.695 bits** | ❌ **Very Poor** | **1× baseline** | ❌ **Unacceptable** |
+| **Configuration**    | **Sequences** | **Total Information** | **Quality Grade** | **Improvement Factor** | **Status**         |
+|----------------------|---------------|-----------------------|-------------------|------------------------|--------------------|
+| **🏆 Filtered (1K)** | **1,000**     | **19.592 bits**       | 🏆 **Excellent**  | **28.2× baseline**     | ✅ **OPTIMAL**      |
+| **Filtered (2K)**    | **2,000**     | **12.564 bits**       | ✅ **Good**        | **18.1× baseline**     | ✅ **Alternative**  |
+| **Filtered (5K)**    | **5,000**     | **10.659 bits**       | ⚠️ **Fair**       | **15.3× baseline**     | ⚠️ **Acceptable**  |
+| **❌ Raw Dataset**    | **37,628**    | **0.695 bits**        | ❌ **Very Poor**   | **1× baseline**        | ❌ **Unacceptable** |
 
 ### **Quality Filtering Impact:**
 - **Sequence Reduction**: 37,628 → 1,000 (97.3% reduction)
@@ -880,13 +880,13 @@ graph TD
 
 ### **Comprehensive Performance Metrics:**
 
-| **Metric** | **Value** | **Assessment** | **Production Readiness** |
-|------------|-----------|----------------|-------------------------|
-| **Processing Speed** | **73,683 seq/sec** | 🏆 **Exceptional** | ✅ **Genome-scale ready** |
-| **Memory Efficiency** | **0.5% increase** | 🏆 **Excellent** | ✅ **Highly scalable** |
-| **Batch Size** | **10,000 optimal** | ✅ **Optimized** | ✅ **Memory balanced** |
-| **Error Rate** | **0%** | 🏆 **Perfect** | ✅ **Production grade** |
-| **Scalability** | **Linear O(n)** | ✅ **Predictable** | ✅ **Enterprise ready** |
+| **Metric**            | **Value**          | **Assessment**     | **Production Readiness** |
+|-----------------------|--------------------|--------------------|--------------------------|
+| **Processing Speed**  | **73,683 seq/sec** | 🏆 **Exceptional** | ✅ **Genome-scale ready** |
+| **Memory Efficiency** | **0.5% increase**  | 🏆 **Excellent**   | ✅ **Highly scalable**    |
+| **Batch Size**        | **10,000 optimal** | ✅ **Optimized**    | ✅ **Memory balanced**    |
+| **Error Rate**        | **0%**             | 🏆 **Perfect**     | ✅ **Production grade**   |
+| **Scalability**       | **Linear O(n)**    | ✅ **Predictable**  | ✅ **Enterprise ready**   |
 
 ### **Technical Specifications:**
 - **🚀 Processing Speed**: 35,368 sequences in 0.48 seconds

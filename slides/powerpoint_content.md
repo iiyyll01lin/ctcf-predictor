@@ -135,14 +135,14 @@ CTCF Quality Benchmarks:
 - No statistical validation → Unreliable results
 
 **Our Modern Framework:**
-| Aspect | Traditional | Our Pipeline |
-|--------|-------------|--------------|
-| Data Splitting | Random selection | Chromosome-based splitting |
-| Quality Control | Minimal filtering | Comprehensive preprocessing |
-| Alignment | Single method | 7 distinct methods |
-| Validation | Basic metrics | 300+ null model testing |
-| Automation | Manual steps | Fully automated Docker pipeline |
-| Reproducibility | Variable | Containerized consistency |
+| Aspect          | Traditional       | Our Pipeline                    |
+|-----------------|-------------------|---------------------------------|
+| Data Splitting  | Random selection  | Chromosome-based splitting      |
+| Quality Control | Minimal filtering | Comprehensive preprocessing     |
+| Alignment       | Single method     | 7 distinct methods              |
+| Validation      | Basic metrics     | 300+ null model testing         |
+| Automation      | Manual steps      | Fully automated Docker pipeline |
+| Reproducibility | Variable          | Containerized consistency       |
 
 **Key Innovations:**
 - Quality-over-quantity paradigm: Small, high-quality subsets outperform large datasets
@@ -329,12 +329,12 @@ training_sequences.fasta → [Integrated Alignment + PWM Building] → Results
 - Progressive alignment: Iterative refinement
 
 **Alignment Strategy Comparison:**
-| Method | Sequences Used | Total Info (bits) | Conserved Positions |
-|--------|----------------|-------------------|-------------------|
-| Center | 35,368 | 0.695 | 0 |
-| Consensus | 22,573 | 0.774 | 0 |
-| Length-based | 35,368 | 0.792 | 0 |
-| Advanced consensus | Variable | >8.0 | 0-2 |
+| Method             | Sequences Used | Total Info (bits) | Conserved Positions |
+|--------------------|----------------|-------------------|---------------------|
+| Center             | 35,368         | 0.695             | 0                   |
+| Consensus          | 22,573         | 0.774             | 0                   |
+| Length-based       | 35,368         | 0.792             | 0                   |
+| Advanced consensus | Variable       | >8.0              | 0-2                 |
 
 **Key Insight:** Advanced methods with quality filtering significantly outperform traditional approaches.
 
@@ -414,12 +414,12 @@ training_sequences.fasta → [Integrated Alignment + PWM Building] → Results
 **Title:** Information Content Analysis and Quality Metrics - Quality Assessment Framework
 
 **Information Content Classification:**
-| Quality Level | Total IC (bits) | Avg IC/Position | Conserved Positions | Interpretation |
-|---------------|-----------------|-----------------|-------------------|----------------|
-| Excellent | >15 | >0.3 | >5 positions | Publication-ready |
-| Good | 10-15 | 0.2-0.3 | 2-5 positions | Suitable for applications |
-| Fair | 5-10 | 0.1-0.2 | 1-2 positions | Requires validation |
-| Poor | <5 | <0.1 | <1 position | Insufficient quality |
+| Quality Level | Total IC (bits) | Avg IC/Position | Conserved Positions | Interpretation            |
+|---------------|-----------------|-----------------|---------------------|---------------------------|
+| Excellent     | >15             | >0.3            | >5 positions        | Publication-ready         |
+| Good          | 10-15           | 0.2-0.3         | 2-5 positions       | Suitable for applications |
+| Fair          | 5-10            | 0.1-0.2         | 1-2 positions       | Requires validation       |
+| Poor          | <5              | <0.1            | <1 position         | Insufficient quality      |
 
 **Performance Results:**
 
@@ -491,12 +491,12 @@ Consensus: N  N  N  N  N  N  N  N  N  N  N  N  N  N  N  N  N  N  N
 
 **Processing Speed:**
 ```
-Method                  | Sequences | Time    | Rate
-------------------------|-----------|---------|------------------
-Efficient Aligned PWM   | 35,368    | 0.54s   | 65,496 seq/sec
-Simple Aligned PWM      | 35,368    | 0.31s   | 114,090 seq/sec
-Subset PWM (1000)       | 1,000     | 0.05s   | 20,000 seq/sec
-Advanced Consensus      | 22,573    | 1.2s    | 18,811 seq/sec
+Method                | Sequences | Time  | Rate
+----------------------|-----------|-------|----------------
+Efficient Aligned PWM | 35,368    | 0.54s | 65,496 seq/sec
+Simple Aligned PWM    | 35,368    | 0.31s | 114,090 seq/sec
+Subset PWM (1000)     | 1,000     | 0.05s | 20,000 seq/sec
+Advanced Consensus    | 22,573    | 1.2s  | 18,811 seq/sec
 ```
 
 **Scalability Characteristics:**
@@ -534,11 +534,11 @@ Advanced Consensus      | 22,573    | 1.2s    | 18,811 seq/sec
 **Performance Metrics:**
 ```
 Threshold | Sensitivity | Specificity | Balanced Accuracy | F1-Score
-----------|-------------|-------------|-------------------|----------
-0.5       | 0.95        | 0.60        | 0.775            | 0.73
-1.0       | 0.85        | 0.80        | 0.825            | 0.82
-1.5       | 0.75        | 0.90        | 0.825            | 0.81
-2.0       | 0.65        | 0.95        | 0.800            | 0.77
+----------|-------------|-------------|-------------------|---------
+0.5       | 0.95        | 0.60        | 0.775             | 0.73
+1.0       | 0.85        | 0.80        | 0.825             | 0.82
+1.5       | 0.75        | 0.90        | 0.825             | 0.81
+2.0       | 0.65        | 0.95        | 0.800             | 0.77
 ```
 
 **Optimal Selection:**
@@ -633,12 +633,12 @@ Traditional Assumption: More training data → Better models
 Our Discovery: High-quality subsets dramatically outperform large datasets
 
 **Quantitative Evidence:**
-| Dataset Size | Total Information | Quality Grade | Improvement Factor |
-|--------------|-------------------|---------------|--------------------|
-| 1,000 sequences | 15.565 bits | 🏆 Excellent | 22x baseline |
-| 2,000 sequences | 12.465 bits | ✅ Good | 18x baseline |
-| 5,000 sequences | 7.155 bits | ⚠️ Fair | 10x baseline |
-| 35,368 sequences | 0.695 bits | ❌ Very Poor | 1x baseline |
+| Dataset Size     | Total Information | Quality Grade | Improvement Factor |
+|------------------|-------------------|---------------|--------------------|
+| 1,000 sequences  | 15.565 bits       | 🏆 Excellent  | 22x baseline       |
+| 2,000 sequences  | 12.465 bits       | ✅ Good        | 18x baseline       |
+| 5,000 sequences  | 7.155 bits        | ⚠️ Fair       | 10x baseline       |
+| 35,368 sequences | 0.695 bits        | ❌ Very Poor   | 1x baseline        |
 
 **Biological Interpretation:**
 [Mermaid diagram showing Large Dataset → High Noise → Poor Signal vs. Quality Subset → High Signal → Excellent PWM]
@@ -709,11 +709,11 @@ Testing chromosomes:  chr2, chr4, chr6, chr8, chr10, chr12, chr14, chr16, chr18,
 
 **Baseline Establishment:**
 ```
-Control Type          | Mean Info | Std Dev | 95% CI
----------------------|-----------|---------|------------------
-Random Sequences     | 0.041     | 0.002   | [0.037, 0.045]
-Shuffled Sequences   | 0.041     | 0.001   | [0.039, 0.043]
-Position-Shuffled    | 0.042     | 0.002   | [0.038, 0.046]
+Control Type       | Mean Info | Std Dev | 95% CI
+-------------------|-----------|---------|---------------
+Random Sequences   | 0.041     | 0.002   | [0.037, 0.045]
+Shuffled Sequences | 0.041     | 0.001   | [0.039, 0.043]
+Position-Shuffled  | 0.042     | 0.002   | [0.038, 0.046]
 
 Best Real PWM: 20.519 bits (500x improvement over null)
 ```
@@ -753,12 +753,12 @@ Advantages: Joint optimization, reduced error propagation
 Disadvantages: Complex implementation, less interpretable
 
 **Performance Comparison:**
-| Architecture | Best Method | Information Content | Conserved Positions |
-|--------------|-------------|-------------------|-------------------|
-| Sequential | Simple Aligned | 0.695 bits | 0 |
-| Sequential | Efficient Aligned | 0.695 bits | 0 |
-| Integrated | Advanced Consensus | >8.0 bits | 0-2 |
-| Integrated | Subset Selection | 15.565 bits | 2 |
+| Architecture | Best Method        | Information Content | Conserved Positions |
+|--------------|--------------------|---------------------|---------------------|
+| Sequential   | Simple Aligned     | 0.695 bits          | 0                   |
+| Sequential   | Efficient Aligned  | 0.695 bits          | 0                   |
+| Integrated   | Advanced Consensus | >8.0 bits           | 0-2                 |
+| Integrated   | Subset Selection   | 15.565 bits         | 2                   |
 
 **Key Discovery: Integration + Quality Filtering = Success**
 [Mermaid diagram showing Raw Sequences → Architecture Choice (Sequential/Integrated) → Basic Alignment (Poor PWM 0.695 bits) vs. Quality + Alignment (Excellent PWM 15.565 bits)]
