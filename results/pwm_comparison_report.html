@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PWM Comparison Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .metric-high { background-color: #d4edda; }
+        .metric-medium { background-color: #fff3cd; }
+        .metric-low { background-color: #f8d7da; }
+        .summary { background-color: #e9ecef; padding: 15px; margin: 20px 0; border-radius: 5px; }
+        .consensus { font-family: monospace; font-size: 14px; background-color: #f8f9fa; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>PWM Comparison Report</h1>
+    <p>Generated on: 2025-06-11 21:00:14.573095</p>
+    
+    <div class='summary'>
+        <h2>Summary</h2>
+        <p><strong>Total PWMs analyzed:</strong> 23</p>
+        <p><strong>Best overall information content:</strong> 20.519 bits</p>
+        <p><strong>Best average per position:</strong> 0.126 bits</p>
+        <p><strong>Most conserved positions:</strong> 2</p>
+    </div>
+    
+    <h2>Overall Comparison</h2>
+    <table>
+        <tr>
+            <th>PWM Name</th>
+            <th>Method</th>
+            <th>Positions</th>
+            <th>Total Info (bits)</th>
+            <th>Avg Info (bits)</th>
+            <th>Conserved (>1 bit)</th>
+            <th>Core Length</th>
+            <th>Sequences</th>
+        </tr>
+        <tr>
+            <td>best_pwm.rds</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>15.565</td>
+            <td>0.066</td>
+            <td>2</td>
+            <td>2</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>efficient_aligned_pwm.rds</td>
+            <td>efficient_aligned</td>
+            <td>216</td>
+            <td class='metric-low'>0.695</td>
+            <td>0.003</td>
+            <td>0</td>
+            <td>0</td>
+            <td>35368</td>
+        </tr>
+        <tr>
+            <td>generated_pwm.rds</td>
+            <td>unknown</td>
+            <td>163</td>
+            <td class='metric-medium'>7.481</td>
+            <td>0.046</td>
+            <td>0</td>
+            <td>0</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>pwm_aligned.rds</td>
+            <td>unknown</td>
+            <td>163</td>
+            <td class='metric-high'>20.519</td>
+            <td>0.126</td>
+            <td>0</td>
+            <td>0</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>robust_pwm.rds</td>
+            <td>unknown</td>
+            <td>226</td>
+            <td class='metric-low'>2.473</td>
+            <td>0.011</td>
+            <td>1</td>
+            <td>1</td>
+            <td>N/A</td>
+        </tr>
+        <tr>
+            <td>simple_aligned_pwm.rds</td>
+            <td>simple_aligned</td>
+            <td>216</td>
+            <td class='metric-low'>0.695</td>
+            <td>0.003</td>
+            <td>0</td>
+            <td>0</td>
+            <td>35368</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_1000</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>19.592</td>
+            <td>0.083</td>
+            <td>2</td>
+            <td>3</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_2000</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>12.564</td>
+            <td>0.053</td>
+            <td>1</td>
+            <td>1</td>
+            <td>2000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_5000</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-medium'>10.659</td>
+            <td>0.045</td>
+            <td>0</td>
+            <td>0</td>
+            <td>5000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_10000</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-low'>4.757</td>
+            <td>0.02</td>
+            <td>1</td>
+            <td>1</td>
+            <td>10000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size1000.rds</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>19.592</td>
+            <td>0.083</td>
+            <td>2</td>
+            <td>3</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size10000.rds</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-low'>4.757</td>
+            <td>0.02</td>
+            <td>1</td>
+            <td>1</td>
+            <td>10000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size2000.rds</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>12.564</td>
+            <td>0.053</td>
+            <td>1</td>
+            <td>1</td>
+            <td>2000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size5000.rds</td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-medium'>10.659</td>
+            <td>0.045</td>
+            <td>0</td>
+            <td>0</td>
+            <td>5000</td>
+        </tr>
+        <tr>
+            <td>test_simple_aligned_pwm.rds</td>
+            <td>simple_aligned</td>
+            <td>216</td>
+            <td class='metric-low'>0.695</td>
+            <td>0.003</td>
+            <td>0</td>
+            <td>0</td>
+            <td>35368</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_1000</td>
+            <td>high_quality_subset</td>
+            <td>221</td>
+            <td class='metric-medium'>5.993</td>
+            <td>0.027</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_2000</td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>11.749</td>
+            <td>0.05</td>
+            <td>0</td>
+            <td>0</td>
+            <td>2000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_5000</td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>9.837</td>
+            <td>0.042</td>
+            <td>1</td>
+            <td>1</td>
+            <td>5000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_10000</td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>6.788</td>
+            <td>0.029</td>
+            <td>0</td>
+            <td>0</td>
+            <td>10000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size1000.rds</td>
+            <td>high_quality_subset</td>
+            <td>221</td>
+            <td class='metric-medium'>5.993</td>
+            <td>0.027</td>
+            <td>0</td>
+            <td>0</td>
+            <td>1000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size10000.rds</td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>6.788</td>
+            <td>0.029</td>
+            <td>0</td>
+            <td>0</td>
+            <td>10000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size2000.rds</td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>11.749</td>
+            <td>0.05</td>
+            <td>0</td>
+            <td>0</td>
+            <td>2000</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size5000.rds</td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>9.837</td>
+            <td>0.042</td>
+            <td>1</td>
+            <td>1</td>
+            <td>5000</td>
+        </tr>
+    </table>
+    
+    <h2>Detailed Analysis</h2>
+    <h3>Top Performers</h3>
+    <ul>
+        <li><strong>Best Total Information:</strong> pwm_aligned.rds (20.519 bits)</li>
+        <li><strong>Best Average per Position:</strong> pwm_aligned.rds (0.126 bits)</li>
+        <li><strong>Most Conserved Positions:</strong> best_pwm.rds (2 positions)</li>
+    </ul>
+    <h3>Consensus Sequences</h3>
+    <table>
+        <tr><th>PWM Name</th><th>Consensus Sequence</th></tr>
+        <tr>
+            <td>best_pwm.rds</td>
+            <td class='consensus'>TCTTAATAATCTAATTTTAATATATTTTATTAATTTGAAATCATAAATAACGTAATAATGAAAAGTTTTTTACAATTTTTTAGTGATCAGTCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGAGGGTAACTAATATCAAAAATCAGTTTATGTAAAAAATAATTTTATTTTTTATATATTTATATAATTTTATTTTAATATAATTATAAAAAACAGATGACCAAGTAAGGGGGG</td>
+        </tr>
+        <tr>
+            <td>efficient_aligned_pwm.rds</td>
+            <td class='consensus'>TATTTATATTTAATATATAAAGGTGGGCGGCCCGCCCGCCCGCCCCCCCGCCGCGCCCGGCGGGGCGGCGGCCGGCGGGGGGGCGGGGCGCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGCGCGGCCGGGCCGCGGGGGCCCTCCCTGTGTGATCTTATTTTTTTTTTTTTTTTTTTTAATTATTTTTTTTTTATTTTAATATT</td>
+        </tr>
+        <tr>
+            <td>generated_pwm.rds</td>
+            <td class='consensus'>CAATGGCCCGTCGACACTGCGAGGCGACCTCGATGACCCCAGGCCCCCGGGGGCCCCTGCGCCGGGGGCCGCCCGCCCCGGCCGCCCCCCGGGGGGGCCCAGGCCCACCACCCGGGCCCCCCCACCCCGCCGGGTCCATCCCGCCGGCCCGCCCTCAGGACCC</td>
+        </tr>
+        <tr>
+            <td>pwm_aligned.rds</td>
+            <td class='consensus'>GAACAAAAAACGTTATGCTCTACTTCTCGGCAAAGGACCCAGGACGGCCTATGCGAGGCTGCCGCACCCTCAAACGCACACACGGCGCCAGCTCGCGCTACCGCCGCCTCCCCGCGCGCCCGAGCCCCCCCGGGGGCTTTCAGGAAGCCACAGACTGCTCTAG</td>
+        </tr>
+        <tr>
+            <td>robust_pwm.rds</td>
+            <td class='consensus'>AATATAAAATAAAAATATAAAAAATAAAATTAATAAAAAAAAAAAAAAAAAAAAAAAAAGAAAATCTTATTTTATTCTTGTGCCGGGCCCCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGCGGCGGCGCAAAAAAAAAATAAATATTATATTTTTTTTATTTTTTTTTTTTTTTTTTTATTTTTAATATTTATTTTTTTTTTTAAATATTAAGATGGCGA</td>
+        </tr>
+        <tr>
+            <td>simple_aligned_pwm.rds</td>
+            <td class='consensus'>TATTTATATTTAATATATAAAGGTGGGCGGCCCGCCCGCCCGCCCCCCCGCCGCGCCCGGCGGGGCGGCGGCCGGCGGGGGGGCGGGGCGCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGCGCGGCCGGGCCGCGGGGGCCCTCCCTGTGTGATCTTATTTTTTTTTTTTTTTTTTTTAATTATTTTTTTTTTATTTTAATATT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_1000</td>
+            <td class='consensus'>ATAATTTAAATATAATTTTTAAAAATATATGATTTATTAAAAATATACAAATAAAAAAATTAAATATTATATTTATGTATTATTTTGGCTCTCCCCCCCCCCCCCCGCCGGGGGGGGGGGGGGGGAGCCGAGCCTATATATGAAAAATTTAATTTAATTAAATATTTTAAATATTTATTAATTATGTATTTTTTAATTATTTTAATATATTAATTTAAAAGACCCTGGCTGGCATAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_2000</td>
+            <td class='consensus'>TAAAATAAATAATTATATAATAATTAAAAATTTTTAAAAATAAAAATTAATTATTTAATTTAATTAATTCTTTTTTTTCTTTTGTCTGTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGAGGACCTCTATAAAAAAAATAATATATTTATTTAAAATTTTATAATAATATATAATAAAATAATTTTTTTTATTTAATATTTTTTAATTAACAAAGTCAGCTTCACAAAAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_5000</td>
+            <td class='consensus'>AATTTTTATTTTATATAATAATATATATAATAATAATAAAATAAAAAAAAATATTATAATAAATTATTTTATTTTTTTATTTCTTTGGTTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGCGAGAACAAAAAAAAAAAATAAAAATTTTATTTTATTAATTTTATTTTTTTTTATATAATTTATTATAATAATTTATAATATAAATTAATAAAAAACCCAAGTCTAGACTT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_10000</td>
+            <td class='consensus'>AATATTAATTTAATATTTAAAAAAAAAAATAAATAATAAAAATAAAAAAAATAAAAAATTATAATTTTATTTTTTTTTTTTTCTGTGGCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCAAAATAAAAAAAAAATAAAATAAAAATTTTATTATTATTTTTTTTTTTTATATAATTTTATAAATTTATTTAATTTTATAAAATTTCAGTAGCCAACTCCTCATCCT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size1000.rds</td>
+            <td class='consensus'>ATAATTTAAATATAATTTTTAAAAATATATGATTTATTAAAAATATACAAATAAAAAAATTAAATATTATATTTATGTATTATTTTGGCTCTCCCCCCCCCCCCCCGCCGGGGGGGGGGGGGGGGAGCCGAGCCTATATATGAAAAATTTAATTTAATTAAATATTTTAAATATTTATTAATTATGTATTTTTTAATTATTTTAATATATTAATTTAAAAGACCCTGGCTGGCATAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size10000.rds</td>
+            <td class='consensus'>AATATTAATTTAATATTTAAAAAAAAAAATAAATAATAAAAATAAAAAAAATAAAAAATTATAATTTTATTTTTTTTTTTTTCTGTGGCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCAAAATAAAAAAAAAATAAAATAAAAATTTTATTATTATTTTTTTTTTTTATATAATTTTATAAATTTATTTAATTTTATAAAATTTCAGTAGCCAACTCCTCATCCT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size2000.rds</td>
+            <td class='consensus'>TAAAATAAATAATTATATAATAATTAAAAATTTTTAAAAATAAAAATTAATTATTTAATTTAATTAATTCTTTTTTTTCTTTTGTCTGTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGAGGACCTCTATAAAAAAAATAATATATTTATTTAAAATTTTATAATAATATATAATAAAATAATTTTTTTTATTTAATATTTTTTAATTAACAAAGTCAGCTTCACAAAAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size5000.rds</td>
+            <td class='consensus'>AATTTTTATTTTATATAATAATATATATAATAATAATAAAATAAAAAAAAATATTATAATAAATTATTTTATTTTTTTATTTCTTTGGTTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGCGAGAACAAAAAAAAAAAATAAAAATTTTATTTTATTAATTTTATTTTTTTTTATATAATTTATTATAATAATTTATAATATAAATTAATAAAAAACCCAAGTCTAGACTT</td>
+        </tr>
+        <tr>
+            <td>test_simple_aligned_pwm.rds</td>
+            <td class='consensus'>TATTTATATTTAATATATAAAGGTGGGCGGCCCGCCCGCCCGCCCCCCCGCCGCGCCCGGCGGGGCGGCGGCCGGCGGGGGGGCGGGGCGCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGCGCGGCCGGGCCGCGGGGGCCCTCCCTGTGTGATCTTATTTTTTTTTTTTTTTTTTTTAATTATTTTTTTTTTATTTTAATATT</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_1000</td>
+            <td class='consensus'>AAAAATTTTATTATTTATAAAAATAAAATTATAAATAAAATATTATAAAAATTTAAAAGAAATAAGGACATTTAATCTTGTTGATCTGACTTCCCCCCCCCCCCCCCCCGGGGGGGCGGGGGAGAGAGGCACGAAGAATATCAAAACAATTAAATCTTTTTTTTTTTTATCTTTTAGTATATTTATATAAAAAAATTAATATTAAATATAAATAATTTATC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_2000</td>
+            <td class='consensus'>TATAAATATTTTATAAATTATTAAAAAATATTTTTTTTATTAATTAAATAATCATTTATGATTAAAATTTTTATTTTTTTTGATTTTGCTGCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGAGAGCAGAGCAAAAAAATATTTAAATATAAAATTTTTTTATTTTAAATTGTTATTTAATTTTTTTTTATAATTATATTTTTTATTTTATTAAAAGATAGCTGTAAAAAACTC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_5000</td>
+            <td class='consensus'>AATAAATATTTTAAATATAAAAAATATTATTTAAAATAATAAATATAAAAATAAATAAATAAAATATTTTTTTTTATTTTTACTCTGGCTCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCGAAAATATAAAATAAATTAAAATTATATTTTTATTATTTTATTTTTTATTAAATTTATATATTTTTTTATTTATTTTTAAAAAATTTCAATAAAAGGTACAACACTC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_10000</td>
+            <td class='consensus'>AATATAAAATTAAAAAATAAAAAATAAAATAATTAATAATAAAAAAAAAAATATAAAAAAAAAATTAAATTTTTTTTTTTTAATGTGCCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGCAAAAAAAAAAAAAAATAAAAATAATATTTTATTAATATAATTAATTATTATTTTTTTTATATTAATTATATATTTTTAAAAAAATTAAGATACCGAGAGCTAGACT</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size1000.rds</td>
+            <td class='consensus'>AAAAATTTTATTATTTATAAAAATAAAATTATAAATAAAATATTATAAAAATTTAAAAGAAATAAGGACATTTAATCTTGTTGATCTGACTTCCCCCCCCCCCCCCCCCGGGGGGGCGGGGGAGAGAGGCACGAAGAATATCAAAACAATTAAATCTTTTTTTTTTTTATCTTTTAGTATATTTATATAAAAAAATTAATATTAAATATAAATAATTTATC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size10000.rds</td>
+            <td class='consensus'>AATATAAAATTAAAAAATAAAAAATAAAATAATTAATAATAAAAAAAAAAATATAAAAAAAAAATTAAATTTTTTTTTTTTAATGTGCCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGCAAAAAAAAAAAAAAATAAAAATAATATTTTATTAATATAATTAATTATTATTTTTTTTATATTAATTATATATTTTTAAAAAAATTAAGATACCGAGAGCTAGACT</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size2000.rds</td>
+            <td class='consensus'>TATAAATATTTTATAAATTATTAAAAAATATTTTTTTTATTAATTAAATAATCATTTATGATTAAAATTTTTATTTTTTTTGATTTTGCTGCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGAGAGCAGAGCAAAAAAATATTTAAATATAAAATTTTTTTATTTTAAATTGTTATTTAATTTTTTTTTATAATTATATTTTTTATTTTATTAAAAGATAGCTGTAAAAAACTC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size5000.rds</td>
+            <td class='consensus'>AATAAATATTTTAAATATAAAAAATATTATTTAAAATAATAAATATAAAAATAAATAAATAAAATATTTTTTTTTATTTTTACTCTGGCTCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCGAAAATATAAAATAAATTAAAATTATATTTTTATTATTTTATTTTTTATTAAATTTATATATTTTTTTATTTATTTTTAAAAAATTTCAATAAAAGGTACAACACTC</td>
+        </tr>
+    </table>
+    
+    <h2>Quality Assessment Guidelines</h2>
+    <div class='summary'>
+        <h3>Information Content Interpretation:</h3>
+        <ul>
+            <li><strong>Excellent:</strong> >15 bits total, >0.3 bits average per position</li>
+            <li><strong>Good:</strong> 10-15 bits total, 0.2-0.3 bits average per position</li>
+            <li><strong>Poor:</strong> <10 bits total, <0.2 bits average per position</li>
+        </ul>
+        
+        <h3>Conserved Positions:</h3>
+        <ul>
+            <li><strong>Strong motif:</strong> >5 positions with >1 bit</li>
+            <li><strong>Moderate motif:</strong> 2-5 positions with >1 bit</li>
+            <li><strong>Weak motif:</strong> <2 positions with >1 bit</li>
+        </ul>
+    </div>
+    
+</body>
+</html>

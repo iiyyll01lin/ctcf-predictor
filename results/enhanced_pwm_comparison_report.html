@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enhanced PWM Comparison Report with Null Model Analysis</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; border-bottom: 2px solid #ecf0f1; }
+        h3 { color: #7f8c8d; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .metric-high { background-color: #d5f4e6; }
+        .metric-medium { background-color: #fff3cd; }
+        .metric-low { background-color: #fadbd8; }
+        .significant { background-color: #d5f4e6; font-weight: bold; }
+        .not-significant { background-color: #fadbd8; }
+        .effect-large { color: #e74c3c; font-weight: bold; }
+        .effect-medium { color: #f39c12; }
+        .effect-small { color: #95a5a6; }
+        .summary { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .null-summary { background-color: #e9ecef; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .consensus { font-family: monospace; font-size: 14px; background-color: #f8f9fa; padding: 5px; }
+        .warning { background-color: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>Enhanced PWM Comparison Report with Null Model Analysis</h1>
+    <p>Generated on: 2025-06-11 21:00:16.455219</p>
+    <div class='summary'>
+        <h2>Summary</h2>
+        <p><strong>PWMs analyzed:</strong> 23</p>
+        <p><strong>Best overall information content:</strong> 20.519 bits</p>
+        <p><strong>Best average per position:</strong> 0.126 bits</p>
+        <p><strong>Most conserved positions:</strong> 2</p>
+        <p><strong>Null model types:</strong> 3</p>
+        <p><strong>Statistical significance threshold:</strong> p < 0.05</p>
+    </div>
+    <div class='null-summary'>
+        <h2>Null Model Baselines</h2>
+        <table>
+            <tr>
+                <th>Null Model Type</th>
+                <th>Description</th>
+                <th>Total Info (Mean ± SD)</th>
+                <th>Conserved Pos (Mean ± SD)</th>
+                <th>Avg Info (Mean ± SD)</th>
+            </tr>
+            <tr>
+                <td><strong>random</strong></td>
+                <td>Random sequences with matched base composition</td>
+                <td>0.02 ± 0.001</td>
+                <td>0 ± 0</td>
+                <td>1e-04 ± 0</td>
+            </tr>
+            <tr>
+                <td><strong>shuffled</strong></td>
+                <td>Shuffled sequences preserving individual composition</td>
+                <td>0.019 ± 0.001</td>
+                <td>0 ± 0</td>
+                <td>1e-04 ± 0</td>
+            </tr>
+            <tr>
+                <td><strong>position_shuffled</strong></td>
+                <td>Position-wise shuffled sequences</td>
+                <td>0.773 ± 0</td>
+                <td>0 ± 0</td>
+                <td>0.0036 ± 0</td>
+            </tr>
+        </table>
+    </div>
+    <h2>PWM Performance vs Null Models</h2>
+    <table>
+        <tr>
+            <th rowspan='2'>PWM Name</th>
+            <th rowspan='2'>Method</th>
+            <th rowspan='2'>Positions</th>
+            <th rowspan='2'>Total Info (bits)</th>
+            <th rowspan='2'>Conserved (>1 bit)</th>
+            <th rowspan='2'>Avg Info (bits)</th>
+            <th colspan='3'>Statistical Significance (vs Null Models)</th>
+        </tr>
+        <tr>
+            <th>vs random</th>
+            <th>vs shuffled</th>
+            <th>vs position_shuffled</th>
+        </tr>
+        <tr>
+            <td><strong>best_pwm.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>15.565</td>
+            <td>2</td>
+            <td>0.066</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>efficient_aligned_pwm.rds</strong></td>
+            <td>efficient_aligned</td>
+            <td>216</td>
+            <td class='metric-low'>0.695</td>
+            <td>0</td>
+            <td>0.003</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='not-significant'>Total: p=1.000<br>Conserved: p=1.000<br>Avg: p=1.000</td>
+        </tr>
+        <tr>
+            <td><strong>generated_pwm.rds</strong></td>
+            <td>unknown</td>
+            <td>163</td>
+            <td class='metric-medium'>7.481</td>
+            <td>0</td>
+            <td>0.046</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>pwm_aligned.rds</strong></td>
+            <td>unknown</td>
+            <td>163</td>
+            <td class='metric-high'>20.519</td>
+            <td>0</td>
+            <td>0.126</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>robust_pwm.rds</strong></td>
+            <td>unknown</td>
+            <td>226</td>
+            <td class='metric-low'>2.473</td>
+            <td>1</td>
+            <td>0.011</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>simple_aligned_pwm.rds</strong></td>
+            <td>simple_aligned</td>
+            <td>216</td>
+            <td class='metric-low'>0.695</td>
+            <td>0</td>
+            <td>0.003</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='not-significant'>Total: p=1.000<br>Conserved: p=1.000<br>Avg: p=1.000</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_all_sizes.rds_size_1000</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>19.592</td>
+            <td>2</td>
+            <td>0.083</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_all_sizes.rds_size_2000</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>12.564</td>
+            <td>1</td>
+            <td>0.053</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_all_sizes.rds_size_5000</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-medium'>10.659</td>
+            <td>0</td>
+            <td>0.045</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_all_sizes.rds_size_10000</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-low'>4.757</td>
+            <td>1</td>
+            <td>0.02</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_size1000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>19.592</td>
+            <td>2</td>
+            <td>0.083</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_size10000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-low'>4.757</td>
+            <td>1</td>
+            <td>0.02</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_size2000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-high'>12.564</td>
+            <td>1</td>
+            <td>0.053</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>subset_pwm_size5000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>237</td>
+            <td class='metric-medium'>10.659</td>
+            <td>0</td>
+            <td>0.045</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_simple_aligned_pwm.rds</strong></td>
+            <td>simple_aligned</td>
+            <td>216</td>
+            <td class='metric-low'>0.695</td>
+            <td>0</td>
+            <td>0.003</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='not-significant'>Total: p=1.000<br>Conserved: p=1.000<br>Avg: p=1.000</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_all_sizes.rds_size_1000</strong></td>
+            <td>high_quality_subset</td>
+            <td>221</td>
+            <td class='metric-medium'>5.993</td>
+            <td>0</td>
+            <td>0.027</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_all_sizes.rds_size_2000</strong></td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>11.749</td>
+            <td>0</td>
+            <td>0.05</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_all_sizes.rds_size_5000</strong></td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>9.837</td>
+            <td>1</td>
+            <td>0.042</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_all_sizes.rds_size_10000</strong></td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>6.788</td>
+            <td>0</td>
+            <td>0.029</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_size1000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>221</td>
+            <td class='metric-medium'>5.993</td>
+            <td>0</td>
+            <td>0.027</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_size10000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>6.788</td>
+            <td>0</td>
+            <td>0.029</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_size2000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>11.749</td>
+            <td>0</td>
+            <td>0.05</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=1.000<br>Avg: p=0.010</td>
+        </tr>
+        <tr>
+            <td><strong>test_subset_pwm_size5000.rds</strong></td>
+            <td>high_quality_subset</td>
+            <td>236</td>
+            <td class='metric-medium'>9.837</td>
+            <td>1</td>
+            <td>0.042</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+            <td class='significant'>Total: p=0.010<br>Conserved: p=0.010<br>Avg: p=0.010</td>
+        </tr>
+    </table>
+    <h2>Top Performers with Statistical Analysis</h2>
+    <div class='summary'>
+        <h3>Performance Leaders</h3>
+        <ul>
+            <li><strong>Best Total Information:</strong> pwm_aligned.rds (20.519 bits)</li>
+            <li><strong>Best Average per Position:</strong> pwm_aligned.rds (0.126 bits)</li>
+            <li><strong>Most Conserved Positions:</strong> best_pwm.rds (2 positions)</li>
+        </ul>
+        <h3>Statistical Significance Summary</h3>
+        <p>PWMs showing significant improvement over null models:</p>
+        <ul>
+            <li><strong>best_pwm.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>efficient_aligned_pwm.rds:</strong> Significant vs random, shuffled</li>
+            <li><strong>generated_pwm.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>pwm_aligned.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>robust_pwm.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>simple_aligned_pwm.rds:</strong> Significant vs random, shuffled</li>
+            <li><strong>subset_pwm_all_sizes.rds_size_1000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_all_sizes.rds_size_2000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_all_sizes.rds_size_5000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_all_sizes.rds_size_10000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_size1000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_size10000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_size2000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>subset_pwm_size5000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_simple_aligned_pwm.rds:</strong> Significant vs random, shuffled</li>
+            <li><strong>test_subset_pwm_all_sizes.rds_size_1000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_all_sizes.rds_size_2000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_all_sizes.rds_size_5000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_all_sizes.rds_size_10000:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_size1000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_size10000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_size2000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+            <li><strong>test_subset_pwm_size5000.rds:</strong> Significant vs random, shuffled, position_shuffled</li>
+        </ul>
+    </div>
+    <h2>Consensus Sequences</h2>
+    <table>
+        <tr><th>PWM Name</th><th>Consensus Sequence</th></tr>
+        <tr>
+            <td>best_pwm.rds</td>
+            <td class='consensus'>TCTTAATAATCTAATTTTAATATATTTTATTAATTTGAAATCATAAATAACGTAATAATGAAAAGTTTTTTACAATTTTTTAGTGATCAGTCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGAGGGTAACTAATATCAAAAATCAGTTTATGTAAAAAATAATTTTATTTTTTATATATTTATATAATTTTATTTTAATATAATTATAAAAAACAGATGACCAAGTAAGGGGGG</td>
+        </tr>
+        <tr>
+            <td>efficient_aligned_pwm.rds</td>
+            <td class='consensus'>TATTTATATTTAATATATAAAGGTGGGCGGCCCGCCCGCCCGCCCCCCCGCCGCGCCCGGCGGGGCGGCGGCCGGCGGGGGGGCGGGGCGCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGCGCGGCCGGGCCGCGGGGGCCCTCCCTGTGTGATCTTATTTTTTTTTTTTTTTTTTTTAATTATTTTTTTTTTATTTTAATATT</td>
+        </tr>
+        <tr>
+            <td>generated_pwm.rds</td>
+            <td class='consensus'>CAATGGCCCGTCGACACTGCGAGGCGACCTCGATGACCCCAGGCCCCCGGGGGCCCCTGCGCCGGGGGCCGCCCGCCCCGGCCGCCCCCCGGGGGGGCCCAGGCCCACCACCCGGGCCCCCCCACCCCGCCGGGTCCATCCCGCCGGCCCGCCCTCAGGACCC</td>
+        </tr>
+        <tr>
+            <td>pwm_aligned.rds</td>
+            <td class='consensus'>GAACAAAAAACGTTATGCTCTACTTCTCGGCAAAGGACCCAGGACGGCCTATGCGAGGCTGCCGCACCCTCAAACGCACACACGGCGCCAGCTCGCGCTACCGCCGCCTCCCCGCGCGCCCGAGCCCCCCCGGGGGCTTTCAGGAAGCCACAGACTGCTCTAG</td>
+        </tr>
+        <tr>
+            <td>robust_pwm.rds</td>
+            <td class='consensus'>AATATAAAATAAAAATATAAAAAATAAAATTAATAAAAAAAAAAAAAAAAAAAAAAAAAGAAAATCTTATTTTATTCTTGTGCCGGGCCCCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGCGGCGGCGCAAAAAAAAAATAAATATTATATTTTTTTTATTTTTTTTTTTTTTTTTTTATTTTTAATATTTATTTTTTTTTTTAAATATTAAGATGGCGA</td>
+        </tr>
+        <tr>
+            <td>simple_aligned_pwm.rds</td>
+            <td class='consensus'>TATTTATATTTAATATATAAAGGTGGGCGGCCCGCCCGCCCGCCCCCCCGCCGCGCCCGGCGGGGCGGCGGCCGGCGGGGGGGCGGGGCGCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGCGCGGCCGGGCCGCGGGGGCCCTCCCTGTGTGATCTTATTTTTTTTTTTTTTTTTTTTAATTATTTTTTTTTTATTTTAATATT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_1000</td>
+            <td class='consensus'>ATAATTTAAATATAATTTTTAAAAATATATGATTTATTAAAAATATACAAATAAAAAAATTAAATATTATATTTATGTATTATTTTGGCTCTCCCCCCCCCCCCCCGCCGGGGGGGGGGGGGGGGAGCCGAGCCTATATATGAAAAATTTAATTTAATTAAATATTTTAAATATTTATTAATTATGTATTTTTTAATTATTTTAATATATTAATTTAAAAGACCCTGGCTGGCATAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_2000</td>
+            <td class='consensus'>TAAAATAAATAATTATATAATAATTAAAAATTTTTAAAAATAAAAATTAATTATTTAATTTAATTAATTCTTTTTTTTCTTTTGTCTGTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGAGGACCTCTATAAAAAAAATAATATATTTATTTAAAATTTTATAATAATATATAATAAAATAATTTTTTTTATTTAATATTTTTTAATTAACAAAGTCAGCTTCACAAAAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_5000</td>
+            <td class='consensus'>AATTTTTATTTTATATAATAATATATATAATAATAATAAAATAAAAAAAAATATTATAATAAATTATTTTATTTTTTTATTTCTTTGGTTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGCGAGAACAAAAAAAAAAAATAAAAATTTTATTTTATTAATTTTATTTTTTTTTATATAATTTATTATAATAATTTATAATATAAATTAATAAAAAACCCAAGTCTAGACTT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_all_sizes.rds_size_10000</td>
+            <td class='consensus'>AATATTAATTTAATATTTAAAAAAAAAAATAAATAATAAAAATAAAAAAAATAAAAAATTATAATTTTATTTTTTTTTTTTTCTGTGGCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCAAAATAAAAAAAAAATAAAATAAAAATTTTATTATTATTTTTTTTTTTTATATAATTTTATAAATTTATTTAATTTTATAAAATTTCAGTAGCCAACTCCTCATCCT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size1000.rds</td>
+            <td class='consensus'>ATAATTTAAATATAATTTTTAAAAATATATGATTTATTAAAAATATACAAATAAAAAAATTAAATATTATATTTATGTATTATTTTGGCTCTCCCCCCCCCCCCCCGCCGGGGGGGGGGGGGGGGAGCCGAGCCTATATATGAAAAATTTAATTTAATTAAATATTTTAAATATTTATTAATTATGTATTTTTTAATTATTTTAATATATTAATTTAAAAGACCCTGGCTGGCATAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size10000.rds</td>
+            <td class='consensus'>AATATTAATTTAATATTTAAAAAAAAAAATAAATAATAAAAATAAAAAAAATAAAAAATTATAATTTTATTTTTTTTTTTTTCTGTGGCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCAAAATAAAAAAAAAATAAAATAAAAATTTTATTATTATTTTTTTTTTTTATATAATTTTATAAATTTATTTAATTTTATAAAATTTCAGTAGCCAACTCCTCATCCT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size2000.rds</td>
+            <td class='consensus'>TAAAATAAATAATTATATAATAATTAAAAATTTTTAAAAATAAAAATTAATTATTTAATTTAATTAATTCTTTTTTTTCTTTTGTCTGTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGAGGACCTCTATAAAAAAAATAATATATTTATTTAAAATTTTATAATAATATATAATAAAATAATTTTTTTTATTTAATATTTTTTAATTAACAAAGTCAGCTTCACAAAAT</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size5000.rds</td>
+            <td class='consensus'>AATTTTTATTTTATATAATAATATATATAATAATAATAAAATAAAAAAAAATATTATAATAAATTATTTTATTTTTTTATTTCTTTGGTTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGCGAGAACAAAAAAAAAAAATAAAAATTTTATTTTATTAATTTTATTTTTTTTTATATAATTTATTATAATAATTTATAATATAAATTAATAAAAAACCCAAGTCTAGACTT</td>
+        </tr>
+        <tr>
+            <td>test_simple_aligned_pwm.rds</td>
+            <td class='consensus'>TATTTATATTTAATATATAAAGGTGGGCGGCCCGCCCGCCCGCCCCCCCGCCGCGCCCGGCGGGGCGGCGGCCGGCGGGGGGGCGGGGCGCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGGGGCGCGGCCGGGCCGCGGGGGCCCTCCCTGTGTGATCTTATTTTTTTTTTTTTTTTTTTTAATTATTTTTTTTTTATTTTAATATT</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_1000</td>
+            <td class='consensus'>AAAAATTTTATTATTTATAAAAATAAAATTATAAATAAAATATTATAAAAATTTAAAAGAAATAAGGACATTTAATCTTGTTGATCTGACTTCCCCCCCCCCCCCCCCCGGGGGGGCGGGGGAGAGAGGCACGAAGAATATCAAAACAATTAAATCTTTTTTTTTTTTATCTTTTAGTATATTTATATAAAAAAATTAATATTAAATATAAATAATTTATC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_2000</td>
+            <td class='consensus'>TATAAATATTTTATAAATTATTAAAAAATATTTTTTTTATTAATTAAATAATCATTTATGATTAAAATTTTTATTTTTTTTGATTTTGCTGCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGAGAGCAGAGCAAAAAAATATTTAAATATAAAATTTTTTTATTTTAAATTGTTATTTAATTTTTTTTTATAATTATATTTTTTATTTTATTAAAAGATAGCTGTAAAAAACTC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_5000</td>
+            <td class='consensus'>AATAAATATTTTAAATATAAAAAATATTATTTAAAATAATAAATATAAAAATAAATAAATAAAATATTTTTTTTTATTTTTACTCTGGCTCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCGAAAATATAAAATAAATTAAAATTATATTTTTATTATTTTATTTTTTATTAAATTTATATATTTTTTTATTTATTTTTAAAAAATTTCAATAAAAGGTACAACACTC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_all_sizes.rds_size_10000</td>
+            <td class='consensus'>AATATAAAATTAAAAAATAAAAAATAAAATAATTAATAATAAAAAAAAAAATATAAAAAAAAAATTAAATTTTTTTTTTTTAATGTGCCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGCAAAAAAAAAAAAAAATAAAAATAATATTTTATTAATATAATTAATTATTATTTTTTTTATATTAATTATATATTTTTAAAAAAATTAAGATACCGAGAGCTAGACT</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size1000.rds</td>
+            <td class='consensus'>AAAAATTTTATTATTTATAAAAATAAAATTATAAATAAAATATTATAAAAATTTAAAAGAAATAAGGACATTTAATCTTGTTGATCTGACTTCCCCCCCCCCCCCCCCCGGGGGGGCGGGGGAGAGAGGCACGAAGAATATCAAAACAATTAAATCTTTTTTTTTTTTATCTTTTAGTATATTTATATAAAAAAATTAATATTAAATATAAATAATTTATC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size10000.rds</td>
+            <td class='consensus'>AATATAAAATTAAAAAATAAAAAATAAAATAATTAATAATAAAAAAAAAAATATAAAAAAAAAATTAAATTTTTTTTTTTTAATGTGCCTCCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGGGGCAAAAAAAAAAAAAAATAAAAATAATATTTTATTAATATAATTAATTATTATTTTTTTTATATTAATTATATATTTTTAAAAAAATTAAGATACCGAGAGCTAGACT</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size2000.rds</td>
+            <td class='consensus'>TATAAATATTTTATAAATTATTAAAAAATATTTTTTTTATTAATTAAATAATCATTTATGATTAAAATTTTTATTTTTTTTGATTTTGCTGCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGAGAGCAGAGCAAAAAAATATTTAAATATAAAATTTTTTTATTTTAAATTGTTATTTAATTTTTTTTTATAATTATATTTTTTATTTTATTAAAAGATAGCTGTAAAAAACTC</td>
+        </tr>
+        <tr>
+            <td>test_subset_pwm_size5000.rds</td>
+            <td class='consensus'>AATAAATATTTTAAATATAAAAAATATTATTTAAAATAATAAATATAAAAATAAATAAATAAAATATTTTTTTTTATTTTTACTCTGGCTCCCCCCCCCCCCCCCCCCGGGGGGGGGGGGGGGGGAGGCGAAAATATAAAATAAATTAAAATTATATTTTTATTATTTTATTTTTTATTAAATTTATATATTTTTTTATTTATTTTTAAAAAATTTCAATAAAAGGTACAACACTC</td>
+        </tr>
+    </table>
+    <h2>Quality Assessment Guidelines</h2>
+    <div class='summary'>
+        <h3>Information Content Standards for CTCF PWMs:</h3>
+        <ul>
+            <li><strong>Excellent:</strong> >15 bits total, >0.05 bits average per position, 2-5 conserved positions</li>
+            <li><strong>Good:</strong> 10-15 bits total, 0.03-0.05 bits average per position, 1-2 conserved positions</li>
+            <li><strong>Fair:</strong> 5-10 bits total, 0.02-0.03 bits average per position, 0-1 conserved positions</li>
+            <li><strong>Poor:</strong> <5 bits total, <0.02 bits average per position, 0 conserved positions</li>
+        </ul>
+        
+        <h3>Statistical Significance Interpretation:</h3>
+        <ul>
+            <li><strong>p < 0.001:</strong> Highly significant improvement over null model</li>
+            <li><strong>p < 0.01:</strong> Significant improvement over null model</li>
+            <li><strong>p < 0.05:</strong> Marginally significant improvement over null model</li>
+            <li><strong>p ≥ 0.05:</strong> No significant improvement over null model</li>
+        </ul>
+        
+        <h3>Effect Size Interpretation (Cohen's d):</h3>
+        <ul>
+            <li><strong>|d| ≥ 1.2:</strong> Very large effect</li>
+            <li><strong>0.8 ≤ |d| < 1.2:</strong> Large effect</li>
+            <li><strong>0.5 ≤ |d| < 0.8:</strong> Medium effect</li>
+            <li><strong>0.2 ≤ |d| < 0.5:</strong> Small effect</li>
+            <li><strong>|d| < 0.2:</strong> Negligible effect</li>
+        </ul>
+    </div>
+    <h2>Methodology</h2>
+    <div class='summary'>
+        <h3>PWM Quality Metrics:</h3>
+        <ul>
+            <li><strong>Total Information Content:</strong> Sum of information content across all positions</li>
+            <li><strong>Average Information Content:</strong> Mean information content per position</li>
+            <li><strong>Conserved Positions:</strong> Number of positions with >1 bit information content</li>
+        </ul>
+        
+        <h3>Null Models:</h3>
+        <ul>
+            <li><strong>Random:</strong> Random sequences matching overall base composition</li>
+            <li><strong>Shuffled:</strong> Original sequences with shuffled base order</li>
+            <li><strong>Position Shuffled:</strong> Sequences with position-wise shuffled bases</li>
+        </ul>
+        
+        <h3>Statistical Testing:</h3>
+        <ul>
+            <li><strong>P-values:</strong> Empirical p-values based on null distribution comparisons</li>
+            <li><strong>Effect sizes:</strong> Cohen's d calculated as (observed - null_mean) / null_sd</li>
+            <li><strong>Significance threshold:</strong> p < 0.05</li>
+        </ul>
+    </div>
+    
+</body>
+</html>

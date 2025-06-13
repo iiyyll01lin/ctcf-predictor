@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PWM Statistical Significance Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; border-bottom: 2px solid #ecf0f1; }
+        h3 { color: #7f8c8d; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; font-weight: bold; }
+        .significant { background-color: #d5f4e6; }
+        .not-significant { background-color: #fadbd8; }
+        .effect-large { color: #e74c3c; font-weight: bold; }
+        .effect-medium { color: #f39c12; }
+        .effect-small { color: #95a5a6; }
+        .summary { background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .metric-box { display: inline-block; margin: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>PWM Statistical Significance Report</h1>
+    <p>Generated on: 2025-06-09 12:06:45.711241</p>
+
+    <div class='summary'>
+        <h2>Summary</h2>
+        <p><strong>PWMs analyzed:</strong> 10</p>
+        <p><strong>Null model types:</strong> 3</p>
+        <p><strong>Metrics tested:</strong> Total information content, Conserved positions, Average information content</p>
+        <p><strong>Significance threshold:</strong> p < 0.05</p>
+    </div>
+    <h2>Statistical Significance Overview</h2>
+    <table>
+        <tr>
+            <th>PWM Name</th>
+            <th>Null Model</th>
+            <th>Total Info</th>
+            <th>Conserved Pos</th>
+            <th>Avg Info</th>
+        </tr>
+        <tr>
+            <td>best_pwm.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>best_pwm.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>best_pwm.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>efficient_aligned_pwm.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>efficient_aligned_pwm.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>efficient_aligned_pwm.rds</td>
+            <td>position_shuffled</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='not-significant'>p = 1.000</td>
+        </tr>
+        <tr>
+            <td>generated_pwm.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>generated_pwm.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>generated_pwm.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>pwm_aligned.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>pwm_aligned.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>pwm_aligned.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>robust_pwm.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>robust_pwm.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>robust_pwm.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>simple_aligned_pwm.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>simple_aligned_pwm.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>simple_aligned_pwm.rds</td>
+            <td>position_shuffled</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='not-significant'>p = 1.000</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size1000.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size1000.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size1000.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size10000.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size10000.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size10000.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size2000.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size2000.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size2000.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size5000.rds</td>
+            <td>random</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size5000.rds</td>
+            <td>shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+        <tr>
+            <td>subset_pwm_size5000.rds</td>
+            <td>position_shuffled</td>
+            <td class='significant'>p = 0.010</td>
+            <td class='not-significant'>p = 1.000</td>
+            <td class='significant'>p = 0.010</td>
+        </tr>
+    </table>
+    <h2>best_pwm.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>15.565</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>7844.21</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>2</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.066</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>7147.3</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>15.565</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>13274.45</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>2</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.066</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>12095.13</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>15.565</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>2</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.066</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>efficient_aligned_pwm.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>0.695</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>330.2</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.003</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>330.2</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>0.695</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>559.2</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.003</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>559.2</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>0.695</td>
+            <td>0.77 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.003</td>
+            <td>0.004 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>generated_pwm.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>7.481</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>3759.38</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.046</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>4988.56</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>7.481</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>6362.07</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.046</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>8442.09</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>7.481</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.046</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>pwm_aligned.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>20.519</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>10347.14</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.126</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>13718.35</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>20.519</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>17509.91</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.126</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>23214.69</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>20.519</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.126</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>robust_pwm.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>2.175</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>1078.16</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.01</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>1029.53</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>2.175</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>1824.9</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.01</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>1742.61</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>2.175</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.01</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>simple_aligned_pwm.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>0.695</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>330.19</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.003</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>330.19</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>0.695</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>559.18</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.003</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>559.18</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>0.695</td>
+            <td>0.77 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.003</td>
+            <td>0.004 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>subset_pwm_size1000.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>5.832</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>2925.9</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.026</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>2859.23</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>5.832</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>4951.66</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.026</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>4838.84</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>5.832</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.026</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>subset_pwm_size10000.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>5.441</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>2728.45</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>1</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.023</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>2484.83</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>5.441</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>4617.52</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>1</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.023</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>4205.27</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>5.441</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>1</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.023</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>subset_pwm_size2000.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>8.108</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>4076.13</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.035</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>3777.21</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>8.108</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>6898.08</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.035</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>6392.24</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>8.108</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.035</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>subset_pwm_size5000.rds</h2>
+    <table>
+        <tr>
+            <th>Metric</th>
+            <th>Null Model</th>
+            <th>Observed</th>
+            <th>Null Mean ± SD</th>
+            <th>p-value</th>
+            <th>Effect Size (d)</th>
+            <th>Interpretation</th>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>random</td>
+            <td>7.296</td>
+            <td>0.041 ± 0.002</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>3665.84</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>random</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>random</td>
+            <td>0.031</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>3339.16</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>shuffled</td>
+            <td>7.296</td>
+            <td>0.041 ± 0.001</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>6203.78</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>shuffled</td>
+            <td>0.031</td>
+            <td>0 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>5650.98</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Total Information</td>
+            <td>position_shuffled</td>
+            <td>7.296</td>
+            <td>0.77 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Conserved Positions</td>
+            <td>position_shuffled</td>
+            <td>0</td>
+            <td>0 ± 0</td>
+            <td class='not-significant'>1.000</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+        <tr>
+            <td>Average Information</td>
+            <td>position_shuffled</td>
+            <td>0.031</td>
+            <td>0.004 ± 0</td>
+            <td class='significant'>0.010</td>
+            <td class='effect-large'>Inf</td>
+            <td>very large</td>
+        </tr>
+    </table>
+    <h2>Methodology</h2>
+    <h3>Null Models</h3>
+    <ul>
+        <li><strong>Random:</strong> Random sequences with matched overall base composition</li>
+        <li><strong>Shuffled:</strong> Sequences with shuffled order, preserving individual composition</li>
+        <li><strong>Position Shuffled:</strong> Position-wise shuffled sequences</li>
+    </ul>
+    <h3>Statistical Tests</h3>
+    <ul>
+        <li><strong>p-value:</strong> Empirical p-value based on null distribution</li>
+        <li><strong>Effect Size:</strong> Cohen's d = (observed - null_mean) / null_sd</li>
+        <li><strong>Significance threshold:</strong> p < 0.05</li>
+    </ul>
+    <h3>Effect Size Interpretation</h3>
+    <ul>
+        <li><strong>Negligible:</strong> |d| < 0.2</li>
+        <li><strong>Small:</strong> 0.2 ≤ |d| < 0.5</li>
+        <li><strong>Medium:</strong> 0.5 ≤ |d| < 0.8</li>
+        <li><strong>Large:</strong> 0.8 ≤ |d| < 1.2</li>
+        <li><strong>Very Large:</strong> |d| ≥ 1.2</li>
+    </ul>
+</body>
+</html>
