@@ -31,9 +31,9 @@
 | 組員   | 系級     | 學號      | 工作分配                          |
 |------|--------|-----------|-------------------------------|
 | 林穎彥 | 資科碩一 | 113971012 | 團隊中的吉祥物🦒，負責增進團隊氣氛 |
-| 張小明 | 資科碩二 | xxxxxxxxx | 團隊的中流砥柱，一個人打十個       |
-| 張小明 | 資科碩二 | xxxxxxxxx | 團隊的中流砥柱，一個人打十個       |
-| 張小明 | 資科碩二 | xxxxxxxxx | 團隊的中流砥柱，一個人打十個       |
+| 邱世凎 | 資科碩一 | 113971017 | 團隊的中流砥柱，一個人打十個       |
+| 張育瑋 | 資科碩一 | 113971008 | 團隊的中流砥柱，一個人打十個       |
+| 蔣政寬 | 資科碩二 | 112971026 | 團隊的中流砥柱，一個人打十個       |
 
 ### Docs
 * **[Complete Documentation Hub](docs/)** - 15 comprehensive guides covering all aspects
@@ -110,7 +110,7 @@ ls results/
 * **[Results Summary](results/enhanced_pwm_comparison_report.html)** - Interactive performance comparison 
 
 ### Website
-* **[Shiny](https://your-shiny-app-url)** - Interactive web application for data visualization and exploration
+* **[ShinyApps](https://4ywvcn-shih0kan0chiu.shinyapps.io/DS_Final_UI/)** - Interactive web application for data visualization and exploration
 
 ### 🚀 Getting Started
 - **[Quick Start Guide](01-quick-start.md)** - Get up and running in 5 minutes
