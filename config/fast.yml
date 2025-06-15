@@ -1,0 +1,48 @@
+# Optimized for speed, moderate quality
+# Use this configuration for rapid prototyping and testing
+
+data:
+  input:
+    max_sequences: 20000               # Fewer sequences for speed
+    
+  preprocessing:
+    quality_threshold: 0.7
+    min_length: 30                     # More lenient length filtering
+    complexity_threshold: 0.4          # Lower complexity requirement
+    filter_repetitive: false           # Skip time-consuming filtering
+    
+  validation:
+    split_method: "random"             # Faster than chromosome split
+    cv_folds: 3                        # Fewer CV folds
+
+alignment:
+  method: "center"                     # Fastest alignment method
+  max_iterations: 3                    # Few iterations for speed  
+  refinement:
+    enable: false                      # Disable refinement for speed
+
+pwm:
+  information_content:
+    min_total_ic: 6.0                  # Lower IC requirement
+    min_conserved_positions: 2         # Fewer conserved positions
+
+statistics:
+  bootstrap_iterations: 100            # Fewer bootstrap iterations
+  null_model_iterations: 100           # Fewer null model iterations
+  tests:
+    - "wilcoxon"                       # Only essential tests
+
+performance:
+  threads: 8                           # Use all available threads
+  batch_size: 2000                     # Larger batches for throughput
+  use_parallel: true
+  optimization:
+    use_streaming: true                # Enable streaming processing
+  
+output:
+  formats: ["meme"]                    # Only essential format
+  reports:
+    generate_html: false               # Skip HTML reports for speed
+    include_plots: false               # Skip plots for speed
+    html: false                        # Skip detailed reports
+    json: true                         # Only JSON summary

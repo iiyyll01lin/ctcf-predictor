@@ -1,0 +1,66 @@
+# Minimal configuration for resource-constrained environments
+# Run on limited computational resources
+
+data:
+  input:
+    max_sequences: 5000                # Very limited dataset
+    
+  preprocessing:
+    min_length: 20                     # Very lenient filtering
+    complexity_threshold: 0.3
+    
+  validation:
+    split_method: "random"
+    cv_folds: 3
+
+alignment:
+  method: "center"                     # Simplest method
+  max_iterations: 1                    # Single iteration
+  
+  refinement:
+    enable: false
+
+pwm:
+  information_content:
+    min_total_ic: 4.0                  # Low IC requirement
+    min_conserved_positions: 1
+
+statistics:
+  bootstrap_iterations: 50             # Minimal iterations
+  null_model_iterations: 50
+  tests:
+    - "wilcoxon"                       # Only basic test
+
+performance:
+  threads: 2
+  memory_limit: "2G"
+  batch_size: 50
+  optimization:
+    use_streaming: true
+    cache_intermediate: false
+
+output:
+  formats: ["meme"]
+  reports:
+    generate_html: false
+    include_plots: false
+
+performance:
+  threads: 2                           # Minimal threading
+  memory_limit: "1G"                   # Very low memory
+  batch_size: 100                      # Small batches
+  use_parallel: false
+  cache_intermediate: false
+
+output:
+  formats: ["meme"]                    # Single format only
+  include_plots: false
+  save_intermediate: false
+  
+  reports:
+    html: false
+    pdf: false
+    json: true                         # Minimal reporting
+
+logging:
+  level: "ERROR"                       # Minimal logging

@@ -1,0 +1,51 @@
+# Method comparison configuration
+# Compare different alignment methods systematically
+
+data:
+  input:
+    max_sequences: 20000               # Manageable size for comparison
+    
+  preprocessing:
+    min_length: 50
+    complexity_threshold: 0.6
+    quality_threshold: 0.8
+    
+  validation:
+    split_method: "chromosome"         # Consistent validation
+    cv_folds: 5
+
+# Test multiple alignment methods
+alignment:
+  methods_to_compare: ["center", "consensus", "integrated"]
+  
+  # Parameters for each method
+  center:
+    window_size: 50
+    
+  consensus:
+    threshold: 0.8
+    max_iterations: 10
+    
+  integrated:
+    max_iterations: 15    consensus_threshold: 0.8
+
+statistics:
+  bootstrap_iterations: 1000
+  comparison_tests:
+    - "paired_t_test"
+    - "wilcoxon_signed_rank"
+    - "friedman"
+
+performance:
+  threads: 8
+  batch_size: 1000
+  
+output:
+  formats: ["meme", "jaspar"]
+  reports:
+    generate_html: true                # Detailed comparison reports
+    include_plots: true                # Important for comparison
+    
+  comparison:
+    generate_comparison_plots: true
+    save_method_specific_results: true

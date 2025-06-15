@@ -1,0 +1,37 @@
+# Optimized for low memory usage
+# Use this configuration for resource-constrained environments
+
+data:
+  input:
+    max_sequences: 10000               # Limit sequences to reduce memory
+    
+  preprocessing:
+    remove_duplicates: true            # Remove duplicates to save memory
+    
+  validation:
+    cv_folds: 3                        # Fewer folds to reduce memory
+
+alignment:
+  method: "center"                     # Memory-efficient alignment
+  
+performance:
+  threads: 2                           # Fewer threads to reduce memory
+  memory_limit: "2G"                   # Explicit memory limit
+  batch_size: 100                      # Small batches
+  use_parallel: false                  # Disable parallel processing
+  optimization:
+    use_streaming: true                # Use streaming for large datasets
+    cache_intermediate: false          # Don't cache to save memory
+    compress_temp_files: true          # Compress temporary files
+
+output:
+  formats: ["meme"]                    # Single format to save memory
+  reports:
+    generate_html: false               # Skip memory-intensive reports
+    include_plots: false               # Skip memory-intensive plots
+    html: false                        # Skip HTML reports
+    pdf: false                         # Skip PDF reports
+    json: true                         # Only lightweight JSON
+
+logging:
+  level: "WARN"                        # Reduce logging verbosity

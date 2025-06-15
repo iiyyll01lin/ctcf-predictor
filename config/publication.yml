@@ -1,0 +1,67 @@
+# Publication-quality configuration
+# Maximum quality for research publication
+
+data:
+  input:
+    max_sequences: 50000
+    
+  preprocessing:
+    quality_threshold: 0.95
+    min_length: 100                    # Strict length filtering
+    complexity_threshold: 0.85         # Very high complexity requirement
+    gc_content_range: [0.4, 0.6]
+    filter_repetitive: true
+    
+  validation:
+    split_method: "chromosome"         # Proper biological validation
+    cv_folds: 10                       # Robust cross-validation
+
+alignment:
+  method: "integrated"                 # Best alignment method
+  max_iterations: 50                   # Many iterations for convergence
+  consensus_threshold: 0.95            # Very high consensus requirement
+  
+  refinement:
+    enable: true
+    max_refinement_cycles: 5
+    improvement_threshold: 0.01        # Very strict improvement
+
+pwm:
+  pseudocount: 0.005                   # Very low pseudocount
+  information_content:
+    min_total_ic: 15.0                 # Very high IC requirement
+    min_conserved_positions: 8         # Many conserved positions
+  quality_thresholds:
+    excellent: 20.0
+    good: 16.0
+    acceptable: 15.0
+
+statistics:
+  significance_level: 0.001            # Very strict significance
+  bootstrap_iterations: 5000           # Many bootstrap iterations
+  null_model_iterations: 5000          # Many null model iterations
+  tests:
+    - "wilcoxon"
+    - "ks"
+    - "permutation"
+    - "bootstrap"
+  multiple_testing_correction: "fdr"   # FDR correction
+
+performance:
+  threads: 8
+  batch_size: 200                      # Small batches for precision
+  
+output:
+  formats: ["meme", "jaspar", "transfac"]
+  reports:
+    generate_html: true
+    generate_pdf: true
+    include_plots: true
+  
+  reports:
+    html: true
+    pdf: true                          # Publication-ready PDF
+    json: true
+
+logging:
+  level: "DEBUG"                       # Detailed logging for publications

@@ -1,0 +1,62 @@
+# Optimized for maximum quality, slower processing
+# Use this configuration for publication-quality results
+
+data:
+  input:
+    max_sequences: 100000
+    
+  preprocessing:
+    quality_threshold: 0.95
+    min_length: 100                    # Stricter length filtering
+    max_length: 200
+    complexity_threshold: 0.8          # Higher complexity requirement
+    filter_repetitive: true
+    gc_content_range: [0.4, 0.6]
+    
+  validation:
+    split_method: "chromosome"
+    cv_folds: 10                       # More CV folds for robust validation
+
+alignment:
+  method: "integrated"                 # Best alignment method
+  max_iterations: 20                   # More iterations for convergence
+  consensus_threshold: 0.9             # Higher consensus requirement  refinement:
+    enable: true
+    max_refinement_cycles: 5
+    improvement_threshold: 0.05        # Stricter improvement requirement
+
+pwm:
+  pseudocount: 0.01                    # Lower pseudocount for sharper PWM
+  information_content:
+    min_total_ic: 12.0                 # Higher IC requirement
+    min_conserved_positions: 5         # More conserved positions required
+  quality_thresholds:
+    excellent: 18.0
+    good: 15.0
+    acceptable: 12.0
+
+statistics:
+  bootstrap_iterations: 2000           # More bootstrap iterations
+  null_model_iterations: 5000          # More null model iterations
+  tests:
+    - "wilcoxon"
+    - "ks"
+    - "permutation"
+    - "bootstrap"
+
+performance:
+  threads: 8                           # More threads for quality processing
+  batch_size: 500                      # Smaller batches for precision
+  
+output:
+  formats: ["meme", "jaspar", "transfac"]
+  reports:
+    generate_html: true
+    generate_pdf: true
+    include_plots: true
+  include_plots: true
+  
+  reports:
+    html: true
+    pdf: true                          # Enable PDF reports for publication
+    json: true

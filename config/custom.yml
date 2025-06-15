@@ -1,0 +1,51 @@
+# Custom quality metrics configuration
+# Use custom quality assessment functions
+
+data:
+  input:
+    max_sequences: 30000
+    
+  preprocessing:
+    complexity_threshold: 0.7
+    
+alignment:
+  method: "integrated"
+
+pwm:
+  information_content:
+    min_total_ic: 8.0
+    min_conserved_positions: 3
+
+# Custom quality assessment
+quality:
+  custom_function: "config/custom_quality.R"
+  
+  weights:
+    information_content: 0.4
+    conservation: 0.3
+    biological_relevance: 0.2
+    custom_metric: 0.1
+  
+  custom_metrics:
+    - "motif_conservation_score"
+    - "biological_relevance_score"
+    - "cross_species_conservation"
+    
+  thresholds:
+    custom_score_min: 0.7
+    biological_relevance_min: 0.6
+    motif_conservation: 0.8
+    cross_species_conservation: 0.6
+
+performance:
+  threads: 6
+  batch_size: 1000
+  
+output:
+  formats: ["meme", "jaspar"]
+  include_plots: true
+  
+  reports:
+    html: true
+    json: true
+    custom_quality_report: true

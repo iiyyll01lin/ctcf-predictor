@@ -1,0 +1,143 @@
+# CTCF PWM Testing Pipeline Configuration
+# Version: 2.0
+
+# ======================
+# Data Processing
+# ======================
+data:
+  input:
+    format: "fasta"                    # Input format: fasta, bed, custom
+    min_sequences: 100                 # Minimum sequences required
+    max_sequences: 50000               # Maximum sequences to process
+    
+  preprocessing:
+    min_length: 50                     # Minimum sequence length (bp)
+    max_length: 500                    # Maximum sequence length (bp)
+    quality_threshold: 0.8             # Quality score threshold (0-1)
+    remove_duplicates: true            # Remove duplicate sequences
+    filter_repetitive: true            # Filter repetitive elements
+    gc_content_range: [0.3, 0.7]       # Acceptable GC content range
+    complexity_threshold: 0.6          # Sequence complexity threshold
+    
+  validation:
+    split_method: "chromosome"         # Validation method: chromosome, random, cv
+    test_chromosomes: ["16", "17", "18", "19", "20", "21", "22", "X", "Y"]
+    train_ratio: 0.8                   # Training set ratio (for random split)
+    cv_folds: 5                        # Cross-validation folds
+
+# ======================
+# Alignment Settings
+# ======================
+alignment:
+  method: "integrated"                 # Alignment method: center, consensus, integrated
+  center_window: 50                    # Window size for center alignment
+  consensus_threshold: 0.8             # Consensus threshold (0-1)
+  max_iterations: 10                   # Maximum alignment iterations
+  convergence_threshold: 0.01          # Convergence threshold
+  
+  refinement:
+    enable: true                       # Enable iterative refinement
+    max_refinement_cycles: 3           # Maximum refinement cycles
+    improvement_threshold: 0.1         # Minimum improvement required
+
+# ======================
+# PWM Construction
+# ======================
+pwm:
+  pseudocount: 0.1                     # Pseudocount for probability calculation
+  background_freq:                     # Background nucleotide frequencies
+    A: 0.25
+    C: 0.25
+    G: 0.25
+    T: 0.25
+  
+  information_content:
+    min_total_ic: 8.0                  # Minimum total information content
+    min_conserved_positions: 3         # Minimum conserved positions (>1 bit)
+    conservation_threshold: 1.0         # Information content threshold for conservation
+    
+  quality_thresholds:
+    excellent: 16.0                    # Excellent quality threshold (bits)
+    good: 12.0                         # Good quality threshold (bits)
+    acceptable: 8.0                    # Minimum acceptable threshold (bits)
+
+# ======================
+# Statistical Validation
+# ======================
+statistics:
+  significance_level: 0.01             # Statistical significance level
+  null_model_iterations: 1000          # Null model iterations
+  bootstrap_iterations: 500            # Bootstrap iterations
+  
+  tests:
+    - "wilcoxon"                       # Wilcoxon rank-sum test
+    - "ks"                             # Kolmogorov-Smirnov test
+    - "permutation"                    # Permutation test
+    
+  multiple_testing_correction: "bonferroni"  # bonferroni, fdr, holm
+
+# ======================
+# Performance Settings
+# ======================
+performance:
+  threads: 4                           # Number of CPU threads
+  memory_limit: "8G"                   # Memory limit
+  batch_size: 1000                     # Batch size for processing
+  use_parallel: true                   # Enable parallel processing
+  temp_dir: "/tmp/ctcf"                # Temporary directory
+  
+  optimization:
+    use_streaming: false               # Use streaming for large datasets
+    cache_intermediate: true           # Cache intermediate results
+    compress_temp_files: true          # Compress temporary files
+
+# ======================
+# Output Settings
+# ======================
+output:
+  formats:                             # Output formats to generate
+    - "meme"                           # MEME format
+    - "jaspar"                         # JASPAR format
+    - "transfac"                       # TRANSFAC format
+    
+  reports:
+    generate_html: true                # Generate HTML reports
+    generate_pdf: false                # Generate PDF reports
+    include_plots: true                # Include visualization plots
+    
+  file_naming:
+    timestamp: true                    # Include timestamp in filenames
+    method_suffix: true                # Include method in filename
+    quality_suffix: true               # Include quality grade in filename
+
+# ======================
+# Logging and Debugging
+# ======================
+logging:
+  level: "INFO"                        # Log level: DEBUG, INFO, WARN, ERROR
+  file: "logs/pipeline.log"            # Log file path
+  console: true                        # Log to console
+  rotate_logs: true                    # Rotate log files
+  max_log_size: "100M"                 # Maximum log file size
+  
+  debug:
+    save_intermediate: false           # Save intermediate results for debugging
+    verbose_alignment: false           # Verbose alignment output
+    profile_memory: false              # Profile memory usage
+
+# ======================
+# Docker Configuration
+# ======================
+docker:
+  image: "ctcf-pipeline:latest"        # Docker image name
+  memory_limit: "8g"                   # Docker memory limit
+  cpu_limit: "4"                       # Docker CPU limit
+  
+  volumes:                             # Volume mappings
+    data: "/data"
+    results: "/results"
+    config: "/config"
+    
+  environment:                         # Environment variables
+    CTCF_THREADS: "4"
+    CTCF_MEMORY: "8G"

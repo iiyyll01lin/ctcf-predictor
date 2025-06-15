@@ -1,0 +1,35 @@
+# High-throughput analysis configuration
+# Process large datasets quickly with moderate quality
+
+data:
+  input:
+    max_sequences: 100000              # Large dataset support
+    
+  preprocessing:
+    quality_threshold: 0.7
+    complexity_threshold: 0.5          # Moderate complexity requirement
+    filter_repetitive: false           # Skip for speed
+    
+  validation:
+    split_method: "random"             # Faster than chromosome split
+    cv_folds: 5
+
+alignment:
+  method: "center"                     # Fast alignment method
+  max_iterations: 3                    # Limited iterations for speed
+    refinement:
+    enable: false                      # Disable for throughput
+
+performance:
+  threads: 16                          # Maximum parallelization
+  batch_size: 5000                     # Large batches for throughput
+  use_parallel: true
+  optimization:
+    use_streaming: true                # Stream processing for large datasets
+  
+output:
+  formats: ["meme", "jaspar"]          # Essential formats only
+  reports:
+    generate_html: false               # Skip detailed reports
+    include_plots: false               # Skip plots for speed
+    json: true                         # Summary only

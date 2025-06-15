@@ -1,0 +1,71 @@
+# Adaptive configuration with conditional processing
+# Method selection based on available resources and data characteristics
+
+data:
+  input:
+    max_sequences: 40000
+    
+  preprocessing:
+    complexity_threshold: 0.6
+    # Adaptive quality threshold based on dataset size
+    quality_threshold: 
+      - condition: "sequence_count < 1000"
+        value: 0.7
+      - condition: "sequence_count >= 1000 && sequence_count < 10000"
+        value: 0.8
+      - condition: "sequence_count >= 10000"
+        value: 0.9
+    
+  # Adaptive validation based on dataset size
+  validation:
+    split_method: "auto"               # Auto-select based on data size
+    cv_folds: "auto"                   # Auto-select based on dataset
+
+# Adaptive alignment method selection
+alignment:
+  # Method selection based on available memory
+  method:
+    - condition: "available_memory > 8G"
+      value: "integrated"
+    - condition: "available_memory > 4G"
+      value: "consensus"
+    - condition: "available_memory <= 4G"
+      value: "center"
+  
+  # Method selection rules
+  selection_rules:
+    memory_low: "center"               # < 4GB RAM
+    memory_medium: "consensus"         # 4-8GB RAM
+    memory_high: "integrated"          # > 8GB RAM
+    
+  # Auto-adjust iterations based on convergence
+  max_iterations: "auto"
+  convergence_threshold: 0.01
+
+performance:
+  # Thread count based on system resources
+  threads:
+    - condition: "cpu_cores >= 8"
+      value: 6
+    - condition: "cpu_cores >= 4"
+      value: 4
+    - condition: "cpu_cores < 4"
+      value: 2
+  
+  # Auto-detect system resources
+  memory_limit: "auto"                 # Use 80% of available memory
+  batch_size: "auto"                   # Adjust based on memory
+  
+  # Adaptive processing strategies
+  adaptive_strategies:
+    low_memory_fallback: true
+    streaming_for_large_datasets: true
+    
+output:
+  formats: ["meme", "jaspar"]
+  formats: ["meme"]                    # Start with essential format
+  include_plots: "auto"                # Based on available resources
+  
+  reports:
+    html: "auto"                       # Generate if resources allow
+    json: true                         # Always generate lightweight JSON
