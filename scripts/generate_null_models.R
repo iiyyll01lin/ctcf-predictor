@@ -52,8 +52,38 @@ generate_random_sequences <- function(sequences, n_reps = 100) {
     }
     random_sequences[[paste0("random_", rep)]] <- rep_sequences
   }
+    return(random_sequences)
+}
+
+# Generate GC-content matched sequences
+generate_gc_matched_sequences <- function(sequences, n_reps = 100) {
+  cat("Generating GC-content matched sequences...\n")
   
-  return(random_sequences)
+  # Calculate GC content for each sequence
+  gc_contents <- sapply(sequences, function(seq) {
+    bases <- strsplit(seq, "")[[1]]
+    gc_count <- sum(bases %in% c("G", "C"))
+    return(gc_count / length(bases))
+  })
+  
+  gc_matched_sequences <- list()
+  for (rep in 1:n_reps) {
+    rep_sequences <- character(length(sequences))
+    for (i in seq_along(sequences)) {
+      len <- nchar(sequences[i])
+      gc_content <- gc_contents[i]
+      at_prob <- (1 - gc_content) / 2
+      gc_prob <- gc_content / 2
+      
+      bases <- sample(c("A", "T", "G", "C"), len, replace = TRUE,
+                     prob = c(at_prob, at_prob, gc_prob, gc_prob))
+      rep_sequences[i] <- paste(bases, collapse = "")
+    }
+    gc_matched_sequences[[paste0("gc_matched_", rep)]] <- rep_sequences
+  }
+  
+  cat("Generated", n_reps, "GC-content matched sequence sets\n")
+  return(gc_matched_sequences)
 }
 
 # Generate shuffled sequences preserving individual composition
@@ -90,8 +120,75 @@ generate_position_shuffled <- function(sequences, n_reps = 100) {
     rep_sequences <- apply(shuffled_matrix, 1, paste, collapse = "")
     position_shuffled[[paste0("position_shuffled_", rep)]] <- rep_sequences
   }
+    return(position_shuffled)
+}
+
+# Generate dinucleotide-preserving sequences
+generate_dinucleotide_preserved <- function(sequences, n_reps = 100) {
+  cat("Generating dinucleotide-preserving sequences...\n")
   
-  return(position_shuffled)
+  # Calculate dinucleotide frequencies
+  calculate_dinuc_freq <- function(seq) {
+    bases <- strsplit(seq, "")[[1]]
+    if (length(bases) < 2) return(NULL)
+    
+    dinucs <- paste0(bases[-length(bases)], bases[-1])
+    freq_table <- table(dinucs)
+    return(freq_table / sum(freq_table))
+  }
+  
+  dinuc_preserved <- list()
+  for (rep in 1:n_reps) {
+    rep_sequences <- character(length(sequences))
+    for (i in seq_along(sequences)) {
+      seq <- sequences[i]
+      len <- nchar(seq)
+      
+      if (len < 2) {
+        rep_sequences[i] <- seq
+        next
+      }
+      
+      # Use Markov chain approach to preserve dinucleotide frequencies
+      bases <- strsplit(seq, "")[[1]]
+      transition_matrix <- matrix(0, nrow = 4, ncol = 4)
+      rownames(transition_matrix) <- c("A", "C", "G", "T")
+      colnames(transition_matrix) <- c("A", "C", "G", "T")
+      
+      for (j in 1:(length(bases) - 1)) {
+        from_base <- bases[j]
+        to_base <- bases[j + 1]
+        transition_matrix[from_base, to_base] <- transition_matrix[from_base, to_base] + 1
+      }
+      
+      # Normalize to probabilities
+      for (j in 1:4) {
+        if (sum(transition_matrix[j, ]) > 0) {
+          transition_matrix[j, ] <- transition_matrix[j, ] / sum(transition_matrix[j, ])
+        }
+      }
+      
+      # Generate new sequence
+      new_seq <- character(len)
+      new_seq[1] <- sample(c("A", "C", "G", "T"), 1)
+      
+      for (j in 2:len) {
+        prev_base <- new_seq[j - 1]
+        if (sum(transition_matrix[prev_base, ]) > 0) {
+          new_seq[j] <- sample(c("A", "C", "G", "T"), 1, 
+                              prob = transition_matrix[prev_base, ])
+        } else {
+          new_seq[j] <- sample(c("A", "C", "G", "T"), 1)
+        }
+      }
+      
+      rep_sequences[i] <- paste(new_seq, collapse = "")
+    }
+    dinuc_preserved[[paste0("dinuc_preserved_", rep)]] <- rep_sequences
+  }
+  
+  cat("Generated", n_reps, "dinucleotide-preserving sequence sets\n")
+  return(dinuc_preserved)
 }
 
 # Build PWM from sequences
@@ -166,11 +263,17 @@ null_models <- list()
 # 1. Random sequences (matched composition)
 null_models$random <- generate_random_sequences(valid_sequences, n_replicates)
 
-# 2. Shuffled sequences (individual composition preserved)
+# 2. GC-content matched sequences
+null_models$gc_matched <- generate_gc_matched_sequences(valid_sequences, n_replicates)
+
+# 3. Shuffled sequences (individual composition preserved)
 null_models$shuffled <- generate_shuffled_sequences(valid_sequences, n_replicates)
 
-# 3. Position-shuffled sequences
+# 4. Position-shuffled sequences
 null_models$position_shuffled <- generate_position_shuffled(valid_sequences, n_replicates)
+
+# 5. Dinucleotide-preserving sequences
+null_models$dinuc_preserved <- generate_dinucleotide_preserved(valid_sequences, n_replicates)
 
 # Build PWMs for all null models and calculate metrics
 cat("\nBuilding PWMs for null models...\n")

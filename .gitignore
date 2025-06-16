@@ -2,3 +2,4 @@ data/reference_genome/
 data/*sequences*.fasta
 results/*.rds
 results/*report*.html
+results/

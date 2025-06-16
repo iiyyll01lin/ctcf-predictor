@@ -229,8 +229,57 @@ for (pwm_name in names(real_pwm_metrics)) {
       )
     )
   }
+    statistical_results[[pwm_name]] <- pwm_results
+}
+
+# Apply multiple testing correction
+apply_multiple_testing_correction <- function(p_values, method = "bonferroni") {
+  cat("Applying multiple testing correction using", method, "method...\n")
   
-  statistical_results[[pwm_name]] <- pwm_results
+  adjusted_p_values <- p.adjust(p_values, method = method)
+  
+  # Create correction summary
+  correction_summary <- data.frame(
+    test = names(p_values),
+    raw_p = p_values,
+    adjusted_p = adjusted_p_values,
+    significant_raw = p_values < 0.05,
+    significant_adjusted = adjusted_p_values < 0.05,
+    stringsAsFactors = FALSE
+  )
+  
+  return(correction_summary)
+}
+
+# Apply multiple testing correction if we have multiple PWMs
+if (length(real_pwm_metrics) > 1) {
+  cat("\nApplying multiple testing correction...\n")
+  
+  # Extract p-values for correction
+  all_p_values <- numeric()
+  for (pwm_name in names(statistical_results)) {
+    for (null_type in names(statistical_results[[pwm_name]])) {
+      p_val <- statistical_results[[pwm_name]][[null_type]]$total_info$p_value
+      test_name <- paste(pwm_name, null_type, "total_info", sep = "_")
+      all_p_values[test_name] <- p_val
+      
+      p_val_conserved <- statistical_results[[pwm_name]][[null_type]]$conserved_positions$p_value
+      test_name_conserved <- paste(pwm_name, null_type, "conserved", sep = "_")
+      all_p_values[test_name_conserved] <- p_val_conserved
+      
+      p_val_avg <- statistical_results[[pwm_name]][[null_type]]$avg_info$p_value
+      test_name_avg <- paste(pwm_name, null_type, "avg_info", sep = "_")
+      all_p_values[test_name_avg] <- p_val_avg
+    }
+  }
+  
+  # Apply correction
+  corrected_results <- apply_multiple_testing_correction(all_p_values, "bonferroni")
+  statistical_results$multiple_testing_correction <- corrected_results
+  
+  cat("Multiple testing correction applied to", length(all_p_values), "tests\n")
+  cat("Significant tests before correction:", sum(corrected_results$significant_raw), "\n")
+  cat("Significant tests after correction:", sum(corrected_results$significant_adjusted), "\n")
 }
 
 # Generate HTML report
