@@ -10,8 +10,11 @@ library(Biostrings)
 # --- Command Line Arguments ---
 args <- commandArgs(trailingOnly = TRUE)
 input_file <- if (length(args) >= 1) args[1] else "data/training_sequences.fasta"
-output_prefix <- if (length(args) >= 2) args[2] else "results/robust_pwm"
-min_sequences <- if (length(args) >= 3) as.numeric(args[3]) else 100
+output_file <- if (length(args) >= 2) args[2] else "results/ctcf_pwm.meme"
+output_format <- if (length(args) >= 3) args[3] else "meme"
+pseudocount <- if (length(args) >= 4) as.numeric(args[4]) else 0.1
+min_ic <- if (length(args) >= 5) as.numeric(args[5]) else 8.0
+min_sequences <- if (length(args) >= 6) as.numeric(args[6]) else 100
 
 # --- Utility Functions ---
 
@@ -21,6 +24,161 @@ calculate_info_content <- function(pwm) {
     x[x == 0] <- 1e-10
     sum(x * log2(x/0.25))
   })
+}
+
+# Calculate information content with custom background
+calculate_information_content <- function(prob_matrix, background = NULL) {
+  if (is.null(background)) {
+    background <- c(0.25, 0.25, 0.25, 0.25)  # uniform background
+  }
+  
+  ic_per_pos <- apply(prob_matrix, 2, function(pos_probs) {
+    valid_probs <- pmax(pos_probs, 1e-10)  # avoid log(0)
+    sum(valid_probs * log2(valid_probs / background))
+  })
+  
+  return(ic_per_pos)
+}
+
+# Add pseudocounts to frequency matrix
+add_pseudocounts <- function(freq_matrix, pseudocount) {
+  return(freq_matrix + pseudocount)
+}
+
+# Normalize frequencies to probabilities
+normalize_probabilities <- function(pseudo_matrix) {
+  return(prop.table(pseudo_matrix, margin = 2))
+}
+
+# Calculate frequencies from sequences
+calculate_frequencies <- function(sequences) {
+  consensus_mat <- consensusMatrix(sequences, as.prob = FALSE)
+  valid_bases <- c("A", "C", "G", "T")
+  consensus_mat <- consensus_mat[rownames(consensus_mat) %in% valid_bases, , drop = FALSE]
+  return(consensus_mat)
+}
+
+# Assess PWM quality based on multiple criteria
+assess_pwm_quality <- function(ic_vector, config) {
+  total_ic <- sum(ic_vector)
+  conserved_positions <- sum(ic_vector > 1.0)
+  max_ic <- max(ic_vector)
+  mean_ic <- mean(ic_vector)
+  
+  quality_metrics <- list(
+    total_ic = total_ic,
+    conserved_positions = conserved_positions,
+    max_ic = max_ic,
+    mean_ic = mean_ic,
+    passes_min_ic = total_ic >= config$min_ic,
+    quality_level = if (total_ic >= 16.0) "excellent" 
+                   else if (total_ic >= 12.0) "good"
+                   else if (total_ic >= config$min_ic) "acceptable"
+                   else "poor"
+  )
+  
+  return(quality_metrics)
+}
+
+# Main PWM construction function
+build_robust_pwm <- function(sequences, config) {
+  cat("Building robust PWM...\n")
+  
+  # Calculate frequency matrix
+  freq_matrix <- calculate_frequencies(sequences)
+  
+  # Add pseudocounts
+  pseudo_matrix <- add_pseudocounts(freq_matrix, config$pseudocount)
+  
+  # Convert to probabilities
+  prob_matrix <- normalize_probabilities(pseudo_matrix)
+  
+  # Calculate information content
+  ic_vector <- calculate_information_content(prob_matrix, config$background)
+  
+  # Quality assessment
+  quality <- assess_pwm_quality(ic_vector, config)
+  
+  return(list(
+    pwm = prob_matrix,
+    information_content = ic_vector,
+    quality_metrics = quality,
+    sequences_used = length(sequences),
+    pseudocount_used = config$pseudocount
+  ))
+}
+
+# Export PWM to different formats
+export_pwm <- function(pwm_result, output_file, format = "meme") {
+  pwm <- pwm_result$pwm
+  
+  if (format == "meme") {
+    export_meme_format(pwm, output_file, pwm_result)
+  } else if (format == "jaspar") {
+    export_jaspar_format(pwm, output_file)
+  } else if (format == "transfac") {
+    export_transfac_format(pwm, output_file)
+  } else {
+    # Default: RDS format
+    saveRDS(pwm_result, output_file)
+  }
+}
+
+# Export to MEME format
+export_meme_format <- function(pwm, output_file, pwm_result) {
+  meme_content <- paste0(
+    "MEME version 4\n\n",
+    "ALPHABET= ACGT\n\n",
+    "strands: + -\n\n",
+    "Background letter frequencies (from uniform background):\n",
+    "A 0.25000 C 0.25000 G 0.25000 T 0.25000\n\n",
+    "MOTIF CTCF_PWM CTCF\n\n",
+    "letter-probability matrix: alength= 4 w= ", ncol(pwm), 
+    " nsites= ", pwm_result$sequences_used, 
+    " E= 0\n"
+  )
+  
+  # Add probability matrix
+  for (i in 1:ncol(pwm)) {
+    meme_content <- paste0(meme_content, 
+                          sprintf("%.6f\t%.6f\t%.6f\t%.6f\n", 
+                                  pwm["A", i], pwm["C", i], 
+                                  pwm["G", i], pwm["T", i]))
+  }
+  
+  writeLines(meme_content, output_file)
+}
+
+# Export to JASPAR format
+export_jaspar_format <- function(pwm, output_file) {
+  jaspar_content <- paste0(
+    ">CTCF_PWM\tCTCF\n",
+    "A  [", paste(sprintf("%.6f", pwm["A", ]), collapse=" "), "]\n",
+    "C  [", paste(sprintf("%.6f", pwm["C", ]), collapse=" "), "]\n",
+    "G  [", paste(sprintf("%.6f", pwm["G", ]), collapse=" "), "]\n",
+    "T  [", paste(sprintf("%.6f", pwm["T", ]), collapse=" "), "]\n"
+  )
+  
+  writeLines(jaspar_content, output_file)
+}
+
+# Export to TRANSFAC format
+export_transfac_format <- function(pwm, output_file) {
+  transfac_content <- paste0(
+    "ID CTCF_PWM\n",
+    "BF T00000\n",
+    "P0\tA\tC\tG\tT\n"
+  )
+  
+  for (i in 1:ncol(pwm)) {
+    transfac_content <- paste0(transfac_content,
+                              sprintf("%02d\t%.3f\t%.3f\t%.3f\t%.3f\n",
+                                      i, pwm["A", i], pwm["C", i], 
+                                      pwm["G", i], pwm["T", i]))
+  }
+  
+  transfac_content <- paste0(transfac_content, "//\n")
+  writeLines(transfac_content, output_file)
 }
 
 # Filter sequences by quality metrics
@@ -47,27 +205,13 @@ filter_high_quality_sequences <- function(sequences) {
   return(length_filtered)
 }
 
-# Build PWM with pseudocounts
-build_robust_pwm <- function(sequences, pseudocount = 0.1) {
-  cat("Building consensus matrix...\n")
-  consensus_mat <- consensusMatrix(sequences, as.prob = FALSE)
-  
-  # Keep only standard bases
-  valid_bases <- c("A", "C", "G", "T")
-  consensus_mat <- consensus_mat[rownames(consensus_mat) %in% valid_bases, , drop = FALSE]
-  
-  # Add pseudocounts
-  consensus_mat_pseudo <- consensus_mat + pseudocount
-  
-  # Convert to probabilities
-  pwm <- prop.table(consensus_mat_pseudo, margin = 2)
-  
-  return(pwm)
-}
-
 # --- Main Script ---
 cat("=== Robust PWM Building ===\n")
 cat("Input file:", input_file, "\n")
+cat("Output file:", output_file, "\n")  
+cat("Output format:", output_format, "\n")
+cat("Pseudocount:", pseudocount, "\n")
+cat("Min IC threshold:", min_ic, "\n")
 cat("Minimum sequences required:", min_sequences, "\n")
 cat("Analysis time:", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n\n")
 
@@ -104,86 +248,77 @@ if (length(filtered_sequences) < min_sequences) {
 
 cat("Final sequence count for PWM building:", length(filtered_sequences), "\n")
 
-# Build PWM with different pseudocount values
-pseudocount_values <- c(0.01, 0.1, 0.5, 1.0)
-best_pwm <- NULL
-best_info <- 0
-best_pseudocount <- 0.1
+# Prepare configuration
+config <- list(
+  pseudocount = pseudocount,
+  min_ic = min_ic,
+  background = c(0.25, 0.25, 0.25, 0.25)  # uniform background
+)
 
-cat("\nTesting different pseudocount values:\n")
-for (pc in pseudocount_values) {
-  pwm <- build_robust_pwm(filtered_sequences, pseudocount = pc)
-  info_content <- calculate_info_content(pwm)
-  total_info <- sum(info_content)
-  
-  cat("Pseudocount", pc, ": Total info =", round(total_info, 3), "bits\n")
-  
-  if (total_info > best_info) {
-    best_info <- total_info
-    best_pwm <- pwm
-    best_pseudocount <- pc
-  }
-}
+# Build robust PWM
+pwm_result <- build_robust_pwm(filtered_sequences, config)
 
-cat("\nBest pseudocount:", best_pseudocount, "with", round(best_info, 3), "total bits\n")
-
-# Calculate detailed statistics
-info_content <- calculate_info_content(best_pwm)
-high_info_positions <- sum(info_content > 1.0)
-
+# Display results
 cat("\nPWM Quality Metrics:\n")
-cat("- PWM dimensions:", nrow(best_pwm), "x", ncol(best_pwm), "\n")
-cat("- Total information content:", round(sum(info_content), 3), "bits\n")
-cat("- Average per position:", round(mean(info_content), 3), "bits\n")
-cat("- High-information positions (>1 bit):", high_info_positions, "\n")
-cat("- Maximum position info:", round(max(info_content), 3), "bits\n")
+cat("- PWM dimensions:", nrow(pwm_result$pwm), "x", ncol(pwm_result$pwm), "\n")
+cat("- Total information content:", round(pwm_result$quality_metrics$total_ic, 3), "bits\n")
+cat("- Average per position:", round(pwm_result$quality_metrics$mean_ic, 3), "bits\n")
+cat("- Conserved positions (>1 bit):", pwm_result$quality_metrics$conserved_positions, "\n")
+cat("- Maximum position info:", round(pwm_result$quality_metrics$max_ic, 3), "bits\n")
+cat("- Quality level:", toupper(pwm_result$quality_metrics$quality_level), "\n")
 
-# Quality assessment
-if (sum(info_content) > 15) {
-  cat("✅ EXCELLENT PWM quality\n")
-} else if (sum(info_content) > 10) {
-  cat("✅ GOOD PWM quality\n")
-} else if (sum(info_content) > 5) {
-  cat("⚠️  FAIR PWM quality - consider more data\n")
+# Quality check
+if (pwm_result$quality_metrics$passes_min_ic) {
+  cat("✅ PWM meets minimum IC threshold\n")
 } else {
-  cat("❌ POOR PWM quality - need better alignment or more data\n")
+  cat("⚠️  PWM below minimum IC threshold - consider improving alignment\n")
 }
 
-# Save results
-cat("\nSaving results...\n")
-saveRDS(best_pwm, paste0(output_prefix, ".rds"))
-write.table(best_pwm, paste0(output_prefix, ".txt"), 
-            sep = "\t", quote = FALSE, row.names = TRUE, col.names = NA)
+# Export PWM in requested format
+cat("\nExporting PWM...\n")
+export_pwm(pwm_result, output_file, output_format)
 
 # Save metadata
+output_dir <- dirname(output_file)
+base_name <- tools::file_path_sans_ext(basename(output_file))
+metadata_file <- file.path(output_dir, paste0(base_name, "_metadata.json"))
+
 metadata <- list(
   creation_time = as.character(Sys.time()),
   input_file = input_file,
+  output_file = output_file,
+  output_format = output_format,
   total_sequences = length(all_sequences),
   filtered_sequences = length(filtered_sequences),
-  best_pseudocount = best_pseudocount,
-  total_information = round(sum(info_content), 3),
-  average_information = round(mean(info_content), 3),
-  high_info_positions = high_info_positions,
-  pwm_dimensions = paste(nrow(best_pwm), "x", ncol(best_pwm))
+  pseudocount_used = pseudocount,
+  total_information = round(pwm_result$quality_metrics$total_ic, 3),
+  average_information = round(pwm_result$quality_metrics$mean_ic, 3),
+  conserved_positions = pwm_result$quality_metrics$conserved_positions,
+  quality_level = pwm_result$quality_metrics$quality_level,
+  pwm_dimensions = paste(nrow(pwm_result$pwm), "x", ncol(pwm_result$pwm)),
+  passes_threshold = pwm_result$quality_metrics$passes_min_ic
 )
 
-# Create simple JSON manually instead of using jsonlite
+# Create JSON manually
 json_content <- paste0('{\n',
   '  "creation_time": "', metadata$creation_time, '",\n',
   '  "input_file": "', metadata$input_file, '",\n',
+  '  "output_file": "', metadata$output_file, '",\n',
+  '  "output_format": "', metadata$output_format, '",\n',
   '  "total_sequences": ', metadata$total_sequences, ',\n',
   '  "filtered_sequences": ', metadata$filtered_sequences, ',\n',
-  '  "best_pseudocount": ', metadata$best_pseudocount, ',\n',
+  '  "pseudocount_used": ', metadata$pseudocount_used, ',\n',
   '  "total_information": ', metadata$total_information, ',\n',
   '  "average_information": ', metadata$average_information, ',\n',
-  '  "high_info_positions": ', metadata$high_info_positions, ',\n',
-  '  "pwm_dimensions": "', metadata$pwm_dimensions, '"\n',
+  '  "conserved_positions": ', metadata$conserved_positions, ',\n',
+  '  "quality_level": "', metadata$quality_level, '",\n',
+  '  "pwm_dimensions": "', metadata$pwm_dimensions, '",\n',
+  '  "passes_threshold": ', tolower(as.character(metadata$passes_threshold)), '\n',
   '}'
 )
 
-writeLines(json_content, paste0(output_prefix, "_metadata.json"))
+writeLines(json_content, metadata_file)
 
-cat("Robust PWM saved to:", paste0(output_prefix, ".rds"), "\n")
-cat("Metadata saved to:", paste0(output_prefix, "_metadata.json"), "\n")
+cat("PWM saved to:", output_file, "\n")
+cat("Metadata saved to:", metadata_file, "\n")
 cat("=== Robust PWM Building Complete ===\n")

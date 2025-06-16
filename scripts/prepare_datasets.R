@@ -8,288 +8,290 @@ if (!requireNamespace("Biostrings", quietly = TRUE)) {
 }
 library(Biostrings)
 
-# --- Parameters ---
-# input_fasta <- "../data/extracted_sequences.fasta"
-input_fasta <- "data/preprocessed_sequences_optimized.fasta" 
-output_train_fasta <- "data/training_sequences.fasta"
-output_test_fasta <- "data/test_sequences.fasta"
+# --- Command Line Arguments ---
+args <- commandArgs(trailingOnly = TRUE)
+input_file <- if (length(args) >= 1) args[1] else "data/preprocessed_sequences_optimized.fasta"
+method <- if (length(args) >= 2) args[2] else "chromosome_split"
+output_dir <- if (length(args) >= 3) args[3] else "data/datasets/"
+train_proportion <- if (length(args) >= 4) as.numeric(args[4]) else 0.8
+k_folds <- if (length(args) >= 5) as.numeric(args[5]) else 5
 
-# Desired sequence length for PWM building and evaluation
-# Set to NULL to skip length filtering
-target_length <- NULL
-# target_length <- 11 # Example: Match the original PWM length
+# Create output directory
+dir.create(output_dir, recursive = TRUE, showWarnings = FALSE)
 
-# Proportion of data to use for the training set (e.g., 0.8 = 80%)
-train_proportion <- 0.8
-
-# Negative example generation parameters
-generate_negatives <- TRUE # Set to FALSE to disable automatic negative generation
-negative_generation_method <- "shuffle" # Options: "shuffle", "dinucleotide_shuffle", "random"
-negative_to_positive_ratio <- 1.0 # Ratio of negative to positive examples in test set
+cat("=== Dataset Preparation ===\n")
+cat("Input file:", input_file, "\n")
+cat("Method:", method, "\n")
+cat("Output directory:", output_dir, "\n")
+cat("Train proportion:", train_proportion, "\n")
+if (method == "cross_validation") cat("K-folds:", k_folds, "\n")
+cat("Analysis time:", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n\n")
 
 # Random seed for reproducibility
 set.seed(123)
 
-# --- Negative Example Generation Functions ---
-
-# Simple sequence shuffling (maintains nucleotide composition)
-shuffle_sequence <- function(seq) {
-  chars <- unlist(strsplit(as.character(seq), ""))
-  paste0(sample(chars), collapse="")
-}
-
-# Generate a completely random DNA sequence of specified length
-generate_random_sequence <- function(length) {
-  nucleotides <- c("A", "C", "G", "T")
-  paste0(sample(nucleotides, size=length, replace=TRUE), collapse="")
-}
-
-# Dinucleotide shuffling (better preserves sequence complexity)
-# This is a simplified implementation of the Altschul-Erikson algorithm
-dinucleotide_shuffle <- function(seq) {
-  seq_str <- as.character(seq)
-  seq_len <- nchar(seq_str)
-  
-  if (seq_len <= 2) return(seq_str) # Cannot shuffle sequences of length 1-2
-  
-  # Extract dinucleotides
-  dinucs <- character(seq_len - 1)
-  for (i in 1:(seq_len - 1)) {
-    dinucs[i] <- substr(seq_str, i, i+1)
-  }
-  
-  # Keep first nucleotide fixed (starting point)
-  result <- substr(seq_str, 1, 1)
-  available_dinucs <- dinucs
-  current_nuc <- substr(seq_str, 1, 1)
-  
-  # Build the shuffled sequence
-  while (length(available_dinucs) > 0) {
-    # Find dinucleotides that start with current_nuc
-    candidates <- grep(paste0("^", current_nuc), available_dinucs, value=TRUE)
-    
-    if (length(candidates) == 0) {
-      # If no candidates, just pick a random remaining dinucleotide
-      chosen <- sample(available_dinucs, 1)
-    } else {
-      # Select a random matching dinucleotide
-      chosen <- sample(candidates, 1)
-    }
-    
-    # Add the second nucleotide of chosen dinucleotide
-    next_nuc <- substr(chosen, 2, 2)
-    result <- paste0(result, next_nuc)
-    current_nuc <- next_nuc
-    
-    # Remove the used dinucleotide
-    available_dinucs <- available_dinucs[available_dinucs != chosen]
-  }
-  
-  return(result)
-}
-
-# Generate negative examples based on positive examples
-generate_negative_examples <- function(positive_seqs, method="shuffle", ratio=1.0) {
-  n_positives <- length(positive_seqs)
-  n_negatives <- ceiling(n_positives * ratio)
-  
-  cat("Generating", n_negatives, "negative examples using method:", method, "\n")
-  
-  negative_seqs <- DNAStringSet()
-  
-  for (i in 1:n_negatives) {
-    # Choose a positive sequence to base the negative on
-    pos_idx <- ((i - 1) %% n_positives) + 1
-    pos_seq <- positive_seqs[[pos_idx]]
-    seq_len <- nchar(as.character(pos_seq))
-    
-    # Apply the chosen method to generate a negative example
-    if (method == "shuffle") {
-      new_seq <- shuffle_sequence(pos_seq)
-    } else if (method == "dinucleotide_shuffle") {
-      new_seq <- dinucleotide_shuffle(pos_seq)
-    } else if (method == "random") {
-      new_seq <- generate_random_sequence(seq_len)
-    } else {
-      stop("Unknown negative generation method:", method)
-    }
-    
-    # Create a named negative sequence
-    neg_seq <- DNAStringSet(new_seq)
-    names(neg_seq) <- paste0("negative_", i, " | class=0")
-    
-    # Add to our collection
-    negative_seqs <- c(negative_seqs, neg_seq)
-  }
-  
-  return(negative_seqs)
-}
-
-# --- Genomic Split Helper Functions ---
-
-# Validate and show examples of sequence names for debugging
-validate_sequence_names <- function(seq_names, show_examples = 5) {
-  cat("Validating sequence name formats for chromosome extraction...\n")
-  
-  # Show first few examples
-  n_examples <- min(show_examples, length(seq_names))
-  cat("Example sequence names (first", n_examples, "):\n")
-  for (i in 1:n_examples) {
-    cat("  ", i, ":", seq_names[i], "\n")
-  }
-  
-  # Test chromosome extraction on examples
-  chr_patterns <- c(
-    "chr[0-9XY]+:[0-9]+-[0-9]+",    # chr1:12345-67890
-    "chr[0-9XY]+_[0-9]+_[0-9]+",    # chr1_12345_67890
-    "chr[0-9XY]+\\.[0-9]+\\.[0-9]+", # chr1.12345.67890
-    "chr[0-9XY]+"                   # just chr1 (minimal)
-  )
-  
-  cat("Testing common chromosome patterns:\n")
-  for (pattern in chr_patterns) {
-    matches <- sum(grepl(pattern, seq_names[1:n_examples]))
-    cat("  Pattern '", pattern, "': ", matches, "/", n_examples, " matches\n")
-  }
-  
-  return(invisible(NULL))
-}
+# --- Dataset Preparation Functions ---
 
 # Extract chromosome information from sequence names
-extract_chromosome <- function(seq_name) {
-  # Try multiple common formats
-  patterns <- list(
-    chr_colon = "chr[0-9XY]+(?=:)",           # chr1:start-end
-    chr_underscore = "chr[0-9XY]+(?=_)",      # chr1_start_end  
-    chr_dot = "chr[0-9XY]+(?=\\.)",           # chr1.start.end
-    chr_simple = "chr[0-9XY]+"                # chr1 (anywhere)
+extract_chromosome <- function(seq_names) {
+  chr_patterns <- c(
+    "chr([0-9]+|[XY])",  # chr1, chr2, ..., chrX, chrY
+    "chromosome[_ ]([0-9]+|[XY])",  # chromosome 1, chromosome_X
+    "([0-9]+|[XY]):"  # 1:, X:, etc.
   )
   
-  for (pattern in patterns) {
-    chr_match <- regexpr(pattern, seq_name, perl = TRUE)
-    if (chr_match > 0) {
-      return(substr(seq_name, chr_match, chr_match + attr(chr_match, "match.length") - 1))
+  chromosomes <- rep(NA, length(seq_names))
+  
+  for (i in seq_along(seq_names)) {
+    name <- seq_names[i]
+    for (pattern in chr_patterns) {
+      match <- regexpr(pattern, name, ignore.case = TRUE)
+      if (match > 0) {
+        matched_text <- regmatches(name, match)
+        chr_num <- gsub(".*([0-9]+|[XY]).*", "\\1", matched_text, ignore.case = TRUE)
+        chromosomes[i] <- chr_num
+        break
+      }
+    }
+    
+    # If no pattern matched, try to extract any number or X/Y
+    if (is.na(chromosomes[i])) {
+      simple_match <- regexpr("([0-9]+|[XY])", name, ignore.case = TRUE)
+      if (simple_match > 0) {
+        chromosomes[i] <- regmatches(name, simple_match)
+      }
     }
   }
   
-  return("unknown")
+  return(chromosomes)
 }
 
-# --- Main Script ---
-
-cat("Starting dataset preparation...\n")
-
-# 1. Read Input Sequences
-cat("Reading sequences from:", input_fasta, "\n")
-if (!file.exists(input_fasta)) {
-  stop("Input FASTA file not found: ", input_fasta, ". Run download_data.sh first.")
-}
-all_sequences <- readDNAStringSet(input_fasta)
-cat("Read", length(all_sequences), "sequences.\n")
-
-# 2. Filter by Length (Optional)
-if (!is.null(target_length)) {
-  cat("Filtering sequences to length:", target_length, "\n")
-  original_count <- length(all_sequences)
-  all_sequences <- all_sequences[width(all_sequences) == target_length]
-  filtered_count <- length(all_sequences)
-  cat("Kept", filtered_count, "out of", original_count, "sequences matching length", target_length, "\n")
-  if (filtered_count == 0) {
-    stop("No sequences remaining after length filtering. Check target_length or input data.")
-  }
-} else {
-  cat("Skipping length filtering.\n")
-  filtered_count <- length(all_sequences)
-}
-
-# 3. Chromosome-based Split (prevents genomic data leakage)
-cat("Performing chromosome-based split (", train_proportion * 100, "% training)...\n", sep="")
-
-# Validate sequence names first
-validate_sequence_names(names(all_sequences))
-
-# Get chromosome for each sequence
-chromosomes <- sapply(names(all_sequences), extract_chromosome)
-unique_chrs <- unique(chromosomes)
-cat("Found chromosomes:", paste(sort(unique_chrs), collapse=", "), "\n")
-
-# Handle case where chromosome extraction fails
-if (length(unique_chrs) == 1 && unique_chrs[1] == "unknown") {
-  cat("WARNING: Could not extract chromosome information from sequence names.\n")
-  cat("Falling back to random split. Consider checking sequence name format.\n")
-  cat("Expected formats: 'chr1:start-end', 'chr1_start_end', etc.\n")
+# Prepare chromosome split datasets
+prepare_chromosome_split <- function(sequences, seq_names, output_dir) {
+  cat("Preparing chromosome split datasets...\n")
   
-  # Fallback to original random split
-  shuffled_indices <- sample(filtered_count)
-  num_train <- floor(train_proportion * filtered_count)
-  train_indices <- shuffled_indices[1:num_train]
-  test_indices <- shuffled_indices[(num_train + 1):filtered_count]
+  # Extract chromosome information
+  chromosomes <- extract_chromosome(seq_names)
   
-  train_sequences <- all_sequences[train_indices]
-  test_sequences <- all_sequences[test_indices]
-  
-} else {
-  # Split chromosomes between train/test (not individual sequences)
-  set.seed(123)  # For reproducible chromosome assignment
-  shuffled_chrs <- sample(unique_chrs)
-  n_train_chrs <- max(1, ceiling(length(unique_chrs) * train_proportion))
-  
-  train_chrs <- shuffled_chrs[1:n_train_chrs]
-  test_chrs <- shuffled_chrs[(n_train_chrs + 1):length(unique_chrs)]
-  
-  cat("Training chromosomes (", length(train_chrs), "):", paste(sort(train_chrs), collapse=", "), "\n")
-  cat("Testing chromosomes (", length(test_chrs), "):", paste(sort(test_chrs), collapse=", "), "\n")
-  
-  # Split sequences based on chromosome assignment
-  train_mask <- chromosomes %in% train_chrs
-  test_mask <- chromosomes %in% test_chrs
-  
-  train_sequences <- all_sequences[train_mask]
-  test_sequences <- all_sequences[test_mask]
-  
-  # Verify no overlap
-  if (length(intersect(train_chrs, test_chrs)) > 0) {
-    warning("Chromosome overlap detected between train/test sets!")
+  # Remove sequences without chromosome information
+  valid_indices <- !is.na(chromosomes)
+  if (sum(valid_indices) == 0) {
+    stop("No chromosome information found in sequence names")
   }
   
-  # Report split statistics
-  cat("Split quality check:\n")
-  cat("- Unique training chromosomes:", length(unique(chromosomes[train_mask])), "\n")
-  cat("- Unique testing chromosomes:", length(unique(chromosomes[test_mask])), "\n")
-}
-
-cat("Training set size:", length(train_sequences), "\n")
-cat("Test set size:", length(test_sequences), "\n")
-
-# 4. Write Training Set
-cat("Writing training set to:", output_train_fasta, "\n")
-writeXStringSet(train_sequences, filepath = output_train_fasta)
-
-# 5. Prepare Test Set (Adding Positive Labels)
-cat("Preparing test set with positive/negative labels...\n")
-# Add "| class=1" to headers, indicating these are positive examples
-names(test_sequences) <- paste0(names(test_sequences), " | class=1")
-
-# 6. Generate Negative Examples (if enabled)
-if (generate_negatives) {
-  cat("Automatic negative example generation is enabled.\n")
-  negative_sequences <- generate_negative_examples(
-    test_sequences, 
-    method = negative_generation_method,
-    ratio = negative_to_positive_ratio
+  sequences <- sequences[valid_indices]
+  chromosomes <- chromosomes[valid_indices]
+  seq_names <- seq_names[valid_indices]
+  
+  cat("Found sequences from chromosomes:", paste(unique(chromosomes), collapse = ", "), "\n")
+  
+  # Define training chromosomes (1-15) and testing chromosomes (16-22, X, Y)
+  train_chrs <- as.character(1:15)
+  test_chrs <- c(as.character(16:22), "X", "Y")
+  
+  # Split sequences
+  train_indices <- chromosomes %in% train_chrs
+  test_indices <- chromosomes %in% test_chrs
+  
+  if (sum(train_indices) == 0) {
+    stop("No training sequences found (chromosomes 1-15)")
+  }
+  if (sum(test_indices) == 0) {
+    stop("No testing sequences found (chromosomes 16-22, X, Y)")
+  }
+  
+  train_sequences <- sequences[train_indices]
+  test_sequences <- sequences[test_indices]
+  
+  cat("Training sequences:", length(train_sequences), "(chromosomes 1-15)\n")
+  cat("Testing sequences:", length(test_sequences), "(chromosomes 16-22, X, Y)\n")
+  
+  # Save datasets
+  train_file <- file.path(output_dir, "training_sequences.fasta")
+  test_file <- file.path(output_dir, "test_sequences.fasta")
+  
+  writeXStringSet(train_sequences, train_file)
+  writeXStringSet(test_sequences, test_file)
+  
+  # Save metadata
+  metadata <- list(
+    method = "chromosome_split",
+    train_chromosomes = train_chrs,
+    test_chromosomes = test_chrs,
+    train_count = length(train_sequences),
+    test_count = length(test_sequences),
+    train_file = train_file,
+    test_file = test_file
   )
   
-  # Add negative examples to test set
-  test_sequences <- c(test_sequences, negative_sequences)
-  cat("Final test set size (positives + negatives):", length(test_sequences), "\n")
-} else {
-  cat("Automatic negative example generation is disabled.\n")
-  cat("IMPORTANT: The test set currently only contains positive examples (class=1).\n")
-  cat("For meaningful evaluation, generate and include appropriate negative examples (class=0).\n")
+  return(metadata)
 }
 
-# 7. Write Test Set
-cat("Writing test set to:", output_test_fasta, "\n")
-writeXStringSet(test_sequences, filepath = output_test_fasta)
+# Prepare random split datasets
+prepare_random_split <- function(sequences, seq_names, output_dir, train_prop = 0.8) {
+  cat("Preparing random split datasets...\n")
+  
+  n_total <- length(sequences)
+  n_train <- floor(n_total * train_prop)
+  
+  # Random sampling
+  train_indices <- sample(n_total, n_train)
+  test_indices <- setdiff(1:n_total, train_indices)
+  
+  train_sequences <- sequences[train_indices]
+  test_sequences <- sequences[test_indices]
+  
+  cat("Training sequences:", length(train_sequences), "\n")
+  cat("Testing sequences:", length(test_sequences), "\n")
+  
+  # Save datasets
+  train_file <- file.path(output_dir, "training_sequences.fasta")
+  test_file <- file.path(output_dir, "test_sequences.fasta")
+  
+  writeXStringSet(train_sequences, train_file)
+  writeXStringSet(test_sequences, test_file)
+  
+  # Save metadata
+  metadata <- list(
+    method = "random_split",
+    train_proportion = train_prop,
+    train_count = length(train_sequences),
+    test_count = length(test_sequences),
+    train_file = train_file,
+    test_file = test_file
+  )
+  
+  return(metadata)
+}
 
-cat("\nDataset preparation complete.\n")
+# Prepare cross-validation datasets
+prepare_cross_validation <- function(sequences, seq_names, output_dir, k = 5) {
+  cat("Preparing", k, "-fold cross-validation datasets...\n")
+  
+  n_total <- length(sequences)
+  fold_size <- floor(n_total / k)
+  
+  # Create folds
+  indices <- sample(n_total)  # randomize order
+  folds <- list()
+  
+  for (i in 1:k) {
+    if (i < k) {
+      fold_indices <- indices[((i-1)*fold_size + 1):(i*fold_size)]
+    } else {
+      # Last fold gets remaining sequences
+      fold_indices <- indices[((i-1)*fold_size + 1):n_total]
+    }
+    folds[[i]] <- fold_indices
+  }
+  
+  # Create directories for each fold
+  cv_dir <- file.path(output_dir, "cross_validation")
+  dir.create(cv_dir, recursive = TRUE, showWarnings = FALSE)
+  
+  fold_metadata <- list()
+  
+  for (i in 1:k) {
+    fold_dir <- file.path(cv_dir, paste0("fold_", i))
+    dir.create(fold_dir, showWarnings = FALSE)
+    
+    # Test set is current fold, training set is all other folds
+    test_indices <- folds[[i]]
+    train_indices <- unlist(folds[-i])
+    
+    train_sequences <- sequences[train_indices]
+    test_sequences <- sequences[test_indices]
+    
+    # Save fold datasets
+    train_file <- file.path(fold_dir, "training_sequences.fasta")
+    test_file <- file.path(fold_dir, "test_sequences.fasta")
+    
+    writeXStringSet(train_sequences, train_file)
+    writeXStringSet(test_sequences, test_file)
+    
+    fold_metadata[[i]] <- list(
+      fold = i,
+      train_count = length(train_sequences),
+      test_count = length(test_sequences),
+      train_file = train_file,
+      test_file = test_file
+    )
+    
+    cat("Fold", i, ": Train =", length(train_sequences), ", Test =", length(test_sequences), "\n")
+  }
+  
+  # Overall metadata
+  metadata <- list(
+    method = "cross_validation",
+    k_folds = k,
+    total_sequences = n_total,
+    folds = fold_metadata,
+    cv_directory = cv_dir
+  )
+  
+  return(metadata)
+}
+
+# --- Main Execution ---
+
+# Check input file
+if (!file.exists(input_file)) {
+  stop("Input file not found: ", input_file)
+}
+
+# Load sequences
+cat("Loading sequences...\n")
+sequences <- readDNAStringSet(input_file)
+seq_names <- names(sequences)
+
+if (length(sequences) == 0) {
+  stop("No sequences found in input file")
+}
+
+cat("Total sequences loaded:", length(sequences), "\n")
+
+# Prepare datasets based on selected method
+metadata <- switch(method,
+  "chromosome_split" = prepare_chromosome_split(sequences, seq_names, output_dir),
+  "random_split" = prepare_random_split(sequences, seq_names, output_dir, train_proportion),
+  "cross_validation" = prepare_cross_validation(sequences, seq_names, output_dir, k_folds),
+  stop("Unknown method: ", method, ". Valid methods: chromosome_split, random_split, cross_validation")
+)
+
+# Save metadata
+metadata_file <- file.path(output_dir, "dataset_metadata.json")
+
+# Create JSON manually
+json_lines <- c("{")
+for (i in seq_along(metadata)) {
+  name <- names(metadata)[i]
+  value <- metadata[[i]]
+  
+  if (is.character(value)) {
+    json_line <- paste0('  "', name, '": "', value, '"')
+  } else if (is.numeric(value)) {
+    json_line <- paste0('  "', name, '": ', value)
+  } else if (is.logical(value)) {
+    json_line <- paste0('  "', name, '": ', tolower(as.character(value)))
+  } else if (is.list(value)) {
+    # Skip complex nested structures for now
+    json_line <- paste0('  "', name, '": "complex_object"')
+  } else {
+    json_line <- paste0('  "', name, '": "', as.character(value), '"')
+  }
+  
+  if (i < length(metadata)) {
+    json_line <- paste0(json_line, ",")
+  }
+  json_lines <- c(json_lines, json_line)
+}
+json_lines <- c(json_lines, "}")
+
+writeLines(json_lines, metadata_file)
+
+cat("\nDataset preparation completed!\n")
+cat("Method:", method, "\n")
+cat("Output directory:", output_dir, "\n")
+cat("Metadata saved to:", metadata_file, "\n")
+cat("=== Dataset Preparation Complete ===\n")
+
