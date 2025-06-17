@@ -1,5 +1,5 @@
-# null model 生成腳本
-# 為PWM評估系統生成各種null model基準
+# null model generation script
+# null model baseline for PWM model eval system
 # Author: PWM Improvement Team
 # Version: 1.0
 

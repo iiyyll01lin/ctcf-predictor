@@ -1,0 +1,173 @@
+# Extensions configuration schema
+type: object
+properties:
+  extensions:
+    type: object
+    properties:
+      alignment_methods:
+        type: object
+        patternProperties:
+          "^[a-zA-Z_][a-zA-Z0-9_]*$":
+            type: object
+            properties:
+              enabled:
+                type: boolean
+                default: true
+              parameters:
+                type: object
+                additionalProperties: true
+            required: ["enabled"]
+      
+      quality_metrics:
+        type: object
+        patternProperties:
+          "^[a-zA-Z_][a-zA-Z0-9_]*$":
+            type: object
+            properties:
+              enabled:
+                type: boolean
+                default: true
+              parameters:
+                type: object
+                additionalProperties: true
+            required: ["enabled"]
+      
+      validation_tests:
+        type: object
+        patternProperties:
+          "^[a-zA-Z_][a-zA-Z0-9_]*$":
+            type: object
+            properties:
+              enabled:
+                type: boolean
+                default: true
+              parameters:
+                type: object
+                additionalProperties: true
+            required: ["enabled"]
+      
+      output_formats:
+        type: object
+        patternProperties:
+          "^[a-zA-Z_][a-zA-Z0-9_]*$":
+            type: object
+            properties:
+              enabled:
+                type: boolean
+                default: true
+              parameters:
+                type: object
+                additionalProperties: true
+            required: ["enabled"]
+      
+      visualizations:
+        type: object
+        patternProperties:
+          "^[a-zA-Z_][a-zA-Z0-9_]*$":
+            type: object
+            properties:
+              enabled:
+                type: boolean
+                default: true
+              parameters:
+                type: object
+                additionalProperties: true
+            required: ["enabled"]
+
+  custom_extensions:
+    type: object
+    properties:
+      plugin_directories:
+        type: array
+        items:
+          type: string
+        default: ["scripts/extensions/"]
+      
+      auto_load:
+        type: boolean
+        default: true
+      
+      validation:
+        type: object
+        properties:
+          strict_mode:
+            type: boolean
+            default: false
+          require_metadata:
+            type: boolean
+            default: true
+          check_dependencies:
+            type: boolean
+            default: true
+      enabled: boolean
+      parameters: object
+      
+  visualizations:
+    - name: string
+      enabled: boolean
+      parameters: object
+
+# Custom extension configurations
+custom_extensions:
+  
+  # Example custom alignment method configuration
+  my_alignment_method:
+    enabled: true
+    type: "alignment_method"
+    parameters:
+      window_size: 50
+      threshold: 0.8
+      max_iterations: 100
+      
+  # Example custom quality metric configuration  
+  my_quality_metric:
+    enabled: true
+    type: "quality_metric"
+    weight: 0.3
+    parameters:
+      significance_level: 0.01
+      bootstrap_samples: 1000
+      
+  # Example custom validation test configuration
+  my_validation_test:
+    enabled: false
+    type: "validation_test"
+    parameters:
+      cross_validation_folds: 5
+      random_seed: 42
+      
+  # Example custom output format configuration
+  my_output_format:
+    enabled: true
+    type: "output_format"
+    parameters:
+      include_metadata: true
+      precision: 4
+      
+  # Example custom visualization configuration
+  my_visualization:
+    enabled: false
+    type: "visualization"
+    parameters:
+      plot_width: 800
+      plot_height: 600
+      color_scheme: "viridis"
+
+# Extension loading configuration
+extension_loading:
+  auto_discover: true
+  extensions_directory: "scripts/extensions/"
+  load_on_startup: true
+  error_handling: "warn"  # Options: "stop", "warn", "ignore"
+  
+# Extension validation configuration
+extension_validation:
+  validate_interfaces: true
+  check_dependencies: true
+  version_compatibility: true
+  
+# Extension performance configuration
+extension_performance:
+  timeout_seconds: 300
+  memory_limit: "2G"
+  parallel_execution: false

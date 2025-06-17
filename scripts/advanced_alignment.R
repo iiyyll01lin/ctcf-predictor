@@ -329,6 +329,17 @@ find_conserved_regions <- function(positions) {
 
 # --- Main Execution ---
 
+# Load extension framework
+if (file.exists("scripts/core/plugin_manager.R")) {
+  source("scripts/core/plugin_manager.R")
+  initialize_extension_system()
+}
+
+if (file.exists("scripts/core/dynamic_config.R")) {
+  source("scripts/core/dynamic_config.R")
+  initialize_dynamic_config_system()
+}
+
 # Check input file
 if (!file.exists(input_file)) {
   stop("Input file not found: ", input_file)
@@ -350,8 +361,21 @@ aligned_sequences <- switch(alignment_method,
   "length" = align_by_length(sequences),
   "progressive" = align_progressive(sequences),
   {
-    cat("Unknown alignment method. Using consensus alignment.\n")
-    align_by_consensus(sequences)
+    # Check for registered extension methods
+    if (exists("execute_alignment_method") && alignment_method %in% get_alignment_methods()) {
+      cat("Using registered alignment method:", alignment_method, "\n")
+      alignment_result <- execute_alignment_method(alignment_method, as.character(sequences))
+      
+      # Extract aligned sequences from result
+      if (is.list(alignment_result) && !is.null(alignment_result$aligned_sequences)) {
+        DNAStringSet(alignment_result$aligned_sequences)
+      } else {
+        alignment_result
+      }
+    } else {
+      cat("Unknown alignment method. Using consensus alignment.\n")
+      align_by_consensus(sequences)
+    }
   }
 )
 

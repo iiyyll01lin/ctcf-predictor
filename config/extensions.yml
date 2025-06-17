@@ -1,0 +1,77 @@
+# Extensions configuration for CTCF PWM Testing Pipeline
+extensions:
+  alignment_methods:
+    ml_alignment:
+      enabled: true
+      parameters:
+        model_path: "models/alignment_model.rds"
+        use_gpu: false
+        confidence_threshold: 0.7
+    consensus_iterative:
+      enabled: true
+      parameters:
+        max_iterations: 10
+        convergence_threshold: 0.01
+
+  quality_metrics:
+    biological_quality:
+      enabled: true
+      parameters:
+        use_conservation: true
+        use_structure: true
+        species_data_path: "data/species_conservation.rds"
+
+  validation_tests:
+    bayesian_validation:
+      enabled: false
+      parameters:
+        mcmc_iterations: 10000
+        burn_in: 1000
+        chains: 4
+
+  output_formats:
+    research_format:
+      enabled: true
+      parameters:
+        include_metadata: true
+        include_statistics: true
+        format: "json"
+
+  visualizations:
+    interactive_viz:
+      enabled: false
+      parameters:
+        output_format: "html"
+        include_controls: true
+
+# Custom extension configurations
+custom_extensions:
+  plugin_directories:
+    - "scripts/extensions/"
+    - "custom_plugins/"
+  
+  auto_load: true
+  
+  validation:
+    strict_mode: false
+    require_metadata: true
+    check_dependencies: true
+
+# Extension loading settings
+extension_loading:
+  auto_discover: true
+  extensions_directory: "scripts/extensions/"
+  load_on_startup: false
+  error_handling: "warn"
+
+# Extension validation settings  
+extension_validation:
+  validate_interfaces: true
+  check_dependencies: true
+  version_compatibility: true
+
+# Extension performance settings
+extension_performance:
+  timeout_seconds: 300
+  memory_limit: "2G"
+  parallel_execution: false

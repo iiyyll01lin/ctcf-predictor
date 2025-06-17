@@ -229,13 +229,13 @@ Interpretation: Weak signal, quality concerns
 
 ### Statistical Validation Results
 
-| **PWM Method** | **Observed IC** | **P-value** | **Effect Size** | **Interpretation** |
-|----------------|-----------------|-------------|-----------------|-------------------|
-| Subset 1K | 19.592 bits | < 0.001 | 217.5 | Excellent biological signal |
-| Subset 2K | 12.564 bits | < 0.001 | 138.4 | Strong biological signal |
-| Robust PWM | 10.659 bits | < 0.001 | 117.0 | Good biological signal |
-| Simple Aligned | 8.432 bits | < 0.001 | 92.1 | Acceptable signal |
-| Raw Dataset | 0.695 bits | 0.031 | 5.18 | Weak signal |
+| **PWM Method** | **Observed IC** | **P-value** | **Effect Size** | **Interpretation**          |
+|----------------|-----------------|-------------|-----------------|-----------------------------|
+| Subset 1K      | 19.592 bits     | < 0.001     | 217.5           | Excellent biological signal |
+| Subset 2K      | 12.564 bits     | < 0.001     | 138.4           | Strong biological signal    |
+| Robust PWM     | 10.659 bits     | < 0.001     | 117.0           | Good biological signal      |
+| Simple Aligned | 8.432 bits      | < 0.001     | 92.1            | Acceptable signal           |
+| Raw Dataset    | 0.695 bits      | 0.031       | 5.18            | Weak signal                 |
 
 ## Advanced Statistical Methods
 
