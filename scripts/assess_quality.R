@@ -634,6 +634,126 @@ compute_overall_quality_score <- function(quality_results) {
   ))
 }
 
+# Determine PWM quality grade based on multiple criteria
+#' @param total_ic Total information content
+#' @param conserved_count Number of conserved positions (IC > 1.0)
+#' @param pattern_similarity CTCF pattern similarity score (optional)
+#' @param statistical_significance Statistical significance test result (optional)
+#' @param verbose Enable verbose output
+#' @return Quality grade string
+determine_quality_grade <- function(total_ic, conserved_count = NULL, 
+                                   pattern_similarity = NULL, 
+                                   statistical_significance = NULL,
+                                   verbose = FALSE) {
+  if (verbose) log_message("INFO", "Determining PWM quality grade")
+  
+  # If only total_ic is provided, use simple IC-based grading
+  if (is.null(conserved_count) && is.null(pattern_similarity) && is.null(statistical_significance)) {
+    if (total_ic > 20) {
+      grade <- "EXCEPTIONAL"
+    } else if (total_ic > 16) {
+      grade <- "EXCELLENT"
+    } else if (total_ic > 12) {
+      grade <- "GOOD"
+    } else if (total_ic > 8) {
+      grade <- "FAIR"
+    } else if (total_ic > 4) {
+      grade <- "POOR"
+    } else {
+      grade <- "FAIL"
+    }
+    
+    if (verbose) log_message("INFO", paste("Quality grade (IC-based):", grade, "- IC:", round(total_ic, 2)))
+    return(grade)
+  }
+  
+  # Comprehensive grading with multiple criteria
+  criteria_met <- 0
+  total_criteria <- 0
+  
+  # Information content criterion (>16 bits for excellent)
+  if (!is.null(total_ic)) {
+    total_criteria <- total_criteria + 1
+    if (total_ic > 16) {
+      criteria_met <- criteria_met + 1
+    }
+  }
+  
+  # Conserved positions criterion (>6 positions)
+  if (!is.null(conserved_count)) {
+    total_criteria <- total_criteria + 1
+    if (conserved_count > 6) {
+      criteria_met <- criteria_met + 1
+    }
+  }
+  
+  # Pattern similarity criterion (>0.8 similarity to CTCF)
+  if (!is.null(pattern_similarity)) {
+    total_criteria <- total_criteria + 1
+    if (pattern_similarity > 0.8) {
+      criteria_met <- criteria_met + 1
+    }
+  }
+  
+  # Statistical significance criterion
+  if (!is.null(statistical_significance)) {
+    total_criteria <- total_criteria + 1
+    if (statistical_significance == TRUE) {
+      criteria_met <- criteria_met + 1
+    }
+  }
+  
+  # Determine grade based on criteria met
+  criteria_ratio <- criteria_met / total_criteria
+  
+  if (criteria_ratio >= 1.0) {
+    grade <- "EXCELLENT"
+  } else if (criteria_ratio >= 0.75) {
+    grade <- "GOOD"  
+  } else if (criteria_ratio >= 0.5) {
+    grade <- "ACCEPTABLE"
+  } else {
+    grade <- "POOR"
+  }
+  
+  if (verbose) {
+    log_message("INFO", paste("Quality assessment: criteria met", criteria_met, "/", total_criteria))
+    log_message("INFO", paste("Quality grade:", grade))
+  }
+  
+  return(grade)
+}
+
+# Generate quality grade explanation
+#' @param grade Quality grade
+#' @param total_ic Total information content
+#' @param conserved_count Number of conserved positions
+#' @return Explanation text
+generate_grade_explanation <- function(grade, total_ic, conserved_count = NULL) {
+  explanations <- list(
+    "EXCEPTIONAL" = "Outstanding PWM quality suitable for highest-stakes applications including drug discovery and precision medicine.",
+    "EXCELLENT" = "High-quality PWM suitable for research applications, drug discovery, and publication-quality analysis.",
+    "GOOD" = "Good quality PWM suitable for research applications and comparative studies with appropriate validation.",
+    "ACCEPTABLE" = "Acceptable quality PWM suitable for exploratory analysis and method development.",
+    "FAIR" = "Fair quality PWM with limited applications. Consider improving data quality or methods.",
+    "POOR" = "Poor quality PWM. Not recommended for research applications. Requires significant improvement.",
+    "FAIL" = "Failed quality standards. PWM should not be used for any analysis."
+  )
+  
+  base_explanation <- explanations[[grade]] %||% "Unknown quality grade."
+  
+  # Add specific metrics
+  metrics_text <- paste0("Total Information Content: ", round(total_ic, 2), " bits")
+  if (!is.null(conserved_count)) {
+    metrics_text <- paste0(metrics_text, ", Conserved Positions: ", conserved_count)
+  }
+  
+  return(paste(base_explanation, metrics_text, sep = " "))
+}
+
+# Helper function for null-coalescing operator
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
 # Generate quality plots
 generate_quality_plots <- function(pwm_data, quality_results, output_dir) {
   # This would generate various plots - simplified for now
