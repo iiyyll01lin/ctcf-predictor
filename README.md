@@ -251,6 +251,9 @@ ls results/
 * **CTCF Biology**: Phillips, J.E. & Corces, V.G. (2009) - CTCF master regulator of genome architecture
 * **PWM Methodology**: Stormo, G.D. (2000) - DNA binding sites: representation and discovery
 * **Statistical Validation**: Wasserman, W.W. & Sandelin, A. (2004) - Applied bioinformatics for identification of regulatory elements
+* **Split Pitfall Analysis**: Schreiber, J., Singh, R., Bilmes, J., & Noble, W. S. (2020) - A pitfall for machine learning methods aiming to predict across cell types
+* **Data Splitting Strategy**: Tahir, M., Khan, S. S., Davie, J., et al. (2025) - LOCO-EPI: Leave-one-chromosome-out (LOCO) as a benchmarking paradigm for deep learning based prediction of enhancer-promoter interactions
+* **Split-aware Evaluation**: Toneyan, S., Tang, Z., & Koo, P. K. (2022) - Evaluating deep learning for predicting epigenomic profiles
 
 ### Technical Documentation
 * **[Complete API Reference](docs/15-api-reference.md)** - Technical specifications
